@@ -1,4 +1,4 @@
-package ar.edu.unlu.poo.scrabble;
+package modelo.scrabble;
 
 public class Letra extends Ficha{
 
@@ -33,6 +33,11 @@ public class Letra extends Ficha{
 	public int getPremioPalabra() {
 		// TODO Auto-generated method stub
 		return 1;
+	}
+	
+	public String toString() {
+		return "LETRA: " + letra + "\n"
+			 + "PUNTOS: " + puntos + "\n";
 	}
 
 

@@ -1,28 +1,33 @@
-package ar.edu.unlu.poo.scrabble;
+package modelo.scrabble;
 
-public class PremioLetra extends Ficha{
-	
-	private final String letra = "L";
+public class PremioPalabra extends Ficha{
+
+	private final String letra = "P";
 	private Puntaje tipoPuntaje;
 	
 	public String getLetra() {
 		return letra + tipoPuntaje.getDescripcion();
 	}
 	
-	public PremioLetra(Puntaje tipoPuntaje) {
+	public PremioPalabra(Puntaje tipoPuntaje) {
 		this.tipoPuntaje = tipoPuntaje;
 	}
-	
+
 	public int getPremioLetra() {
-		return tipoPuntaje.getPremio();
+		return 1;
 	}
 	
 	public int getPremioPalabra() {
-		return 1;
+		return tipoPuntaje.getPremio();
 	}
 
+	@Override
 	public int getPuntos() {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 	
+
+	
+
 }

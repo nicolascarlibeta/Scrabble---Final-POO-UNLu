@@ -1,4 +1,4 @@
-package ar.edu.unlu.poo.scrabble;
+package modelo.scrabble;
 
 public class PuntajeDoble implements Puntaje{
 
