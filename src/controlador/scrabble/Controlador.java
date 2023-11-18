@@ -29,14 +29,14 @@ public class Controlador {
 		modelo.addJugador(nombreJugador);
 	}
 	
-	public void agregarPalabra(int x, int y, String cadenaString) {
+	public void agregarPalabra(int x, int y, String cadenaString, boolean horizontal) {
 		
 		//Creo la nueva palabra dentro del Controlador
 		char[] caracteres = cadenaString.toCharArray();
 		Palabra nuevaPalabra = new Palabra(caracteres);
 		
 		//La envio al modelo
-		modelo.addPalabra(0, x, y, nuevaPalabra);
+		modelo.addPalabra(0, x, y, nuevaPalabra, horizontal);
 		
 	}
 	

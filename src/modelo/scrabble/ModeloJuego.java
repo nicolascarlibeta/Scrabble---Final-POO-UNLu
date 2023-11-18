@@ -13,7 +13,7 @@ import modelo.scrabble.Ficha;
 public class ModeloJuego {
 	
 	 // * TABLERO: 
-	private Object[][] tablero = new Object[6][6];
+	private Object[][] tablero = new Object[15][15];
 	// * FICHAS:
 	private final HashMap<Character, Integer> fichas = new HashMap<>();
 	// * BOLSA DE FICHAS: 
@@ -87,8 +87,10 @@ public class ModeloJuego {
 		//Le repartimos aleatoriamente las 7 fichas a cada jugador
 		for(int f = 0; f < cantidadFichas; f++) {
 			char letra = (char)((char)new Random().nextInt(91 - 65) + 65);
+			//Le agrego las fichas al atril del jugador
 			jugadores[0].getAtril().add(letra);
-			//bolsaDeFichas
+			//Le quito las fichas a la bolsa
+			//bolsaDeFichas.put(letra, bolsaDeFichas.get(letra) - 1);
 		}
 		
 	}
@@ -98,10 +100,7 @@ public class ModeloJuego {
 		jugadores[0] = nuevoJugador;
 	}
 	
-	public void addPalabra(int idJugador, int x, int y, Palabra palabraActual) {
-		
-		//Hago un alias de la posición del tablero
-		Object casilleroActual = tablero[x][y];
+	public void addPalabra(int idJugador, int x, int y, Palabra palabraActual, boolean horizontal) {
 		
 		//Hago un alias del conjunto de letras de la palabra
 		char[] letrasPalabra = palabraActual.getLetras();
@@ -120,11 +119,16 @@ public class ModeloJuego {
 		jugadores[idJugador].setPuntaje(jugadores[idJugador].getPuntaje() + puntajePalabra);
 		
 		//Coloco las letras en el tablero y se las resto al atril del jugador
-		int d = y;
+		int i = x, d = y;
 		for(Character l: letrasPalabra) {
-			tablero[x][d] = l;
+			tablero[i][d] = l;
 			atril.remove(l);
-			d++;
+			if(horizontal) {
+				d++;				
+			}
+			else{
+				i++;
+			}
 		}
 
 	}
