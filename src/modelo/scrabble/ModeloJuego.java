@@ -21,7 +21,9 @@ public class ModeloJuego {
 	// * CANTIDAD DE FICHAS A REPARTIR:
 	private final int cantidadFichas = 7;
 	// * JUGADORES:
-	private Jugador[] jugadores = new Jugador[4];
+	private Jugador[] jugadores = new Jugador[2];
+	// * CANTIDAD DE JUGADORES:
+	private final int cantidadJugadores = jugadores.length;
 	
 	
 	
@@ -77,27 +79,27 @@ public class ModeloJuego {
 	
 	//INTERFAZ
 	
-	public void nuevaPartida(int cantidadJugadores) {
-		
-		//Creamos y agregamos la cantidad de jugadores de la partida
-		for(int j = 0; j < cantidadJugadores; j++) {
-			addJugador("Javier Carli");
-		}
+	public void cargarPartida() {
 		
 		//Le repartimos aleatoriamente las 7 fichas a cada jugador
-		for(int f = 0; f < cantidadFichas; f++) {
-			char letra = (char)((char)new Random().nextInt(91 - 65) + 65);
-			//Le agrego las fichas al atril del jugador
-			jugadores[0].getAtril().add(letra);
-			//Le quito las fichas a la bolsa
-			//bolsaDeFichas.put(letra, bolsaDeFichas.get(letra) - 1);
+		for(int j = 0; j < cantidadJugadores; j++) {
+			for(int f = 0; f < cantidadFichas; f++) {
+				
+				char letra = (char)((char)new Random().nextInt(91 - 65) + 65);
+				
+				//Le agrego las fichas al atril del jugador
+				jugadores[j].getAtril().add(letra);
+				
+				//Le quito las fichas a la bolsa
+				//bolsaDeFichas.put(letra, bolsaDeFichas.get(letra) - 1);
+			}	
 		}
 		
 	}
 	
-	public void addJugador(String nombreJugador) { 
-		Jugador nuevoJugador = new Jugador(nombreJugador);
-		jugadores[0] = nuevoJugador;
+	public void addJugadores(String jugador1, String jugador2) {
+		jugadores[0] = new Jugador(jugador1);
+		jugadores[1] = new Jugador(jugador2);
 	}
 	
 	public void addPalabra(int idJugador, int x, int y, Palabra palabraActual, boolean horizontal) {
@@ -107,6 +109,9 @@ public class ModeloJuego {
 		
 		//Hago un alias del atril del jugador
 		List<Character> atril = jugadores[idJugador].getAtril();
+		
+		//Hago un formateo de x
+		x -= 64;
 		
 		//Calcular puntaje
 		int puntajePalabra = 0; //Puntaje provisorio
@@ -118,7 +123,7 @@ public class ModeloJuego {
 		//Seteo el puntaje al jugador
 		jugadores[idJugador].setPuntaje(jugadores[idJugador].getPuntaje() + puntajePalabra);
 		
-		//Coloco las letras en el tablero y se las resto al atril del jugador
+		//Coloco las letras en el tablero y se las resto del atril del jugador
 		int i = x, d = y;
 		for(Character l: letrasPalabra) {
 			tablero[i][d] = l;

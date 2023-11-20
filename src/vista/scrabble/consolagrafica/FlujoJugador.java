@@ -2,14 +2,12 @@ package vista.scrabble.consolagrafica;
 
 import controlador.scrabble.Controlador;
 
-public class FlujoComenzarPartida extends Flujo{
+public abstract class FlujoJugador extends Flujo{
 	
-	public FlujoComenzarPartida(ConsolaGrafica vista, Controlador controlador) {
+	public FlujoJugador(ConsolaGrafica vista, Controlador controlador) {
 		super(vista, controlador);
 	}
 	
-	private FlujoJugador1 pJugador1 = new FlujoJugador1(vista,controlador);
-	private FlujoJugador2 pJugador2 = new FlujoJugador2(vista,controlador);
 	private String cadenaString = "";
 	private boolean horizontal;
 	private int x;
@@ -93,7 +91,9 @@ public class FlujoComenzarPartida extends Flujo{
 		int idJugador = 1;
 		this.y = Integer.parseInt(y);
 		controlador.agregarPalabra(idJugador,x,this.y,cadenaString,horizontal);
-		return new FlujoJugador2(vista,controlador);
+		return avanzarFlujo();
 	}
+	
+	public abstract Flujo avanzarFlujo();
 
 }

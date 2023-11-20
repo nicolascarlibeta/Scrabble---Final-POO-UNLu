@@ -21,22 +21,23 @@ public class Controlador {
 		this.vista = vista;
 	}
 	
-	public void comenzarPartida(int cantidadJugadores) {
-		modelo.nuevaPartida(cantidadJugadores);
+	public void comenzarPartida(String jugador1, String jugador2) {
+		agregarJugadores(jugador1,jugador2);
+		modelo.cargarPartida();
 	}
 	
-	public void agregarJugador(String nombreJugador) {
-		modelo.addJugador(nombreJugador);
+	private void agregarJugadores(String jugador1, String jugador2) {
+		modelo.addJugadores(jugador1,jugador2);
 	}
 	
-	public void agregarPalabra(int x, int y, String cadenaString, boolean horizontal) {
+	public void agregarPalabra(int idJugador, int x, int y, String cadenaString, boolean horizontal) {
 		
 		//Creo la nueva palabra dentro del Controlador
 		char[] caracteres = cadenaString.toCharArray();
 		Palabra nuevaPalabra = new Palabra(caracteres);
 		
 		//La envio al modelo
-		modelo.addPalabra(0, x, y, nuevaPalabra, horizontal);
+		modelo.addPalabra(idJugador, x, y, nuevaPalabra, horizontal);
 		
 	}
 	

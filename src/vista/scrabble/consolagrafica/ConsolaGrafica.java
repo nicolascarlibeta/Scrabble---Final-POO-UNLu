@@ -92,6 +92,12 @@ public class ConsolaGrafica implements Vista{
 		terminal.setText("");
 	}
 	
+	//Método principal (Menú Principal)
+    public void mostrarMenuPrincipal() {
+        flujoActual = new FlujoMenuPrincipal(this, controlador);
+        flujoActual.mostarMenuTextual();
+    }
+	
 	//Método general para procesar la entrada del usuario
 	private void procesarEntrada(String entrada) {
 		entrada = entrada.trim();
@@ -147,12 +153,12 @@ public class ConsolaGrafica implements Vista{
  
 		panelOeste = new JPanel();
 		panelOeste.setBackground(new Color(0, 0, 0));
-		panelOeste.setPreferredSize(new Dimension(100,70));
+		panelOeste.setPreferredSize(new Dimension(80,70));
 		frmScrabble.getContentPane().add(panelOeste, BorderLayout.WEST);
  
 		panelEste = new JPanel();
 		panelEste.setBackground(new Color(0, 0, 0));
-		panelEste.setPreferredSize(new Dimension(100,70));
+		panelEste.setPreferredSize(new Dimension(80,70));
 		frmScrabble.getContentPane().add(panelEste, BorderLayout.EAST);
 		
 		terminal = new JTextArea();
@@ -171,11 +177,7 @@ public class ConsolaGrafica implements Vista{
 		
 	}
 
-	//Método principal (Menú Principal)
-    public void mostrarMenuPrincipal() {
-        flujoActual = new FlujoMenuPrincipal(this, controlador);
-        flujoActual.mostarMenuTextual();
-    }
+	
 	
 		
 }

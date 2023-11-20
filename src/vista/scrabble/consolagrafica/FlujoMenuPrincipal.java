@@ -22,8 +22,7 @@ public class FlujoMenuPrincipal extends Flujo{
     public Flujo elegirOpcion(String opcion) {
         switch (opcion) {
             case "1" -> {
-            	controlador.comenzarPartida(1);
-            	return new FlujoComenzarPartida(vista, controlador);
+            	return new FlujoIngresarJugadores(vista, controlador);
             }
             default -> vista.println("Opción inválida");
         }

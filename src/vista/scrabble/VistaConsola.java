@@ -6,7 +6,7 @@ import java.util.Scanner;
 import controlador.scrabble.Controlador;
 
 public class VistaConsola implements Vista{
-
+/*
 	private Controlador controlador;
 	
 	public VistaConsola(Controlador controlador) {
@@ -24,7 +24,7 @@ public class VistaConsola implements Vista{
 		mostrarMensaje("Ingrese la cantidad de jugadores: ");
 		int cantidadJugadores = scanner().nextInt();
 		
-		controlador.comenzarPartida(cantidadJugadores);
+		//controlador.comenzarPartida(cantidadJugadores);
 		
 		// * CICLO DEL JUEGO
 		while(true) {
@@ -97,7 +97,7 @@ public class VistaConsola implements Vista{
 		mostrarMensaje("Puntaje: " + controlador.obtenerPuntaje());
 		
 	}
-
+*/
 
 
 	
