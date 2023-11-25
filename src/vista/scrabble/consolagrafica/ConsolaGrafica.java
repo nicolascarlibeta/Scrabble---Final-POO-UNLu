@@ -20,6 +20,8 @@ import java.awt.GridBagConstraints;
 import javax.swing.SpringLayout;
 
 import controlador.scrabble.Controlador;
+import flujos.scrabble.Flujo;
+import flujos.scrabble.FlujoMenuPrincipal;
 import vista.scrabble.Vista;
 
 import javax.swing.GroupLayout;
@@ -58,18 +60,6 @@ public class ConsolaGrafica implements Vista{
 	private JPanel panelEste;
 	private JPanel panelTerminal;
 	
-	/*
-	public void mostrarAtril() {
-		
-		List<Character> atril = controlador.obtenerAtril();
-		String mostrarAtril = "";
-		for(int f = 0; f < atril.size(); f++) {
-			mostrarAtril += atril.get(f) + " ";
-		}
-		mostrarAtril += "\n";
-		mostrarMensaje(mostrarAtril);
-		
-	}*/
 	
 	//CONSTRUCTOR
 	public ConsolaGrafica(Controlador controlador) {
@@ -114,7 +104,7 @@ public class ConsolaGrafica implements Vista{
 		frmScrabble = new JFrame();
 		frmScrabble.getContentPane().setForeground(new Color(255, 255, 255));
 		frmScrabble.getContentPane().setBackground(new Color(0, 0, 0));
-		frmScrabble.setSize(1000, 600);
+		frmScrabble.setSize(1000, 700);
 		frmScrabble.setVisible(true);
 		frmScrabble.setResizable(true);
 		frmScrabble.setTitle("Scrabble");
@@ -127,6 +117,16 @@ public class ConsolaGrafica implements Vista{
 		panelSur.setLayout(new BoxLayout(panelSur, BoxLayout.X_AXIS));
 		
 		entrada = new JTextField();
+		entrada.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					//Recibe la entrada (opcion) y la procesa
+					procesarEntrada(entrada.getText());
+					//Setea en vacio el campo de entrada
+					entrada.setText("");
+				}
+			}
+		});
 		entrada.setForeground(new Color(255, 255, 255));
 		entrada.setBackground(new Color(0, 0, 0));
 		entrada.setFont(new Font("Segoe UI Variable Static Text", Font.PLAIN, 13));
@@ -174,6 +174,36 @@ public class ConsolaGrafica implements Vista{
 		frmScrabble.getContentPane().add(panelTerminal);
 		
 		mostrarMenuPrincipal();
+		
+	}
+
+	@Override
+	public void mostrarIngresarJugadores() {
+		// TODO Apéndice de método generado automáticamente
+		
+	}
+
+	@Override
+	public void mostrarComenzarPartida() {
+		// TODO Apéndice de método generado automáticamente
+		
+	}
+
+	@Override
+	public void mostrarTablero() {
+		// TODO Apéndice de método generado automáticamente
+		
+	}
+
+	@Override
+	public void mostrarOpcionesJuego() {
+		// TODO Apéndice de método generado automáticamente
+		
+	}
+
+	@Override
+	public void mostrarVerReglas() {
+		// TODO Apéndice de método generado automáticamente
 		
 	}
 

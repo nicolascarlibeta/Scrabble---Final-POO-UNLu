@@ -9,22 +9,27 @@ import java.util.Map;
 import java.util.Random;
 
 import modelo.scrabble.Ficha;
+import obs.scrabble.Observado;
+import obs.scrabble.Observador;
 
-public class ModeloJuego {
+public class ModeloJuego implements Observado{
 	
 	 // * TABLERO: 
-	private Object[][] tablero = new Object[15][15];
+	private Ficha[][] tablero = new Ficha[16][16];
 	// * FICHAS:
-	private final HashMap<Character, Integer> fichas = new HashMap<>();
+	private PuntajeFichas fichas = new PuntajeFichas();
 	// * BOLSA DE FICHAS: 
 	private HashMap<Character, Integer> bolsaDeFichas = new HashMap<>();
+	// * CANTIDAD DE FICHAS ACTUAL:
+	private int cantidadFichasBolsa = 100;
 	// * CANTIDAD DE FICHAS A REPARTIR:
 	private final int cantidadFichas = 7;
 	// * JUGADORES:
 	private Jugador[] jugadores = new Jugador[2];
 	// * CANTIDAD DE JUGADORES:
-	private final int cantidadJugadores = jugadores.length;
-	
+	private final int cantidadJugadores = 2;
+	// * OBSERVADORES:
+	private ArrayList<Observador> observadores = new ArrayList<>();
 	
 	
 	//CONSTRUCTOR
@@ -35,35 +40,95 @@ public class ModeloJuego {
 	}
 	
 	private void cargarTablero() {
-		Character casilleroVacio = '.';
-		tablero[0][0] = ' ';
+		Ficha casilleroVacio = new Letra("_");
+		tablero[0][0] = new Letra(" ");
 		for(int f = 1; f < tablero.length; f++) {
 			for(int c = 1; c < tablero[f].length; c++) {
 				tablero[f][c] = casilleroVacio;	 		
 				}
 			}
-		//Cargar LETRAS (Borde IZQUIERDO)
+		//Cargar LETRAS (Borde IZQUIERDO y DERECHO)
 		int l = 65;
 		for(int f = 1; f < tablero.length; f++) {
-			tablero[f][0] = (char)((char)l);
+			tablero[f][0] = new Letra("" + ((char)l));
+			tablero[0][f] = new Letra("" + ((char)l));
 			l++;
 		}  
-		//Cargar NÚMEROS (Borde DERECHO)
-		for(int c = 1; c < tablero[0].length; c++) {
-			tablero[0][c] = "" + c;
+	
+		cargarPremios();
+		
+	}
+	
+	private void cargarPremios() {
+		
+	//Premio PALABRA DOBLE
+	for(int pd = 1; pd <= tablero.length - 1; pd ++) {
+		tablero[pd][pd] = new PremioPalabra(TipoPuntaje.DOBLE);					
 		}
-		//tablero[2][1] = new PremioLetra(new PuntajeDoble());
+	for(int pd = 1; pd <= tablero.length - 1; pd ++) {
+		tablero[pd][(tablero.length - 1) - (pd - 1)] = new PremioPalabra(TipoPuntaje.DOBLE);
+		}
+	
+	//Premio LETRA TRIPLE
+	for(int x = 2; x <= tablero.length - 1; x += 12) {
+		for(int y = 6; y <= 10; y += 4) {
+			tablero[x][y] = new PremioLetra(TipoPuntaje.TRIPLE);										
+			}
+		}
+	for(int x = 6; x <= 10; x += 4) {
+		for(int y = 2; y <= tablero.length - 1; y += 4) {
+			tablero[x][y] = new PremioLetra(TipoPuntaje.TRIPLE);										
+			}
+		}
+	
+	//Premio PALABRA TRIPLE
+	for(int x = 1; x <= tablero.length - 1; x += 7) {
+		for(int y = 1; y <= tablero.length - 1; y += 7) {
+			tablero[x][y] = new PremioPalabra(TipoPuntaje.TRIPLE);					
+			}
+		}	
+	
+	//Premio LETRA DOBLE (Alrededores)
+	for(int x = 4; x <= tablero.length - 1; x += 8) {
+		for(int y = 1; y <= tablero.length - 1; y += 14) {
+			tablero[x][y] = new PremioLetra(TipoPuntaje.DOBLE);					
+			}
+		}
+	for(int x = 1; x <= tablero.length - 1; x += 14) {
+		for(int y = 4; y <= tablero.length - 1; y += 8) {
+			tablero[x][y] = new PremioLetra(TipoPuntaje.DOBLE);					
+			}
+		}
+	
+	//Premio LETRA DOBLE (Centrales) 
+	for(int x = 3; x <= tablero.length - 1; x += 10) {
+		for(int y = 7; y <= 9; y += 2) {
+			tablero[x][y] = new PremioLetra(TipoPuntaje.DOBLE);					
+			}
+		}
+	for(int x = 7; x <= 9; x += 2) {
+		for(int y = 7; y <= 9; y += 2) {
+			tablero[x][y] = new PremioLetra(TipoPuntaje.DOBLE);					
+			}
+		}
+	for(int x = 7; x <= 9; x += 2) {
+		for(int y = 3; y <= tablero.length - 1; y += 10) {
+			tablero[x][y] = new PremioLetra(TipoPuntaje.DOBLE);					
+			}
+		}
+	for(int y = 8; y <= 8; y++) {
+		for(int x = 4; x <= tablero.length - 1; x += 8) {
+			tablero[x][y] = new PremioLetra(TipoPuntaje.DOBLE);
+			tablero[y][x] = new PremioLetra(TipoPuntaje.DOBLE);
+			}
+		}
+	
+	//Premio PALABRA DOBLE (Estrella)
+	tablero[8][8] = new PremioPalabra(TipoPuntaje.DOBLE);
+	
 	}
 	
 	private void cargarFichas() {
-		
-		//FICHAS.
-		fichas.put('A', 1); fichas.put('B', 3); fichas.put('C', 3); fichas.put('D', 2); fichas.put('E', 1); 
-		fichas.put('F', 4); fichas.put('G', 2);fichas.put('H', 4); fichas.put('I', 1); fichas.put('J', 8); fichas.put('L', 1);
-		fichas.put('M', 3); fichas.put('N', 1); fichas.put('Ñ', 8); fichas.put('O', 1); fichas.put('P', 3); fichas.put('Q', 5);
-		fichas.put('R', 1); fichas.put('S', 1); fichas.put('T', 1); fichas.put('U', 1);
-		fichas.put('V', 4); fichas.put('X', 8); fichas.put('Y', 4); fichas.put('Z', 10);
-		fichas.put(' ', 0);
 		
 		//BOLSA DE FICHAS.
 		bolsaDeFichas.put('A', 12); bolsaDeFichas.put('B', 2); bolsaDeFichas.put('C', 4); 
@@ -81,21 +146,48 @@ public class ModeloJuego {
 	
 	public void cargarPartida() {
 		
+		//Genero el grupo de las vocales (al menos 4 vocales en el atril)
+		char vocales[] = {'A','E','I','O','U'};
+		
 		//Le repartimos aleatoriamente las 7 fichas a cada jugador
 		for(int j = 0; j < cantidadJugadores; j++) {
-			for(int f = 0; f < cantidadFichas; f++) {
-				
-				char letra = (char)((char)new Random().nextInt(91 - 65) + 65);
-				
-				//Le agrego las fichas al atril del jugador
-				jugadores[j].getAtril().add(letra);
-				
-				//Le quito las fichas a la bolsa
-				//bolsaDeFichas.put(letra, bolsaDeFichas.get(letra) - 1);
-			}	
+			for(int f = 0; f < cantidadFichas; j++) {
+				//Reparto las 7 fichas iniciales
+				repartirFichas(j);				
+			}
+		}
+	}
+	
+	public void repartirFichas(int idJugador) {
+		
+		//Genero la ficha de letra
+		char letra = (char)((char)new Random().nextInt(91 - 65) + 65);
+			
+		while(bolsaDeFichas.get(letra) == null || bolsaDeFichas.get(letra) == 0) {
+			letra = (char)((char)new Random().nextInt(91 - 65) + 65);
 		}
 		
+		//Le agrego las fichas al atril del jugador
+		jugadores[idJugador].getAtril().add(letra);
+
+		//Le quito las fichas a la bolsa
+		bolsaDeFichas.put(letra, bolsaDeFichas.get(letra) - 1);
+		cantidadFichasBolsa--;	
 	}
+	
+	public void devolverFichas(int idJugador, char[] fichasACambiar) {
+		
+		for(Character f: fichasACambiar) {
+			
+			//Elimino la ficha del atril
+			jugadores[idJugador].getAtril().remove(f);
+			
+			//Devuelvo la ficha del atril a la bolsa
+			bolsaDeFichas.put(f, bolsaDeFichas.get(f) + 1);
+			cantidadFichasBolsa = cantidadFichasBolsa++;
+		}
+		
+	} 
 	
 	public void addJugadores(String jugador1, String jugador2) {
 		jugadores[0] = new Jugador(jugador1);
@@ -106,27 +198,23 @@ public class ModeloJuego {
 		
 		//Hago un alias del conjunto de letras de la palabra
 		char[] letrasPalabra = palabraActual.getLetras();
-		
+		//length de la palabra
 		//Hago un alias del atril del jugador
 		List<Character> atril = jugadores[idJugador].getAtril();
 		
 		//Hago un formateo de x
 		x -= 64;
 		
-		//Calcular puntaje
-		int puntajePalabra = 0; //Puntaje provisorio
-		for(Character l: letrasPalabra) {
-			puntajePalabra += fichas.get(l);
-		}
-		//Seteo el puntaje a la palabra
-		palabraActual.setPuntaje(puntajePalabra);
+		//Calculo el puntaje inicial de la palabra
+		int puntajePalabra = calcularPuntajePalabra(x, y, letrasPalabra, horizontal);
+		
 		//Seteo el puntaje al jugador
 		jugadores[idJugador].setPuntaje(jugadores[idJugador].getPuntaje() + puntajePalabra);
-		
-		//Coloco las letras en el tablero y se las resto del atril del jugador
+				
+		//Coloco las letras en el tablero y se las resto del atril al jugador
 		int i = x, d = y;
 		for(Character l: letrasPalabra) {
-			tablero[i][d] = l;
+			tablero[i][d] = new Letra(l + "");
 			atril.remove(l);
 			if(horizontal) {
 				d++;				
@@ -135,23 +223,100 @@ public class ModeloJuego {
 				i++;
 			}
 		}
-
+		
+		//Le reparto las fichas restantes al jugador
+		if(cantidadFichasBolsa > 0) {
+			int cantidadARepartir = cantidadFichas - atril.size();
+			for(int c = 0; c < cantidadARepartir; c++) {
+				repartirFichas(idJugador);
+			}
+		}
+	}
+		
+	private int calcularPuntajePalabra(int x, int y, char[] letrasPalabra, boolean horizontal) {
+		
+		//Calculo el puntaje inicial
+		int puntajePalabra = 0;
+		int cantVecesMultiplicar = 1;
+		boolean multiplicarPalabra = false;
+		
+		int i = x, d = y;
+	
+		for(char letra: letrasPalabra) {
+			
+			if(tablero[i][d].getClass() == PremioLetra.class) {
+				puntajePalabra += fichas.getPuntaje(letra + "") * tablero[i][d].getPuntos();					
+			}
+			else if(tablero[i][d].getClass() == PremioPalabra.class) {
+				puntajePalabra += fichas.getPuntaje(letra + "");
+				cantVecesMultiplicar *= tablero[i][d].getPuntos();
+				multiplicarPalabra = true;
+			}
+			else {
+				puntajePalabra += fichas.getPuntaje(letra + "");
+			}
+			
+			if(horizontal) {
+				d++;				
+			}
+			else{
+				i++;
+			}
+		}
+		
+		if(multiplicarPalabra) {
+			puntajePalabra *= cantVecesMultiplicar;
+		}
+		return puntajePalabra;
 	}
 	
-	public Object[][] getTablero() {
+	public int getGanador() {
+		int ganador;
+		if(jugadores[0].getPuntaje() > jugadores[1].getPuntaje()) {
+			ganador = 0;
+		}
+		else {
+			ganador = 1;
+		}
+		return ganador;
+	}
+	
+	public int getCantidadJugadores() {
+		return cantidadJugadores;
+	}
+	
+	public Ficha[][] getTablero() {
 		return tablero;
 	}
-	
-	public HashMap<Character, Integer> getFichas() {
-		return fichas;
-	}
-	
+
 	public HashMap<Character, Integer> getBolsaDeFichas() {
 		return bolsaDeFichas;
 	}
 	
-	public Jugador getJugador() {
-		return jugadores[0];
+	public Jugador[] getJugadores() {
+		return jugadores;
+	}
+	
+	public boolean isVacia() {
+		return cantidadFichasBolsa == 0;
+	}
+	
+	public int getCantidadFichasBolsa() {
+		return cantidadFichasBolsa;
+	}
+	
+	public void ligar(Observador o) {
+		observadores.add(o);
+	}
+
+	public void desligar(Observador o) {
+		observadores.remove(o);
+	}
+
+	public void notificar(Evento evento) {
+		for(Observador o: observadores) {
+			o.actualizar(evento);
+		}
 	}
 
 }

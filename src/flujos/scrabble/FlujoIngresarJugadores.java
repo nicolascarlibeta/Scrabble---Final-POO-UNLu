@@ -1,6 +1,7 @@
-package vista.scrabble.consolagrafica;
+package flujos.scrabble;
 
 import controlador.scrabble.Controlador;
+import vista.scrabble.consolagrafica.ConsolaGrafica;
 
 public class FlujoIngresarJugadores extends Flujo{
 	
@@ -37,14 +38,14 @@ public class FlujoIngresarJugadores extends Flujo{
 	
 	//INTERFAZ
 	public void ingresarNombreJugador1(String jugador1) {
-		this.jugador1 = jugador1;
+		this.jugador1 = jugador1.toUpperCase();
 		estadoActual = EstadosPosibles.INGRESANDO_NOMBRE_JUGADOR_2;
 	}
 	
 	public Flujo ingresarNombreJugador2(String jugador2) {
-		this.jugador2 = jugador2;
-		controlador.comenzarPartida(jugador1,jugador2);
-		return new FlujoComenzarPartida(vista,controlador);
+		this.jugador2 = jugador2.toUpperCase();
+		controlador.comenzarPartida(jugador1,this.jugador2);
+		return new FlujoOpJugador1(vista,controlador,0);
 	}
 
 }

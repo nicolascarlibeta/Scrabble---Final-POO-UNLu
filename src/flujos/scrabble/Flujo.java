@@ -1,6 +1,7 @@
-package vista.scrabble.consolagrafica;
+package flujos.scrabble;
 
 import controlador.scrabble.Controlador;
+import vista.scrabble.consolagrafica.ConsolaGrafica;
 
 public abstract class Flujo {
 

@@ -1,6 +1,7 @@
-package vista.scrabble.consolagrafica;
+package flujos.scrabble;
 
 import controlador.scrabble.*;
+import vista.scrabble.consolagrafica.ConsolaGrafica;
 
 public class FlujoMenuPrincipal extends Flujo{
 
@@ -29,19 +30,6 @@ public class FlujoMenuPrincipal extends Flujo{
         return this;
     }
     
-public String mostrarTableroJuego() {
-		
-		Object[][] tablero = controlador.obtenerTablero();
-		String mostrarTablero = "";
-		for(int f = 0; f < tablero.length; f++) {
-			for(int c = 0; c < tablero[f].length; c++) {
-				mostrarTablero += tablero[f][c] + " ";			
-			}
-			mostrarTablero += "\n"; 
-		}
-		return mostrarTablero;
-	}
-
     
 
 	

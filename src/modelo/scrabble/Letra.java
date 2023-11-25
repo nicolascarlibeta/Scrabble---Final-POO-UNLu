@@ -1,14 +1,16 @@
 package modelo.scrabble;
 
-public class Letra extends Ficha{
+public class Letra implements Ficha{
 
 	private String letra;
 	private int puntos;
 	
 	//CONSTRUCTOR
-	public Letra(String letra, int puntos) {
+	public Letra(String letra) {
 		this.letra = letra;
-		this.puntos = puntos;
+		if(PuntajeFichas.getPuntaje(letra) != 0) {
+			this.puntos = PuntajeFichas.getPuntaje(letra);
+		}
 	}
 	
 	public String getLetra() {
@@ -18,29 +20,6 @@ public class Letra extends Ficha{
 	public int getPuntos() {
 		return puntos;
 	}
-
-	public Puntaje getTipoPuntaje() {
-		return null;
-	}
-
-	@Override
-	public int getPremioLetra() {
-		// TODO Auto-generated method stub
-		return 1;
-	}
-
-	@Override
-	public int getPremioPalabra() {
-		// TODO Auto-generated method stub
-		return 1;
-	}
-	
-	public String toString() {
-		return "LETRA: " + letra + "\n"
-			 + "PUNTOS: " + puntos + "\n";
-	}
-
-
 
 
 }

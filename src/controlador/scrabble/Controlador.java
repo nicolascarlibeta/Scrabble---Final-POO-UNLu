@@ -3,12 +3,10 @@ package controlador.scrabble;
 import java.util.List;
 
 import modelo.scrabble.*;
-import modelo.scrabble.Letra;
-import modelo.scrabble.ModeloJuego;
+import obs.scrabble.Observador;
 import vista.scrabble.Vista;
-import vista.scrabble.VistaConsola;
 
-public class Controlador {
+public class Controlador implements Observador{
 	
 	private Vista vista;
 	private ModeloJuego modelo;
@@ -26,6 +24,10 @@ public class Controlador {
 		modelo.cargarPartida();
 	}
 	
+	public void cambiarFichas(int idJugador, char[] cadenaCaracteres) {
+		modelo.devolverFichas(idJugador,cadenaCaracteres);
+	}
+	
 	private void agregarJugadores(String jugador1, String jugador2) {
 		modelo.addJugadores(jugador1,jugador2);
 	}
@@ -33,31 +35,62 @@ public class Controlador {
 	public void agregarPalabra(int idJugador, int x, int y, String cadenaString, boolean horizontal) {
 		
 		//Creo la nueva palabra dentro del Controlador
-		char[] caracteres = cadenaString.toCharArray();
-		Palabra nuevaPalabra = new Palabra(caracteres);
+		Palabra nuevaPalabra = new Palabra(cadenaString);
 		
 		//La envio al modelo
 		modelo.addPalabra(idJugador, x, y, nuevaPalabra, horizontal);
 		
 	}
 	
-	public Object[][] obtenerTablero() {
-		return modelo.getTablero();
+	public String obtenerTablero() {
+		Ficha[][] tablero = modelo.getTablero();
+		String obtenerTablero = "";
+		for(int f = 0; f < tablero.length; f++) {
+			for(int c = 0; c < tablero[f].length; c++) {
+				obtenerTablero += tablero[f][c].getLetra() + " ";
+				if(tablero[f][c].getClass() == PremioLetra.class) {
+				}
+			}
+			obtenerTablero += "\n"; 
+		}
+		return obtenerTablero;
 	}
 	
-	public List<Character> obtenerAtril(){
-		return modelo.getJugador().getAtril();
+	public int obtenerGanador(){
+		return modelo.getGanador();
 	}
 	
-	public int obtenerPuntaje(){
-		return modelo.getJugador().getPuntaje();
+	public int obtenerCantidadJugadores() {
+		return modelo.getCantidadJugadores();
 	}
 	
+	public Jugador obtenerJugadores(int idJugador){
+		return modelo.getJugadores()[idJugador];
+	}
 	
+	public boolean bolsaEstaVacia() {
+		return modelo.isVacia();
+	}
 	
-	
-	
-	
+	public int obtenerCantidadFichas() {
+		return modelo.getCantidadFichasBolsa();
+	}
+/*
+	public void actualizar(Object arg) {
+		if (arg instanceof Evento) {
+			switch ((Evento) arg) {
+			case NUEVA_PALABRA -> {
+				//vista.mostrarListaUsuarios((IUsuario[]) this.modelo.getUsuarios());				
+			}
+				
+		}
+	}*/
+
+	@Override
+	public void actualizar(Object arg) {
+		// TODO Apéndice de método generado automáticamente
+		
+	}
 	
 	
 

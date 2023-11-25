@@ -4,25 +4,21 @@ import java.util.ArrayList;
 
 public class Palabra {
 	
+	private String palabra = "";
 	private char[] letras = new char[7];
-	private int puntaje;
 	
-	public Palabra(char[] letras) {
-		this.letras = letras;
+	public Palabra(String palabra) {
+		this.palabra = palabra;
+		this.letras = palabra.toCharArray();
 	}
 	
 	public char[] getLetras() {
 		return letras;
 	}
 
-	public int getPuntaje() {
-		return puntaje;
+	public String getPalabra() {
+		return palabra;
 	}
-
-	public void setPuntaje(int puntaje) {
-		this.puntaje = puntaje;
-	}
-	
 	
 	
 	

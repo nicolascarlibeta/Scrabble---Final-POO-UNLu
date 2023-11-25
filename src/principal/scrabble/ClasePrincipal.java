@@ -15,8 +15,6 @@ public class ClasePrincipal {
 			
 		ModeloJuego modelo = new ModeloJuego();
 		Controlador controlador = new Controlador(modelo);
-		//La linea de abajo no es del todo cohesiva
-		//modelo.addJugador("Javier Carli");
 			
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

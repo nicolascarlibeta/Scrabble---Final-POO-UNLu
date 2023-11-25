@@ -1,31 +1,38 @@
 package modelo.scrabble;
 
-public class PremioPalabra extends Ficha{
+public class PremioPalabra implements Ficha{
 
-	private final String letra = "P";
-	private Puntaje tipoPuntaje;
+	private String letra = "";
+	private TipoPuntaje tipoPuntaje;
+	
+	//CONSTRUCTOR
+	public PremioPalabra(TipoPuntaje tipoPuntaje) {
+		this.tipoPuntaje = tipoPuntaje;
+		if(tipoPuntaje == TipoPuntaje.DOBLE) {
+			letra = "2";
+			}
+		else {
+			letra = "3";
+		}
+	}
+	
+	//INTERFAZ
 	
 	public String getLetra() {
-		return letra + tipoPuntaje.getDescripcion();
+		return letra;
 	}
-	
-	public PremioPalabra(Puntaje tipoPuntaje) {
-		this.tipoPuntaje = tipoPuntaje;
-	}
-
-	public int getPremioLetra() {
-		return 1;
-	}
-	
-	public int getPremioPalabra() {
-		return tipoPuntaje.getPremio();
-	}
-
-	@Override
+		
 	public int getPuntos() {
-		// TODO Auto-generated method stub
-		return 0;
+		int premio;
+		if(tipoPuntaje == TipoPuntaje.DOBLE) {
+			premio = 2;
+		}
+		else {
+			premio = 3;
+		}
+		return premio;
 	}
+	
 	
 
 	
