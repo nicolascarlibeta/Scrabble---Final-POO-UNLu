@@ -151,21 +151,27 @@ public class ModeloJuego implements Observado{
 		
 		//Le repartimos aleatoriamente las 7 fichas a cada jugador
 		for(int j = 0; j < cantidadJugadores; j++) {
-			for(int f = 0; f < cantidadFichas; j++) {
+			for(int f = 0; f < cantidadFichas - 4; f++) {
+				//Reparto las 7 fichas iniciales (tres primero)
+
+				char letra = (char)((char)new Random().nextInt(91 - 65) + 65);
+					
+				while(bolsaDeFichas.get(letra) == null || bolsaDeFichas.get(letra) == 0) {
+					letra = (char)((char)new Random().nextInt(91 - 65) + 65);
+				}
+				repartirFichas(j, letra);				
+			}
+		}
+		for(int j = 0; j < cantidadJugadores; j++) {
+			for(int f = 0; f < 4; f++) {
 				//Reparto las 7 fichas iniciales
-				repartirFichas(j);				
+				int random = new Random().nextInt(vocales.length);
+				repartirFichas(j, vocales[random]);				
 			}
 		}
 	}
 	
-	public void repartirFichas(int idJugador) {
-		
-		//Genero la ficha de letra
-		char letra = (char)((char)new Random().nextInt(91 - 65) + 65);
-			
-		while(bolsaDeFichas.get(letra) == null || bolsaDeFichas.get(letra) == 0) {
-			letra = (char)((char)new Random().nextInt(91 - 65) + 65);
-		}
+	public void repartirFichas(int idJugador, char letra) {
 		
 		//Le agrego las fichas al atril del jugador
 		jugadores[idJugador].getAtril().add(letra);
@@ -184,9 +190,22 @@ public class ModeloJuego implements Observado{
 			
 			//Devuelvo la ficha del atril a la bolsa
 			bolsaDeFichas.put(f, bolsaDeFichas.get(f) + 1);
-			cantidadFichasBolsa = cantidadFichasBolsa++;
 		}
 		
+		//Le reparto las fichas restantes al jugador
+		List<Character> atril = jugadores[idJugador].getAtril();
+		if(cantidadFichasBolsa > 0) {
+			int cantidadARepartir = cantidadFichas - atril.size();
+			for(int c = 0; c < cantidadARepartir; c++) {
+				char letra = (char)((char)new Random().nextInt(91 - 65) + 65);
+				
+				while(bolsaDeFichas.get(letra) == null || bolsaDeFichas.get(letra) == 0) {
+					letra = (char)((char)new Random().nextInt(91 - 65) + 65);
+				}
+				repartirFichas(idJugador,letra);
+			}
+			cantidadFichasBolsa += cantidadARepartir;
+		}
 	} 
 	
 	public void addJugadores(String jugador1, String jugador2) {
@@ -202,8 +221,8 @@ public class ModeloJuego implements Observado{
 		//Hago un alias del atril del jugador
 		List<Character> atril = jugadores[idJugador].getAtril();
 		
-		//Hago un formateo de x
-		x -= 64;
+		//Hago un formateo de x e y
+		x -= 64; y -=64;
 		
 		//Calculo el puntaje inicial de la palabra
 		int puntajePalabra = calcularPuntajePalabra(x, y, letrasPalabra, horizontal);
@@ -228,7 +247,12 @@ public class ModeloJuego implements Observado{
 		if(cantidadFichasBolsa > 0) {
 			int cantidadARepartir = cantidadFichas - atril.size();
 			for(int c = 0; c < cantidadARepartir; c++) {
-				repartirFichas(idJugador);
+				char letra = (char)((char)new Random().nextInt(91 - 65) + 65);
+				
+				while(bolsaDeFichas.get(letra) == null || bolsaDeFichas.get(letra) == 0) {
+					letra = (char)((char)new Random().nextInt(91 - 65) + 65);
+				}
+				repartirFichas(idJugador,letra);
 			}
 		}
 	}
@@ -303,6 +327,10 @@ public class ModeloJuego implements Observado{
 	
 	public int getCantidadFichasBolsa() {
 		return cantidadFichasBolsa;
+	}
+	
+	public boolean isPrimerMovimiento() {
+		return jugadores[0].getPuntaje() == 0 && jugadores[1].getPuntaje() == 0;
 	}
 	
 	public void ligar(Observador o) {

@@ -16,7 +16,7 @@ public abstract class FlujoCambiarFichas extends Flujo{
 	
     public void mostarMenuTextual() {
     	vista.println(controlador.obtenerTablero());
-		vista.println("CANT. FICHAS: " + controlador.obtenerCantidadFichas());
+		vista.println("CANT FICHAS: " + controlador.obtenerCantidadFichas());
 		vista.println(mostrarEstadoJugador());
     	vista.println(controlador.obtenerJugadores(idJugador).getAtril().toString());
         vista.println("Ingrese una palabra que contenga las letras que desea cambiar (en cualquier orden): ");

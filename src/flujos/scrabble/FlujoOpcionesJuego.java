@@ -13,7 +13,7 @@ public abstract class FlujoOpcionesJuego extends Flujo{
 	
     public void mostarMenuTextual() {
     	vista.println(controlador.obtenerTablero());
-		vista.println("CANT. FICHAS: " + controlador.obtenerCantidadFichas());
+		vista.println("CANT FICHAS: " + controlador.obtenerCantidadFichas());
 		vista.println(mostrarEstadoJugador());
         vista.println("¿Que deseas hacer?:");
         vista.println("1. Agregar palabra.");

@@ -73,10 +73,6 @@ public class ConsolaGrafica implements Vista{
         terminal.append(texto + "\n");
     }
 	
-	public void print(String texto) {
-		terminal.append(texto);
-    }
-	
 	//Limpiar la terminal
 	public void limpiar() {
 		terminal.setText("");
@@ -104,7 +100,7 @@ public class ConsolaGrafica implements Vista{
 		frmScrabble = new JFrame();
 		frmScrabble.getContentPane().setForeground(new Color(255, 255, 255));
 		frmScrabble.getContentPane().setBackground(new Color(0, 0, 0));
-		frmScrabble.setSize(1000, 700);
+		frmScrabble.setSize(1366, 728);
 		frmScrabble.setVisible(true);
 		frmScrabble.setResizable(true);
 		frmScrabble.setTitle("Scrabble");

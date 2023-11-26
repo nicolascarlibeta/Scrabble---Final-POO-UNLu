@@ -75,6 +75,11 @@ public class Controlador implements Observador{
 	public int obtenerCantidadFichas() {
 		return modelo.getCantidadFichasBolsa();
 	}
+	
+	public boolean esPrimerMovimiento() {
+		return modelo.isPrimerMovimiento();
+	}
+	
 /*
 	public void actualizar(Object arg) {
 		if (arg instanceof Evento) {

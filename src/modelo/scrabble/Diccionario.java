@@ -5,19 +5,19 @@ import java.io.*;
 
 public class Diccionario {
 
-	private static File palabras;
+	private File palabras;
 	
     //INTERFAZ
 	
-	public static void porIndice(int primeraLetra) {
+	public void porIndice(int primeraLetra) {
 		
-		if(primeraLetra >= 65 && primeraLetra <= 70) {
+		if(primeraLetra >= 97 && primeraLetra <= 102) {
     		palabras = new File("A-F.txt");
     	}
-    	else if(primeraLetra >= 71 && primeraLetra <= 77) {
+    	else if(primeraLetra >= 103 && primeraLetra <= 109) {
     		palabras = new File("G-M.txt");
     	}
-    	else if(primeraLetra >= 78 && primeraLetra <= 83) {
+    	else if(primeraLetra >= 110 && primeraLetra <= 115) {
     		palabras = new File("N-S.txt");
     	}
     	else {
@@ -25,7 +25,7 @@ public class Diccionario {
     	}
 	}
     
-    public static boolean contieneA(String palabraBuscada) throws IOException{
+    public boolean contieneA(String palabraBuscada) throws IOException{
     	
     	//Tomo la primera letra de la palabra a buscar
     	int primeraLetra = (int) palabraBuscada.toCharArray()[0];

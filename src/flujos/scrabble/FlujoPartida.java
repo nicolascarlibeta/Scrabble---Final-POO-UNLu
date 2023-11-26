@@ -32,7 +32,7 @@ public abstract class FlujoPartida extends Flujo{
 
 	public void mostarMenuTextual() {
 		vista.println(controlador.obtenerTablero());
-		vista.println("CANT. FICHAS: " + controlador.obtenerCantidadFichas());
+		vista.println("CANT FICHAS: " + controlador.obtenerCantidadFichas());
 		vista.println(mostrarEstadoJugador());
 		switch(estadoActual) {
 		case INGRESANDO_PALABRA -> vista.println("Ingrese una palabra:");
@@ -90,11 +90,18 @@ public abstract class FlujoPartida extends Flujo{
 			}
 		}
 		//Segundo, valido la palabra en el diccionario
-		if(!Diccionario.contieneA(cadenaString)) {
+		if(!new Diccionario().contieneA(cadenaString.toLowerCase())) {
 			vista.println("La palabra ingresada no es valida, intente con otra.");
 			return this;
 		}
-		estadoActual = EstadosPosibles.INGRESANDO_COORDENADA_X;
+		if(controlador.esPrimerMovimiento()) {
+			this.x = 72;
+			this.y = 72;
+			estadoActual = EstadosPosibles.INGRESANDO_DISPOSICION;
+		}
+		else {
+			estadoActual = EstadosPosibles.INGRESANDO_COORDENADA_X;			
+		}
 		return this;
 	}
 	
