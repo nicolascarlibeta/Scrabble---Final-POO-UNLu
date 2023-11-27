@@ -24,10 +24,12 @@ public class FlujoPJugador2 extends FlujoPartida{
 				+ "ATRIL: " + jugador2.getAtril() + "\n"
 				+ "PUNTAJE: " + jugador2.getPuntaje() + "\n";
 	}
-
+	
 	public Flujo avanzarFlujo() {
 		return new FlujoOpJugador1(vista,controlador,0);
 	}
+
+	
 	
 
 }

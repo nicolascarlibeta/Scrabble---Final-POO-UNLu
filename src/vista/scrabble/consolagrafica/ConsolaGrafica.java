@@ -22,6 +22,9 @@ import javax.swing.SpringLayout;
 import controlador.scrabble.Controlador;
 import flujos.scrabble.Flujo;
 import flujos.scrabble.FlujoMenuPrincipal;
+import modelo.scrabble.Ficha;
+import modelo.scrabble.Jugador;
+import modelo.scrabble.PremioLetra;
 import vista.scrabble.Vista;
 
 import javax.swing.GroupLayout;
@@ -44,6 +47,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.border.CompoundBorder;
 import javax.swing.SwingConstants;
+import javax.swing.JScrollPane;
 
 public class ConsolaGrafica implements Vista{
 
@@ -69,8 +73,8 @@ public class ConsolaGrafica implements Vista{
 	}
 	
 	//Métodos para imprimir por pantalla
-	public void println(String texto) {
-        terminal.append(texto + "\n");
+	public void mostrarMensaje(String mensaje) {
+        terminal.append(mensaje + "\n");
     }
 	
 	//Limpiar la terminal
@@ -144,7 +148,7 @@ public class ConsolaGrafica implements Vista{
  
 		panelNorte = new JPanel();
 		panelNorte.setBackground(new Color(0, 0, 0));
-		panelNorte.setPreferredSize(new Dimension(100,70));
+		panelNorte.setPreferredSize(new Dimension(100,50));
 		frmScrabble.getContentPane().add(panelNorte, BorderLayout.NORTH);
  
 		panelOeste = new JPanel();
@@ -172,38 +176,25 @@ public class ConsolaGrafica implements Vista{
 		mostrarMenuPrincipal();
 		
 	}
-
-	@Override
-	public void mostrarIngresarJugadores() {
-		// TODO Apéndice de método generado automáticamente
-		
-	}
-
-	@Override
-	public void mostrarComenzarPartida() {
-		// TODO Apéndice de método generado automáticamente
-		
-	}
-
-	@Override
-	public void mostrarTablero() {
-		// TODO Apéndice de método generado automáticamente
-		
-	}
-
-	@Override
-	public void mostrarOpcionesJuego() {
-		// TODO Apéndice de método generado automáticamente
-		
-	}
-
-	@Override
-	public void mostrarVerReglas() {
-		// TODO Apéndice de método generado automáticamente
-		
-	}
-
 	
+	public void mostrarIngresarJugadores(Jugador[] jugadores) {
+		mostrarMensaje("Se han ingresado los nuevos jugadores: " + jugadores[0].getNombre() + " y " + jugadores[1].getNombre());
+	}
+
+	public void mostrarComenzarPartida(Jugador[] jugadores) {
+		mostrarMensaje("Comienza la partida. Empieza el jugador " + jugadores[0].getNombre() + ".");
+	}
+
+	public void mostrarTablero(Ficha[][] tablero) {
+		String obtenerTablero = "";
+		for(int f = 0; f < tablero.length; f++) {
+			for(int c = 0; c < tablero[f].length; c++) {
+				obtenerTablero += tablero[f][c].getLetra() + " ";
+			}
+			obtenerTablero += "\n"; 
+		}
+		mostrarMensaje(obtenerTablero);
+	}
 	
 		
 }

@@ -18,10 +18,10 @@ public class FlujoIngresarJugadores extends Flujo{
 	}
 
 	public void mostarMenuTextual() {
-		
+		vista.limpiar();
 		switch(estadoActual) {
-		case INGRESANDO_NOMBRE_JUGADOR_1 -> vista.println("¿Cómo se llamará tu jugador?:");
-		case INGRESANDO_NOMBRE_JUGADOR_2 -> vista.println("¿Cómo se llamará el jugador oponente?:");
+		case INGRESANDO_NOMBRE_JUGADOR_1 -> vista.mostrarMensaje("¿Cómo se llamará tu jugador?:");
+		case INGRESANDO_NOMBRE_JUGADOR_2 -> vista.mostrarMensaje("¿Cómo se llamará el jugador oponente?:");
 		}
 	}
 	

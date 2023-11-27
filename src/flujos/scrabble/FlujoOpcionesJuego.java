@@ -12,14 +12,13 @@ public abstract class FlujoOpcionesJuego extends Flujo{
 	}
 	
     public void mostarMenuTextual() {
-    	vista.println(controlador.obtenerTablero());
-		vista.println("CANT FICHAS: " + controlador.obtenerCantidadFichas());
-		vista.println(mostrarEstadoJugador());
-        vista.println("¿Que deseas hacer?:");
-        vista.println("1. Agregar palabra.");
-        vista.println("2. Cambiar las fichas.");
-        vista.println("3. Pasar el turno.");
-        vista.println("Seleccione una opción: ");
+		vista.mostrarMensaje("CANT FICHAS: " + controlador.obtenerCantidadFichas());
+		vista.mostrarMensaje(mostrarEstadoJugador());
+        vista.mostrarMensaje("¿Que deseas hacer?:");
+        vista.mostrarMensaje("1. Agregar palabra.");
+        vista.mostrarMensaje("2. Cambiar las fichas.");
+        vista.mostrarMensaje("3. Pasar el turno.");
+        vista.mostrarMensaje("Seleccione una opción: ");
     }
 
 	public Flujo elegirOpcion(String opcion) {
@@ -33,7 +32,7 @@ public abstract class FlujoOpcionesJuego extends Flujo{
             case "3" -> {
             	return avanzarFlujo();
             }
-            default -> vista.println("Opción inválida");
+            default -> vista.mostrarMensaje("Opción inválida");
         }
         return this;
     }

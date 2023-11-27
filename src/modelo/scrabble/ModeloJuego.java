@@ -144,6 +144,10 @@ public class ModeloJuego implements Observado{
 	
 	//INTERFAZ
 	
+	public void enviarEstadoPartida() {
+		notificar(Evento.CAMBIO_TABLERO);
+	}
+	
 	public void cargarPartida() {
 		
 		//Genero el grupo de las vocales (al menos 4 vocales en el atril)
@@ -169,6 +173,8 @@ public class ModeloJuego implements Observado{
 				repartirFichas(j, vocales[random]);				
 			}
 		}
+		notificar(Evento.NUEVA_PARTIDA);
+		enviarEstadoPartida();
 	}
 	
 	public void repartirFichas(int idJugador, char letra) {
@@ -206,11 +212,14 @@ public class ModeloJuego implements Observado{
 			}
 			cantidadFichasBolsa += cantidadARepartir;
 		}
+		notificar(Evento.CAMBIO_FICHAS);
+		enviarEstadoPartida();
 	} 
 	
 	public void addJugadores(String jugador1, String jugador2) {
 		jugadores[0] = new Jugador(jugador1);
 		jugadores[1] = new Jugador(jugador2);
+		notificar(Evento.NUEVOS_JUGADORES);
 	}
 	
 	public void addPalabra(int idJugador, int x, int y, Palabra palabraActual, boolean horizontal) {
@@ -255,6 +264,8 @@ public class ModeloJuego implements Observado{
 				repartirFichas(idJugador,letra);
 			}
 		}
+		notificar(Evento.NUEVA_PALABRA);
+		enviarEstadoPartida();
 	}
 		
 	private int calcularPuntajePalabra(int x, int y, char[] letrasPalabra, boolean horizontal) {

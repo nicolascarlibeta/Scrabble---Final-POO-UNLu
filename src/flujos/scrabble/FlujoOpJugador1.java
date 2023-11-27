@@ -14,6 +14,7 @@ public class FlujoOpJugador1 extends FlujoOpcionesJuego{
 	}
 
 	public Flujo avanzarFlujo() {
+		vista.mostrarTablero(controlador.obtenerTablero());
 		return new FlujoOpJugador2(vista,controlador,1);
 	}
 

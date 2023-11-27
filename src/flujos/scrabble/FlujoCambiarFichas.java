@@ -15,11 +15,11 @@ public abstract class FlujoCambiarFichas extends Flujo{
 	protected int idJugador;
 	
     public void mostarMenuTextual() {
-    	vista.println(controlador.obtenerTablero());
-		vista.println("CANT FICHAS: " + controlador.obtenerCantidadFichas());
-		vista.println(mostrarEstadoJugador());
-    	vista.println(controlador.obtenerJugadores(idJugador).getAtril().toString());
-        vista.println("Ingrese una palabra que contenga las letras que desea cambiar (en cualquier orden): ");
+    	vista.mostrarTablero(controlador.obtenerTablero());
+		vista.mostrarMensaje("CANT FICHAS: " + controlador.obtenerCantidadFichas());
+		vista.mostrarMensaje(mostrarEstadoJugador());
+    	vista.mostrarMensaje(controlador.obtenerJugadores(idJugador).getAtril().toString());
+        vista.mostrarMensaje("Ingrese una palabra que contenga las letras que desea cambiar (en cualquier orden): ");
     }
 
     public Flujo elegirOpcion(String opcion) {
@@ -29,7 +29,7 @@ public abstract class FlujoCambiarFichas extends Flujo{
 		char[] cadenaCaracteres = opcion.toCharArray();
 		for(char c: cadenaCaracteres) {
 			if(!jugadorActual.getAtril().contains(c)) {
-				vista.println("Ingrese una palabra que contenga las letras de su atril.");
+				vista.mostrarMensaje("Ingrese una palabra que contenga las letras de su atril.");
 				return this;
 			}
 		}

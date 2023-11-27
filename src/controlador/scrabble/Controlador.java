@@ -13,6 +13,7 @@ public class Controlador implements Observador{
 	
 	public Controlador(ModeloJuego modelo) {
 		this.modelo = modelo;
+		modelo.ligar(this);
 	}
 	
 	public void setVista(Vista vista) {
@@ -42,18 +43,8 @@ public class Controlador implements Observador{
 		
 	}
 	
-	public String obtenerTablero() {
-		Ficha[][] tablero = modelo.getTablero();
-		String obtenerTablero = "";
-		for(int f = 0; f < tablero.length; f++) {
-			for(int c = 0; c < tablero[f].length; c++) {
-				obtenerTablero += tablero[f][c].getLetra() + " ";
-				if(tablero[f][c].getClass() == PremioLetra.class) {
-				}
-			}
-			obtenerTablero += "\n"; 
-		}
-		return obtenerTablero;
+	public Ficha[][] obtenerTablero(){
+		return modelo.getTablero();
 	}
 	
 	public int obtenerGanador(){
@@ -80,22 +71,31 @@ public class Controlador implements Observador{
 		return modelo.isPrimerMovimiento();
 	}
 	
-/*
-	public void actualizar(Object arg) {
-		if (arg instanceof Evento) {
-			switch ((Evento) arg) {
-			case NUEVA_PALABRA -> {
-				//vista.mostrarListaUsuarios((IUsuario[]) this.modelo.getUsuarios());				
+	public void actualizar(Evento evento) {
+		switch (evento) {
+		case NUEVOS_JUGADORES -> {
+			Jugador[] nuevosJugadores = modelo.getJugadores();
+			vista.mostrarIngresarJugadores(nuevosJugadores);				
 			}
-				
+		case NUEVA_PARTIDA -> {
+			Jugador[] jugadores = modelo.getJugadores();
+			vista.mostrarComenzarPartida(jugadores);				
+			}
+		case NUEVA_PALABRA -> {
+			vista.mostrarMensaje("Se ha agregado la palabra correctamente.");				
+			}
+		case CAMBIO_FICHAS -> {
+			vista.mostrarMensaje("Se han cambiado las fichas correctamente.");				
+			}
+		case CAMBIO_TABLERO -> {
+			Ficha[][] tablero = modelo.getTablero();
+			vista.mostrarTablero(tablero);				
+			}
 		}
-	}*/
-
-	@Override
-	public void actualizar(Object arg) {
-		// TODO Apéndice de método generado automáticamente
-		
 	}
+
+	
+
 	
 	
 

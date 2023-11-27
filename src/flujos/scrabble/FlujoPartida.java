@@ -31,16 +31,15 @@ public abstract class FlujoPartida extends Flujo{
 	}
 
 	public void mostarMenuTextual() {
-		vista.println(controlador.obtenerTablero());
-		vista.println("CANT FICHAS: " + controlador.obtenerCantidadFichas());
-		vista.println(mostrarEstadoJugador());
+		vista.mostrarTablero(controlador.obtenerTablero());
+		vista.mostrarMensaje(mostrarEstadoJugador());
 		switch(estadoActual) {
-		case INGRESANDO_PALABRA -> vista.println("Ingrese una palabra:");
-		case INGRESANDO_COORDENADA_X -> vista.println("Ingrese la coordenada HORIZONTAL (A, B, C, D, E, F, ...):");
-		case INGRESANDO_COORDENADA_Y -> vista.println("Ingrese la coordenada VERTICAL (A, B, C, D, E, F, ...): ");
+		case INGRESANDO_PALABRA -> vista.mostrarMensaje("Ingrese una palabra:");
+		case INGRESANDO_COORDENADA_X -> vista.mostrarMensaje("Ingrese la coordenada HORIZONTAL (A, B, C, D, E, F, ...):");
+		case INGRESANDO_COORDENADA_Y -> vista.mostrarMensaje("Ingrese la coordenada VERTICAL (A, B, C, D, E, F, ...): ");
 		case INGRESANDO_DISPOSICION -> {
-			vista.println("¿De que forma quiere agregar esta palabra?:");
-			vista.println("1. Horizontal\t2. Vertical:");
+			vista.mostrarMensaje("¿De que forma quiere agregar esta palabra?:");
+			vista.mostrarMensaje("1. Horizontal\t2. Vertical:");
 			}
 		}
 	}
@@ -85,13 +84,13 @@ public abstract class FlujoPartida extends Flujo{
 		//Primero, valido que la palabra contenga letras del atril
 		for(char c: cadenaCaracteres) {
 			if(!jugadorActual.getAtril().contains(c)) {
-				vista.println("Ingrese una palabra que contenga las letras de su atril.");
+				vista.mostrarMensaje("Ingrese una palabra que contenga las letras de su atril.");
 				return this;
 			}
 		}
 		//Segundo, valido la palabra en el diccionario
 		if(!new Diccionario().contieneA(cadenaString.toLowerCase())) {
-			vista.println("La palabra ingresada no es valida, intente con otra.");
+			vista.mostrarMensaje("La palabra ingresada no es valida, intente con otra.");
 			return this;
 		}
 		if(controlador.esPrimerMovimiento()) {
@@ -109,7 +108,7 @@ public abstract class FlujoPartida extends Flujo{
 		x = x.toUpperCase();
 		this.x = (int) x.toCharArray()[0];
 		if(this.x < 65 || this.x > 79) {
-			vista.println("Ingrese una letra coordenada entre A y O.");
+			vista.mostrarMensaje("Ingrese una letra coordenada entre A y O.");
 			return this;
 		}
 		estadoActual = EstadosPosibles.INGRESANDO_COORDENADA_Y;
@@ -120,7 +119,7 @@ public abstract class FlujoPartida extends Flujo{
 		y = y.toUpperCase();
 		this.y = (int) y.toCharArray()[0];
 		if(this.y < 65 || this.y > 79) {
-			vista.println("Ingrese una letra coordenada entre A y O.");
+			vista.mostrarMensaje("Ingrese una letra coordenada entre A y O.");
 			return this;
 		}
 		estadoActual = EstadosPosibles.INGRESANDO_DISPOSICION;
@@ -132,7 +131,7 @@ public abstract class FlujoPartida extends Flujo{
 		case "1" -> horizontal = true;
 		case "2" -> horizontal = false;
 		default -> {
-			vista.println("Ingrese un número valido entre 1 y 2.");
+			vista.mostrarMensaje("Ingrese un número valido entre 1 y 2.");
 			return this;}
 		}
 		controlador.agregarPalabra(idJugador,x,y,cadenaString,horizontal);

@@ -11,12 +11,12 @@ public class FlujoMenuPrincipal extends Flujo{
 	
 	//Cáscara del menú
     public void mostarMenuTextual() {
-		vista.println("SCRABBLE");
-        vista.println("Menú Principal:");
-        vista.println("1. Comenzar partida.");
-        vista.println("2. Reglas de juego.");
-        vista.println("3. Salir.");
-        vista.println("Seleccione una opción: ");
+		vista.mostrarMensaje("SCRABBLE");
+        vista.mostrarMensaje("Menú Principal:");
+        vista.mostrarMensaje("1. Comenzar partida.");
+        vista.mostrarMensaje("2. Reglas de juego.");
+        vista.mostrarMensaje("3. Salir.");
+        vista.mostrarMensaje("Seleccione una opción: ");
     }
 
 	//Menú
@@ -25,7 +25,7 @@ public class FlujoMenuPrincipal extends Flujo{
             case "1" -> {
             	return new FlujoIngresarJugadores(vista, controlador);
             }
-            default -> vista.println("Opción inválida");
+            default -> vista.mostrarMensaje("Opción inválida");
         }
         return this;
     }

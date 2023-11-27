@@ -1,5 +1,9 @@
 package modelo.scrabble;
 
 public enum Evento {
-	NUEVA_PALABRA
+	NUEVOS_JUGADORES,
+	NUEVA_PARTIDA,
+	NUEVA_PALABRA,
+	CAMBIO_FICHAS,
+	CAMBIO_TABLERO
 }

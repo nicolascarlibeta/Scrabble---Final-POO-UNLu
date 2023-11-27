@@ -13,9 +13,9 @@ public class FlujoFinalPartida extends Flujo{
 	}
 
 	public void mostarMenuTextual() {
-		vista.println("El juego ha terminado. ¡Felicidades " + controlador.obtenerJugadores(idGanador).getNombre() + ", sos el ganador!");
-		vista.println("");
-		vista.println("Presiona Intro para continuar.");
+		vista.mostrarMensaje("El juego ha terminado. ¡Felicidades " + controlador.obtenerJugadores(idGanador).getNombre() + ", sos el ganador!");
+		vista.mostrarMensaje("");
+		vista.mostrarMensaje("Presiona Intro para continuar.");
 	}
 
 	public Flujo elegirOpcion(String opcion) {
