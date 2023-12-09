@@ -3,7 +3,7 @@ package modelo.scrabble;
 import java.util.*;
 import java.io.*;
 
-public class Diccionario {
+public class Diccionario implements Serializable {
 
 	private File palabras;
 	

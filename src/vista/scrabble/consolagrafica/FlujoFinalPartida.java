@@ -1,7 +1,8 @@
-package flujos.scrabble;
+package vista.scrabble.consolagrafica;
+
+import java.rmi.RemoteException;
 
 import controlador.scrabble.Controlador;
-import vista.scrabble.consolagrafica.ConsolaGrafica;
 
 public class FlujoFinalPartida extends Flujo{
 

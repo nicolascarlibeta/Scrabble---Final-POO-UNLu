@@ -1,7 +1,6 @@
-package flujos.scrabble;
+package vista.scrabble.consolagrafica;
 
 import controlador.scrabble.*;
-import vista.scrabble.consolagrafica.ConsolaGrafica;
 
 public class FlujoMenuPrincipal extends Flujo{
 
@@ -13,9 +12,10 @@ public class FlujoMenuPrincipal extends Flujo{
     public void mostarMenuTextual() {
 		vista.mostrarMensaje("SCRABBLE");
         vista.mostrarMensaje("Menú Principal:");
-        vista.mostrarMensaje("1. Comenzar partida.");
-        vista.mostrarMensaje("2. Reglas de juego.");
-        vista.mostrarMensaje("3. Salir.");
+        vista.mostrarMensaje("1. Comenzar nueva partida.");
+        vista.mostrarMensaje("2. Cargar partida.");
+        vista.mostrarMensaje("3. Reglas de juego.");
+        vista.mostrarMensaje("4. Salir.");
         vista.mostrarMensaje("Seleccione una opción: ");
     }
 
@@ -23,7 +23,10 @@ public class FlujoMenuPrincipal extends Flujo{
     public Flujo elegirOpcion(String opcion) {
         switch (opcion) {
             case "1" -> {
-            	return new FlujoIngresarJugadores(vista, controlador);
+            	return new FlujoIngresarCantidadJugadores(vista, controlador);
+            }
+            case "2" -> {
+            	return new FlujoElegirPartida(vista, controlador);
             }
             default -> vista.mostrarMensaje("Opción inválida");
         }

@@ -1,37 +1,59 @@
 package controlador.scrabble;
 
+import java.io.IOException;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
-
+import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
+import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 import modelo.scrabble.*;
-import obs.scrabble.Observador;
 import vista.scrabble.Vista;
 
-public class Controlador implements Observador{
+public class Controlador implements IControladorRemoto{
 	
 	private Vista vista;
-	private ModeloJuego modelo;
+	private IModeloRemoto modelo;
 	
-	public Controlador(ModeloJuego modelo) {
-		this.modelo = modelo;
-		modelo.ligar(this);
+	//CONSTRUCTOR
+	public Controlador(IModeloRemoto modelo) {
+		try {
+			setModeloRemoto(modelo);
+		} catch (RemoteException e) {
+			// TODO Bloque catch generado automáticamente
+			e.printStackTrace();
+		}
 	}
+	
+	public Controlador() {}
 	
 	public void setVista(Vista vista) {
 		this.vista = vista;
 	}
 	
-	public void comenzarPartida(String jugador1, String jugador2) {
-		agregarJugadores(jugador1,jugador2);
-		modelo.cargarPartida();
+	public <T extends IObservableRemoto> void setModeloRemoto(T modelo) throws RemoteException {
+		this.modelo = (IModeloRemoto) modelo;
 	}
+	
+	
+	public void comenzarPartida(Jugador[] jugadores) {
+		try {
+			modelo.comenzarPartida(jugadores);
+		} catch (RemoteException e) {
+			// TODO Bloque catch generado automáticamente
+			e.printStackTrace();
+		}
+	}
+	
 	
 	public void cambiarFichas(int idJugador, char[] cadenaCaracteres) {
-		modelo.devolverFichas(idJugador,cadenaCaracteres);
+		try {
+			modelo.devolverFichas(idJugador,cadenaCaracteres);
+		} catch (RemoteException e) {
+			// TODO Bloque catch generado automáticamente
+			e.printStackTrace();
+		}
 	}
 	
-	private void agregarJugadores(String jugador1, String jugador2) {
-		modelo.addJugadores(jugador1,jugador2);
-	}
 	
 	public void agregarPalabra(int idJugador, int x, int y, String cadenaString, boolean horizontal) {
 		
@@ -39,60 +61,135 @@ public class Controlador implements Observador{
 		Palabra nuevaPalabra = new Palabra(cadenaString);
 		
 		//La envio al modelo
-		modelo.addPalabra(idJugador, x, y, nuevaPalabra, horizontal);
+		try {
+			modelo.addPalabra(idJugador, x, y, nuevaPalabra, horizontal);
+		} catch (RemoteException e) {
+			// TODO Bloque catch generado automáticamente
+			e.printStackTrace();
+		}
 		
 	}
 	
-	public Ficha[][] obtenerTablero(){
-		return modelo.getTablero();
+	public void cargarPartida(int idPartida) throws IOException{
+		try {
+			modelo.cargarPartida(idPartida);
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Bloque catch generado automáticamente
+			e.printStackTrace();
+		}
 	}
 	
-	public int obtenerGanador(){
+	public void guardarPartida() throws IOException{
+		modelo.guardarPartida();
+	}
+	
+	public ArrayList<Object> obtenerPartidas() throws IOException{
+		try {
+			return modelo.getListaPartidas();
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Bloque catch generado automáticamente
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public Ficha[][] obtenerTablero() {
+		try {
+			return modelo.getTablero();
+		} catch (RemoteException e) {
+			// TODO Bloque catch generado automáticamente
+			return null;
+		}
+	}
+	
+	public int obtenerGanador() throws RemoteException{
 		return modelo.getGanador();
 	}
 	
-	public int obtenerCantidadJugadores() {
-		return modelo.getCantidadJugadores();
+	public Jugador[] obtenerJugadores() throws RemoteException{
+		return modelo.getJugadores();
 	}
 	
 	public Jugador obtenerJugadores(int idJugador){
-		return modelo.getJugadores()[idJugador];
+		try {
+			return modelo.getJugadores()[idJugador];
+		} catch (RemoteException e) {
+			// TODO Bloque catch generado automáticamente
+			return null;
+		}
 	}
 	
-	public boolean bolsaEstaVacia() {
+	public boolean bolsaEstaVacia() throws RemoteException {
 		return modelo.isVacia();
 	}
 	
-	public int obtenerCantidadFichas() {
-		return modelo.getCantidadFichasBolsa();
+	public int obtenerCantidadFichas() throws RemoteException {
+		return modelo.getCantidadFichas();
 	}
 	
 	public boolean esPrimerMovimiento() {
-		return modelo.isPrimerMovimiento();
+		try {
+			return modelo.isPrimerMovimiento();
+		} catch (RemoteException e) {
+			// TODO Bloque catch generado automáticamente
+			return false;
+		}
 	}
 	
-	public void actualizar(Evento evento) {
-		switch (evento) {
-		case NUEVOS_JUGADORES -> {
-			Jugador[] nuevosJugadores = modelo.getJugadores();
-			vista.mostrarIngresarJugadores(nuevosJugadores);				
-			}
-		case NUEVA_PARTIDA -> {
-			Jugador[] jugadores = modelo.getJugadores();
-			vista.mostrarComenzarPartida(jugadores);				
-			}
-		case NUEVA_PALABRA -> {
-			vista.mostrarMensaje("Se ha agregado la palabra correctamente.");				
-			}
-		case CAMBIO_FICHAS -> {
-			vista.mostrarMensaje("Se han cambiado las fichas correctamente.");				
-			}
-		case CAMBIO_TABLERO -> {
-			Ficha[][] tablero = modelo.getTablero();
-			vista.mostrarTablero(tablero);				
+	public int siguienteTurno() {
+		try {
+			return modelo.siguienteTurno();
+		} catch (RemoteException e) {
+			// TODO Bloque catch generado automáticamente
+			return -1;
+		}
+	}
+	
+	public int obtenerTurnoActual() {
+		try {
+			return modelo.getTurnoActual();
+		} catch (RemoteException e) {
+			// TODO Bloque catch generado automáticamente
+			return -1;
+		}
+	}
+
+	public void actualizar(IObservableRemoto arg0, Object arg1) throws RemoteException {
+		if(arg1 instanceof Evento) {
+			switch ((Evento) arg1) {
+			case NUEVOS_JUGADORES -> {
+				Jugador[] nuevosJugadores = modelo.getJugadores();
+				vista.mostrarIngresarJugadores();				
+				}
+			case NUEVA_PARTIDA -> {
+				Jugador[] jugadores = modelo.getJugadores();
+				vista.mostrarComenzarPartida(jugadores);				
+				}
+			case PARTIDA_GUARDADA -> {
+				vista.mostrarMensaje("Se ha guardado la partida.");				
+				}
+			case NUEVA_PALABRA -> {
+				vista.mostrarMensaje("Se ha agregado la palabra correctamente.");				
+				}
+			case CAMBIO_FICHAS -> {
+				vista.mostrarMensaje("Se han cambiado las fichas correctamente.");				
+				}
+			case CAMBIO_ESTADO_JUGADOR -> {
+				Ficha[][] tablero = modelo.getTablero();
+				int turnoActual = modelo.siguienteTurno();
+				Jugador jugadorActual = modelo.getJugadores()[turnoActual];
+				vista.mostrarTablero(tablero);	
+				vista.mostrarEstadoJugador(jugadorActual);				
+				}
 			}
 		}
 	}
+
+	
+
+	
+
+	
 
 	
 

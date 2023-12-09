@@ -20,8 +20,6 @@ import java.awt.GridBagConstraints;
 import javax.swing.SpringLayout;
 
 import controlador.scrabble.Controlador;
-import flujos.scrabble.Flujo;
-import flujos.scrabble.FlujoMenuPrincipal;
 import modelo.scrabble.Ficha;
 import modelo.scrabble.Jugador;
 import modelo.scrabble.PremioLetra;
@@ -38,6 +36,8 @@ import javax.swing.JTextArea;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.awt.event.KeyAdapter;
@@ -51,7 +51,7 @@ import javax.swing.JScrollPane;
 
 public class ConsolaGrafica implements Vista{
 
-	//Vista debe conocer a Controlador
+	//Vista debe conocer a su Controlador
 	private Controlador controlador;
 	
 	private JFrame frmScrabble;
@@ -72,21 +72,10 @@ public class ConsolaGrafica implements Vista{
 		inicializarVentana();
 	}
 	
-	//Métodos para imprimir por pantalla
-	public void mostrarMensaje(String mensaje) {
-        terminal.append(mensaje + "\n");
-    }
-	
 	//Limpiar la terminal
 	public void limpiar() {
 		terminal.setText("");
 	}
-	
-	//Método principal (Menú Principal)
-    public void mostrarMenuPrincipal() {
-        flujoActual = new FlujoMenuPrincipal(this, controlador);
-        flujoActual.mostarMenuTextual();
-    }
 	
 	//Método general para procesar la entrada del usuario
 	private void procesarEntrada(String entrada) {
@@ -99,13 +88,18 @@ public class ConsolaGrafica implements Vista{
     }
 
 	//Inicializa la ventana principal.
+	public void iniciar() {
+		frmScrabble.setVisible(true);
+		flujoActual = new FlujoMenuPrincipal(this, controlador);
+        flujoActual.mostarMenuTextual();
+	}
+	
 	private void inicializarVentana() {
 		
 		frmScrabble = new JFrame();
 		frmScrabble.getContentPane().setForeground(new Color(255, 255, 255));
 		frmScrabble.getContentPane().setBackground(new Color(0, 0, 0));
 		frmScrabble.setSize(1366, 728);
-		frmScrabble.setVisible(true);
 		frmScrabble.setResizable(true);
 		frmScrabble.setTitle("Scrabble");
 		
@@ -173,12 +167,15 @@ public class ConsolaGrafica implements Vista{
 		panelTerminal.add(terminal);
 		frmScrabble.getContentPane().add(panelTerminal);
 		
-		mostrarMenuPrincipal();
-		
 	}
 	
-	public void mostrarIngresarJugadores(Jugador[] jugadores) {
-		mostrarMensaje("Se han ingresado los nuevos jugadores: " + jugadores[0].getNombre() + " y " + jugadores[1].getNombre());
+	//Métodos para imprimir por pantalla
+	public void mostrarMensaje(String mensaje) {
+	    terminal.append(mensaje + "\n");
+	}
+	
+	public void mostrarIngresarJugadores() {
+		mostrarMensaje("Se han ingresado los nuevos jugadores");
 	}
 
 	public void mostrarComenzarPartida(Jugador[] jugadores) {
@@ -194,6 +191,13 @@ public class ConsolaGrafica implements Vista{
 			obtenerTablero += "\n"; 
 		}
 		mostrarMensaje(obtenerTablero);
+	}
+
+	public void mostrarEstadoJugador(Jugador jugador) {
+		String obtenerEstadoJugador = "Jugador: " + jugador.getNombre() + "\n"
+				+ "ATRIL: " + jugador.getAtril() + "\n"
+				+ "PUNTAJE: " + jugador.getPuntaje() + "\n";
+		mostrarMensaje(obtenerEstadoJugador);
 	}
 	
 		

@@ -1,17 +1,17 @@
-package flujos.scrabble;
+package vista.scrabble.consolagrafica;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 
 import controlador.scrabble.Controlador;
 import modelo.scrabble.Diccionario;
 import modelo.scrabble.Ficha;
 import modelo.scrabble.PremioLetra;
 import modelo.scrabble.Jugador;
-import vista.scrabble.consolagrafica.ConsolaGrafica;
 
-public abstract class FlujoPartida extends Flujo{
+public class FlujoIngresarPalabra extends Flujo{
 	
-	public FlujoPartida(ConsolaGrafica vista, Controlador controlador, int idJugador) {
+	public FlujoIngresarPalabra(ConsolaGrafica vista, Controlador controlador, int idJugador) {
 		super(vista, controlador);
 		this.idJugador = idJugador;
 	}
@@ -31,8 +31,8 @@ public abstract class FlujoPartida extends Flujo{
 	}
 
 	public void mostarMenuTextual() {
-		vista.mostrarTablero(controlador.obtenerTablero());
-		vista.mostrarMensaje(mostrarEstadoJugador());
+		vista.mostrarTablero(controlador.obtenerTablero());	
+		vista.mostrarEstadoJugador(controlador.obtenerJugadores(idJugador));	
 		switch(estadoActual) {
 		case INGRESANDO_PALABRA -> vista.mostrarMensaje("Ingrese una palabra:");
 		case INGRESANDO_COORDENADA_X -> vista.mostrarMensaje("Ingrese la coordenada HORIZONTAL (A, B, C, D, E, F, ...):");
@@ -46,10 +46,15 @@ public abstract class FlujoPartida extends Flujo{
 
 	public Flujo elegirOpcion(String opcion) {
 		
-		if(controlador.obtenerJugadores(idJugador).getAtril().isEmpty()
-				&& controlador.bolsaEstaVacia()) {
-			int idGanador = controlador.obtenerGanador();
-			return new FlujoFinalPartida(vista,controlador,idGanador);
+		try {
+			if(controlador.obtenerJugadores(idJugador).getAtril().isEmpty()
+					&& controlador.bolsaEstaVacia()) {
+				int idGanador = controlador.obtenerGanador();
+				return new FlujoFinalPartida(vista,controlador,idGanador);
+			}
+		} catch (RemoteException e) {
+			// TODO Bloque catch generado automáticamente
+			e.printStackTrace();
 		}
 		
 		switch(estadoActual) {
@@ -75,7 +80,6 @@ public abstract class FlujoPartida extends Flujo{
 	
 	//INTERFAZ
 	
-	public abstract String mostrarEstadoJugador();
 	
 	public Flujo ingresarPalabra(String cadenaString) throws IOException {
 		Jugador jugadorActual = controlador.obtenerJugadores(idJugador);
@@ -135,10 +139,9 @@ public abstract class FlujoPartida extends Flujo{
 			return this;}
 		}
 		controlador.agregarPalabra(idJugador,x,y,cadenaString,horizontal);
-		return avanzarFlujo();
+		return new FlujoOpcionesJuego(vista,controlador,controlador.siguienteTurno());
 	}
 	
-	public abstract Flujo avanzarFlujo();
 	
 	
 

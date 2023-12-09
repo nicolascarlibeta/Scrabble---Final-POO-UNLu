@@ -1,8 +1,9 @@
 package modelo.scrabble;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Palabra {
+public class Palabra implements Serializable{
 	
 	private String palabra = "";
 	private char[] letras = new char[7];

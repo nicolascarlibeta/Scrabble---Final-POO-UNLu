@@ -1,44 +1,41 @@
-package flujos.scrabble;
+package vista.scrabble.consolagrafica;
+
+import java.rmi.RemoteException;
 
 import controlador.scrabble.Controlador;
-import flujos.scrabble.FlujoPartida.EstadosPosibles;
 import modelo.scrabble.Jugador;
-import vista.scrabble.consolagrafica.ConsolaGrafica;
+import vista.scrabble.consolagrafica.FlujoIngresarPalabra.EstadosPosibles;
 
-public abstract class FlujoCambiarFichas extends Flujo{
+public class FlujoCambiarFichas extends Flujo{
 
+	private int idJugador;
+	
 	public FlujoCambiarFichas(ConsolaGrafica vista, Controlador controlador, int idJugador) {
 		super(vista, controlador);
 		this.idJugador = idJugador;
 	}
 	
-	protected int idJugador;
-	
     public void mostarMenuTextual() {
-    	vista.mostrarTablero(controlador.obtenerTablero());
-		vista.mostrarMensaje("CANT FICHAS: " + controlador.obtenerCantidadFichas());
-		vista.mostrarMensaje(mostrarEstadoJugador());
-    	vista.mostrarMensaje(controlador.obtenerJugadores(idJugador).getAtril().toString());
+    	vista.mostrarTablero(controlador.obtenerTablero());	
+		vista.mostrarEstadoJugador(controlador.obtenerJugadores(idJugador));	
         vista.mostrarMensaje("Ingrese una palabra que contenga las letras que desea cambiar (en cualquier orden): ");
     }
 
     public Flujo elegirOpcion(String opcion) {
-    	
-    	Jugador jugadorActual = controlador.obtenerJugadores(idJugador);
+    	Jugador jugadorActual = null;
+		jugadorActual = controlador.obtenerJugadores(idJugador);
     	opcion = opcion.toUpperCase();
 		char[] cadenaCaracteres = opcion.toCharArray();
 		for(char c: cadenaCaracteres) {
-			if(!jugadorActual.getAtril().contains(c)) {
+			if(jugadorActual != null && !jugadorActual.getAtril().contains(c)) {
 				vista.mostrarMensaje("Ingrese una palabra que contenga las letras de su atril.");
 				return this;
 			}
 		}
 		controlador.cambiarFichas(idJugador, cadenaCaracteres);
-		return avanzarFlujo();
+		return new FlujoIngresarPalabra(vista,controlador,controlador.siguienteTurno());
 	}
     
-    public abstract Flujo avanzarFlujo();
-    public abstract String mostrarEstadoJugador();
-	
-	
 }
+	
+

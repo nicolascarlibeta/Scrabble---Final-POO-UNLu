@@ -1,6 +1,8 @@
 package modelo.scrabble;
 
-public class PremioPalabra implements Ficha{
+import java.io.Serializable;
+
+public class PremioPalabra implements Ficha, Serializable {
 
 	private String letra = "";
 	private TipoPuntaje tipoPuntaje;
