@@ -80,7 +80,12 @@ public class Controlador implements IControladorRemoto{
 	}
 	
 	public void guardarPartida() throws IOException{
-		modelo.guardarPartida();
+		try {
+			modelo.guardarPartida();
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Bloque catch generado automáticamente
+			e.printStackTrace();
+		}
 	}
 	
 	public ArrayList<Object> obtenerPartidas() throws IOException{

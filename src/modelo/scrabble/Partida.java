@@ -18,6 +18,7 @@ public class Partida implements Serializable{
 	private BolsaFichas bolsaDeFichas;
 	private Jugador[] jugadores = new Jugador[4];
 	private int turnoActual = 0;
+	private boolean terminada = false;
 	
 	public Partida(Tablero tablero, BolsaFichas bolsaDeFichas,
 			Jugador[] jugadores, int turnoActual) {
@@ -67,16 +68,18 @@ public class Partida implements Serializable{
 	public void setTurnoActual(int turnoActual) {
 		this.turnoActual = turnoActual;
 	}
-
+	
 	public String toString() {
+
+		int j = 0;
 		String jug = "";
-		for(Jugador j: jugadores) {
-			jug += j.getNombre() + ", ";
+		while(jugadores[j++] != null) {
+			jug += jugadores[j].getNombre() + ", ";
 		}
 		return "ID: " + (id++) + "\n"
 				+ "FECHA: " + fechaHora + "\n"
-				+ "JUGADORES: " + jug + "\n"
-				+ "TURNO ACTUAL: " + jugadores[turnoActual] + "\n";
+				+ "JUGADORES: " + "jug" + "\n"
+				+ "TURNO ACTUAL: " + jugadores[turnoActual].getNombre() + "\n";
 	}
 	
 	

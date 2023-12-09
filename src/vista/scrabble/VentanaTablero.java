@@ -459,7 +459,9 @@ public class VentanaTablero {
 		this.atril.setText(jugador.getAtril().toString());
 	}
 
-
+	public JFrame parentComponent() {
+		return frmScrabble;
+	}
 	
 
 	

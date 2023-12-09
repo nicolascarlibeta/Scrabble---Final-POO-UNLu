@@ -1,5 +1,6 @@
 package vista.scrabble;
 
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import modelo.scrabble.Diccionario;
 import modelo.scrabble.Ficha;
 import modelo.scrabble.Jugador;
 import vista.scrabble.consolagrafica.Flujo;
+import vista.scrabble.consolagrafica.FlujoFinalPartida;
 import vista.scrabble.consolagrafica.FlujoIngresarPalabra;
 import vista.scrabble.consolagrafica.FlujoOpcionesJuego;
 import vista.scrabble.consolagrafica.FlujoIngresarPalabra.EstadosPosibles;
@@ -68,21 +70,37 @@ public class VistaGrafica implements Vista{
 				
 				int idJugador = controlador.siguienteTurno();
 				Jugador jugadorActual = controlador.obtenerJugadores(idJugador);
-				//mostrarEstadoJugador(jugadorActual);
-				//Primero recibo la palabra
-				String cadenaString = validarPalabra(idJugador);
-				int x = 0, y = 0;
-				if(!controlador.esPrimerMovimiento()) {
-					//Coor. X
-					x = validarCoorX();
-					//Coor. Y
-					y = validarCoorY();					
-				}
-				//Disposición
-				validarDisposicion();
+				mostrarEstadoJugador(jugadorActual);
+				boolean avanzar = true;
 				
-				//Ingreso la palabra
-				controlador.agregarPalabra(idJugador,x,y,cadenaString,false);
+				try {
+					if(controlador.obtenerJugadores(idJugador).getAtril().isEmpty()
+							&& controlador.bolsaEstaVacia()) {
+						int idGanador = controlador.obtenerGanador();
+						JOptionPane.showMessageDialog(ventanaTablero.parentComponent(), "El juego ha terminado. ¡Felicidades " + controlador.obtenerJugadores(idGanador).getNombre() + ", sos el ganador!");
+						avanzar = false;
+					}
+				} catch (HeadlessException | RemoteException e1) {
+					
+					e1.printStackTrace();
+				}
+				
+				if(avanzar){
+					//Primero recibo la palabra
+					String cadenaString = validarPalabra(idJugador);
+					int x = 0, y = 0;
+					if(!controlador.esPrimerMovimiento()) {
+						//Coor. X
+						x = validarCoorX();
+						//Coor. Y
+						y = validarCoorY();					
+					}
+					//Disposición
+					validarDisposicion();
+					
+					//Ingreso la palabra
+					controlador.agregarPalabra(idJugador,x,y,cadenaString,false);					
+				}
 			
 			}
 		});
@@ -115,9 +133,6 @@ public class VistaGrafica implements Vista{
 				controlador.siguienteTurno();
 			}
 		});
-		
-	
-		
 		
 	}	
 
@@ -184,7 +199,7 @@ public class VistaGrafica implements Vista{
 				mostrarMensaje("La palabra ingresada no es valida, intente con otra.");
 			}
 		} catch (IOException e1) {
-			// TODO Bloque catch generado automáticamente
+			
 			e1.printStackTrace();
 		}
 		return cadenaString;

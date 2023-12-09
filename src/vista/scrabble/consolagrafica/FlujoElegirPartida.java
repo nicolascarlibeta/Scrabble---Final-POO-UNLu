@@ -24,8 +24,6 @@ public class FlujoElegirPartida extends Flujo{
 			// TODO Bloque catch generado automáticamente
 			e.printStackTrace();
 		}
-		
-		
 		vista.mostrarMensaje("Seleccione una partida: ");
 	}
 

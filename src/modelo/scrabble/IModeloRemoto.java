@@ -16,7 +16,7 @@ public interface IModeloRemoto extends IObservableRemoto{
 
 	int siguienteTurno() throws RemoteException;
 
-	void guardarPartida() throws IOException;
+	void guardarPartida() throws IOException, ClassNotFoundException, RemoteException;
 
 	//a revisar
 	int getGanador() throws RemoteException;
