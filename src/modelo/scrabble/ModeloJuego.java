@@ -25,7 +25,7 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	private ArrayList<Jugador> usuariosJugadores = new ArrayList<>();
 	private Jugador[] jugadores = new Jugador[4];
 	// * TURNO:
-	private int turnoActual = 0;
+	private int turnoActual = -1;
 	// * OTROS:
 	private String partidas = "PartidasGuardadas.dat";
 	
@@ -70,7 +70,7 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	
 	public int siguienteTurno() throws RemoteException{
 		if(this.jugadores[turnoActual] != null) {
-			return turnoActual++;
+			return ++turnoActual;
 		}
 		else {
 			turnoActual = 0;
@@ -149,39 +149,26 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	}
 	
 	
-	public void guardarPartida() throws IOException, RemoteException, ClassNotFoundException{
-
-		//Creamos el archivo donde se guarda la partida
-		FileOutputStream partida = new FileOutputStream(partidas,true);
+	public void guardarPartida() throws IOException{
 		
-		//Creamos otro archivo para leer la primer linea
-		//FileInputStream lectura = new FileInputStream(partidas);
-						
-		//Creo un ObjectInputStream con el FileInputStream
-		//ObjectInputStream ois = new ObjectInputStream(lectura);
+		//Escritura
+		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(partidas, true));
 		
-		//Creamos el objeto de la partida a guardar
+		//Partida actual
 		Partida partidaActual = new Partida(tablero,bolsaDeFichas,jugadores,turnoActual);
-				
-		ObjectOutputStream oos = new ObjectOutputStream(partida);
+		
+		//Si no hay primera linea, agregamos la partida como cabecera
 		oos.writeObject(partidaActual);
 		oos.close();
-		/*
-		//Leo el primer objeto del archivo
-		if(ois.readObject() != null) {
-			AddableObjectOutputStream aoos = new AddableObjectOutputStream(partida);
-			aoos.writeObject(partidaActual);
-			aoos.close();
-		}
-		else {
-			ObjectOutputStream oos = new ObjectOutputStream(partida);
-			oos.writeObject(partidaActual);
-			oos.close();		
-		}*/
 		
 		notificarObservadores(Evento.PARTIDA_GUARDADA);
 		
 	}
+	
+	
+	
+	
+	
 	
 	
 	public void top5Jugadores() throws IOException, RemoteException, ClassNotFoundException{
