@@ -26,6 +26,8 @@ public class VentanaPrincipal implements Ventana {
 
 	private JFrame frmScrabble;
 	private JMenuItem iNuevaPartida;
+	private JMenuItem iCargarPartida;
+	private JMenuItem iRanking; 
 	
 	//CONSTRUCTOR
 	public VentanaPrincipal() {
@@ -70,8 +72,11 @@ public class VentanaPrincipal implements Ventana {
 		iNuevaPartida = new JMenuItem("Nueva partida");
 		mnNewMenu.add(iNuevaPartida);
 		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Cargar partida");
-		mnNewMenu.add(mntmNewMenuItem_1);
+		iCargarPartida = new JMenuItem("Cargar partida");
+		mnNewMenu.add(iCargarPartida);
+		
+		iRanking = new JMenuItem("Ver ranking");
+		mnNewMenu.add(iRanking);
 	}
 
 	public void setVisible(boolean b) {
@@ -93,6 +98,14 @@ public class VentanaPrincipal implements Ventana {
 	
 	public JFrame parentComponent() {
 		return frmScrabble;
+	}
+
+	public void cargarPartida(ActionListener accion) {
+		iCargarPartida.addActionListener(accion);
+	}
+	
+	public void verRanking(ActionListener accion) {
+		iRanking.addActionListener(accion);
 	}
 
 

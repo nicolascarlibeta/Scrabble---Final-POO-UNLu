@@ -12,14 +12,13 @@ public interface IModeloRemoto extends IObservableRemoto{
 
 	void devolverFichas(int idJugador, char[] fichasACambiar) throws RemoteException;
 
-	void addPalabra(int idJugador, int x, int y, Palabra palabraActual, boolean horizontal) throws RemoteException;
+	void agregarPalabra(int idJugador, int x, int y, Palabra palabraActual, boolean horizontal) throws RemoteException;
 
 	int siguienteTurno() throws RemoteException;
 
 	void guardarPartida() throws IOException, ClassNotFoundException, RemoteException;
 
-	//a revisar
-	int getGanador() throws RemoteException;
+	int obtenerGanador() throws RemoteException;
 
 	boolean isPrimerMovimiento() throws RemoteException;
 
@@ -40,5 +39,7 @@ public interface IModeloRemoto extends IObservableRemoto{
 	ArrayList<Object> getListaPartidas() throws IOException, ClassNotFoundException, RemoteException;
 	
 	void cargarPartida(int idPartida) throws IOException, ClassNotFoundException, RemoteException;
+
+	ArrayList<Jugador> getTop5Jugadores() throws RemoteException, ClassNotFoundException, IOException;
 
 }

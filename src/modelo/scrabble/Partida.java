@@ -13,7 +13,7 @@ public class Partida implements Serializable{
 	
 	private static final long serialVersionUID = -4243684796308041028L;
 	private static int id = 1;
-	private LocalDateTime fechaHora = LocalDateTime.now();
+	private String fechaHora = "";
 	private Tablero tablero;
 	private BolsaFichas bolsaDeFichas;
 	private Jugador[] jugadores = new Jugador[4];
@@ -22,8 +22,9 @@ public class Partida implements Serializable{
 	
 	public Partida(Tablero tablero, BolsaFichas bolsaDeFichas,
 			Jugador[] jugadores, int turnoActual) {
-		DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd MM yyyy  HH:MM");
-		this.fechaHora.format(formato);
+		LocalDateTime fechaHoy = LocalDateTime.now();
+		DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy  HH:MM");
+		this.fechaHora = fechaHoy.format(formato);
 		this.tablero = tablero;
 		this.bolsaDeFichas = bolsaDeFichas;
 		this.jugadores = jugadores;
@@ -33,11 +34,11 @@ public class Partida implements Serializable{
 		return id;
 	}
 	
-	public LocalDateTime getFechaHora() {
+	public String getFechaHora() {
 		return fechaHora;
 	}
 	
-	public void setFechaHora(LocalDateTime fechaHora) {
+	public void setFechaHora(String fechaHora) {
 		this.fechaHora = fechaHora;
 	}
 				
@@ -71,10 +72,10 @@ public class Partida implements Serializable{
 		int j = 0;
 		String jug = "";
 		while(jugadores[j] != null) {
-			jug += jugadores[j].getNombre() + ", ";
+			jug += jugadores[j].getNombre() + ". ";
 			j++;
 		}
-		return "ID: " + (id++)
+		return (id++)
 				+ ". FECHA: " + fechaHora + "\n"
 				+ "JUGADORES: " + jug + "\n"
 				+ "TURNO ACTUAL: " + jugadores[turnoActual].getNombre() + "\n";

@@ -17,8 +17,8 @@ public class FlujoOpcionesJuego extends Flujo{
 	}
 	
     public void mostarMenuTextual() {
-    	vista.mostrarTablero(controlador.obtenerTablero());	
-		vista.mostrarEstadoJugador(controlador.obtenerJugadores(idJugador));	
+    	//vista.mostrarTablero(controlador.obtenerTablero());	
+		//vista.mostrarEstadoJugador(controlador.obtenerJugadores(idJugador));	
         vista.mostrarMensaje("¿Que deseas hacer?:");
         vista.mostrarMensaje("1. Agregar palabra.");
         vista.mostrarMensaje("2. Cambiar las fichas.");

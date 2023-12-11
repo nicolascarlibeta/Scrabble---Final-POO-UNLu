@@ -51,11 +51,11 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		tablero.devolverFichas(jugadores, bolsaDeFichas, idJugador, fichasACambiar);
 		
 		notificarObservadores(Evento.CAMBIO_FICHAS);
-		//notificarEstadoPartida();
+
 	} 
 	
 	
-	public void addPalabra(int idJugador, int x, int y, Palabra palabraActual, boolean horizontal) throws RemoteException {
+	public void agregarPalabra(int idJugador, int x, int y, Palabra palabraActual, boolean horizontal) throws RemoteException {
 		
 		//Agregamos la palabra
 		tablero.addPalabra(jugadores, bolsaDeFichas, idJugador, x, y, palabraActual, horizontal);
@@ -69,17 +69,21 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	
 	
 	public int siguienteTurno() throws RemoteException{
-		if(this.jugadores[turnoActual] != null) {
-			return ++turnoActual;
+		
+		int turnoActual = 0; 
+		if(this.jugadores[++this.turnoActual] != null) {
+			turnoActual = this.turnoActual;
 		}
 		else {
-			turnoActual = 0;
+			this.turnoActual = 0;
 		}
+		notificarObservadores(Evento.CAMBIO_ESTADO_PARTIDA);
 		return turnoActual;
+		
 	}
 	
 	
-	public int getGanador() throws RemoteException{
+	public int obtenerGanador() throws RemoteException{
 		int mayor = jugadores[0].getPuntaje();
 		int idGanador = 0;
 		for(int j = 1; j < jugadores.length; j++) {
@@ -96,7 +100,7 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		boolean esPrimer = true;
 		for(Jugador j: jugadores) {
 			if (j != null && j.getPuntaje() > 0) {
-				esPrimer = false;
+				return false;
 			}
 		}
 		return esPrimer;
@@ -146,32 +150,71 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		jugadores = partidaACargar.getJugadores();
 		turnoActual = partidaACargar.getTurnoActual();
 		
+		notificarObservadores(Evento.PARTIDA_CARGADA);
+		
 	}
 	
 	
 	public void guardarPartida() throws IOException{
 		
-		//Escritura
-		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(partidas, true));
-		
 		//Partida actual
 		Partida partidaActual = new Partida(tablero,bolsaDeFichas,jugadores,turnoActual);
 		
-		//Si no hay primera linea, agregamos la partida como cabecera
-		oos.writeObject(partidaActual);
-		oos.close();
+		Serializador serializador = new Serializador(partidas);
 		
+		Object o = serializador.readFirstObject();
+		if(o == null) {
+			serializador.writeOneObject(partidaActual);
+		}
+		else {
+			serializador.addOneObject(partidaActual);
+		}
+
 		notificarObservadores(Evento.PARTIDA_GUARDADA);
 		
 	}
 	
 	
+	public ArrayList<Object> getListaPartidas() throws IOException, ClassNotFoundException, RemoteException{
+
+		//Creo una lista vacia de partidas
+		ArrayList<Object> listaPartidas = new ArrayList<>();
+		
+		Serializador serializador = new Serializador(partidas);
+		
+		Object objeto = serializador.readFirstObject();
+		if(objeto != null) {
+			listaPartidas = serializador.readObjects();
+		}
+		
+		/*
+		//Creo un FileInputStream con el nombre del archivo
+		FileInputStream archivo = new FileInputStream(partidas);
+				
+		//Creo un ObjectInputStream con el FileInputStream
+		ObjectInputStream ois = new ObjectInputStream(archivo);
+		
+		//Leo el primer objeto del archivo
+		try {
+			Object objeto = ois.readObject();
+			while(objeto != null) {
+				listaPartidas.add((Partida)objeto);
+				objeto = ois.readObject();
+			}
+			ois.close();
+			
+		} catch(EOFException e) {
+			System.out.println("Fin de archivo.");
+		}*/
+		
+		
+		
+		
+		return listaPartidas;
+	}
 	
 	
-	
-	
-	
-	public void top5Jugadores() throws IOException, RemoteException, ClassNotFoundException{
+	public ArrayList<Jugador> getTop5Jugadores() throws ClassNotFoundException, IOException{
 
 		//Cargamos las partidas guardadas
 		ArrayList<Object> partidas = getListaPartidas();
@@ -188,36 +231,10 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		}
 		Comparator<Jugador> comp = Comparator.comparingInt(Jugador::getPuntaje).reversed();
 		jugadores.sort(comp);
+		
+		return jugadores;
 
 	}
-	
-	
-	public ArrayList<Object> getListaPartidas() throws IOException, ClassNotFoundException, RemoteException{
-
-		//Creo una lista vacia de partidas
-		ArrayList<Object> listaPartidas = new ArrayList<>();
-		
-		//Creo un FileInputStream con el nombre del archivo
-		FileInputStream archivo = new FileInputStream(partidas);
-				
-		//Creo un ObjectInputStream con el FileInputStream
-		ObjectInputStream ois = new ObjectInputStream(archivo);
-		
-		//Leo el primer objeto del archivo
-		try {
-			Object objeto = ois.readObject();
-			while(objeto != null) {
-				listaPartidas.add(objeto);
-				objeto = ois.readObject();
-			}
-			ois.close();
-			
-		} catch(EOFException e) {
-			System.out.println("Fin de Archivo");
-		}
-		return listaPartidas;
-	}
-	
 	
 	
 	//Metodos de observer

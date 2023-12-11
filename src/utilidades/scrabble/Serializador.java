@@ -7,10 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Serializador implements Serializable{
+public class Serializador {
 	private String fileName;
 
 	public Serializador(String fileName) {
@@ -73,7 +72,7 @@ public class Serializador implements Serializable{
 		return respuesta;
 	}
 	
-	public Object[] readObjects() {
+	public ArrayList<Object> readObjects() {
 		Object[] respuesta;
 		ArrayList<Object> listOfObject = new ArrayList<Object>();
 		try {
@@ -100,15 +99,7 @@ public class Serializador implements Serializable{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if(!listOfObject.isEmpty() ) {
-			respuesta = new Object[listOfObject.size()];
-			int count = 0;
-			for(Object o : listOfObject)
-				respuesta[count ++] = o;
-		} else {
-			respuesta = null;
-		}
-		return respuesta;
+		return listOfObject;
 	}
 	
 

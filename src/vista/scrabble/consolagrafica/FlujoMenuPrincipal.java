@@ -14,7 +14,7 @@ public class FlujoMenuPrincipal extends Flujo{
         vista.mostrarMensaje("Menú Principal:");
         vista.mostrarMensaje("1. Comenzar nueva partida.");
         vista.mostrarMensaje("2. Cargar partida.");
-        vista.mostrarMensaje("3. Reglas de juego.");
+        vista.mostrarMensaje("3. Ver ranking de mejores jugadores.");
         vista.mostrarMensaje("4. Salir.");
         vista.mostrarMensaje("Seleccione una opción: ");
     }
@@ -27,6 +27,12 @@ public class FlujoMenuPrincipal extends Flujo{
             }
             case "2" -> {
             	return new FlujoElegirPartida(vista, controlador);
+            }
+            case "3" -> {
+            	return new FlujoVerRanking(vista, controlador);
+            }
+            case "4" -> {
+            	System.exit(0);
             }
             default -> vista.mostrarMensaje("Opción inválida");
         }

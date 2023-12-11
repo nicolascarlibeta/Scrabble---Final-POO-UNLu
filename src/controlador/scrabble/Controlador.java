@@ -62,7 +62,7 @@ public class Controlador implements IControladorRemoto{
 		
 		//La envio al modelo
 		try {
-			modelo.addPalabra(idJugador, x, y, nuevaPalabra, horizontal);
+			modelo.agregarPalabra(idJugador, x, y, nuevaPalabra, horizontal);
 		} catch (RemoteException e) {
 			// TODO Bloque catch generado automáticamente
 			e.printStackTrace();
@@ -88,6 +88,20 @@ public class Controlador implements IControladorRemoto{
 		}
 	}
 	
+	public ArrayList<Jugador> obtenerTop5Jugadores() throws IOException{
+		try {
+			return modelo.getTop5Jugadores();
+		} catch (IOException e) {
+			// TODO Bloque catch generado automáticamente
+			e.printStackTrace();
+			return new ArrayList<>();
+		} catch (ClassNotFoundException e) {
+			// TODO Bloque catch generado automáticamente
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
+	}
+	
 	public ArrayList<Object> obtenerPartidas() throws IOException{
 		try {
 			return modelo.getListaPartidas();
@@ -108,7 +122,7 @@ public class Controlador implements IControladorRemoto{
 	}
 	
 	public int obtenerGanador() throws RemoteException{
-		return modelo.getGanador();
+		return modelo.obtenerGanador();
 	}
 	
 	public Jugador[] obtenerJugadores() throws RemoteException{
@@ -170,6 +184,9 @@ public class Controlador implements IControladorRemoto{
 				Jugador[] jugadores = modelo.getJugadores();
 				vista.mostrarComenzarPartida(jugadores);				
 				}
+			case PARTIDA_CARGADA -> {
+				vista.mostrarMensaje("Se ha cargado la partida exitosamente.");				
+				}
 			case PARTIDA_GUARDADA -> {
 				vista.mostrarMensaje("Se ha guardado la partida.");				
 				}
@@ -179,9 +196,9 @@ public class Controlador implements IControladorRemoto{
 			case CAMBIO_FICHAS -> {
 				vista.mostrarMensaje("Se han cambiado las fichas correctamente.");				
 				}
-			case CAMBIO_ESTADO_JUGADOR -> {
+			case CAMBIO_ESTADO_PARTIDA -> {
 				Ficha[][] tablero = modelo.getTablero();
-				int turnoActual = modelo.siguienteTurno();
+				int turnoActual = modelo.getTurnoActual();
 				Jugador jugadorActual = modelo.getJugadores()[turnoActual];
 				vista.mostrarTablero(tablero);	
 				vista.mostrarEstadoJugador(jugadorActual);				

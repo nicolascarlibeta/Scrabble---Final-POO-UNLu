@@ -10,6 +10,8 @@ public interface Vista {
 	 void mostrarComenzarPartida(Jugador[] jugadores);
 	 void mostrarTablero(Ficha[][] tablero);
 	 void mostrarEstadoJugador(Jugador jugador);
+	 void mostrarPartidasGuardadas();
+	 void mostrarRanking();
 	 void mostrarMensaje(String mensaje);
 	
 }

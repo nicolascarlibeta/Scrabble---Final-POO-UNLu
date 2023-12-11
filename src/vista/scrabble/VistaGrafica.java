@@ -24,6 +24,7 @@ public class VistaGrafica implements Vista{
 	private VentanaPrincipal ventanaPrincipal;
 	private VentanaPartidas ventanaPartidas;
 	private VentanaTablero ventanaTablero;
+	private VentanaRanking ventanaRanking;
 
 	
 	//CONSTRUCTOR
@@ -33,6 +34,7 @@ public class VistaGrafica implements Vista{
 		ventanaPrincipal = new VentanaPrincipal();
 		ventanaPartidas = new VentanaPartidas();
 		ventanaTablero = new VentanaTablero();
+		ventanaRanking = new VentanaRanking();
 		controlador.setVista(this);
 		
 		//FLUJO
@@ -70,7 +72,6 @@ public class VistaGrafica implements Vista{
 				
 				int idJugador = controlador.siguienteTurno();
 				Jugador jugadorActual = controlador.obtenerJugadores(idJugador);
-				mostrarEstadoJugador(jugadorActual);
 				boolean avanzar = true;
 				
 				try {
@@ -134,8 +135,52 @@ public class VistaGrafica implements Vista{
 			}
 		});
 		
+		
+		// * Cargar Partida
+		//Acción de Cargar Partida
+		ventanaPrincipal.cargarPartida(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				mostrarPartidasGuardadas();		
+			}
+		});
+		
+		//Acción de Elegir partida
+		ventanaPartidas.elegirPartida(new ActionListener() {
+					
+			public void actionPerformed(ActionEvent e) {
+
+				int idPartida = ventanaPartidas.getSelectedIndex();
+				if(idPartida != -1) {
+					try {
+						controlador.cargarPartida(idPartida);
+						mostrarComenzarPartida(controlador.obtenerJugadores());
+					} catch (IOException e1) {
+						// TODO Bloque catch generado automáticamente
+						e1.printStackTrace();
+					}
+				}
+				
+			}
+		});
+		
+		// * Ver Ranking
+		//Acción de Ver Ranking
+		ventanaPrincipal.verRanking(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				mostrarRanking();		
+			}
+		});
+		
 	}	
 
+	
+	
+	
+	
+	
+	
 	
 	public void iniciar() {
 		ventanaPrincipal.setVisible(true);
@@ -151,7 +196,12 @@ public class VistaGrafica implements Vista{
 		ventanaPrincipal.setVisible(false);
 		ventanaTablero.setVisible(true);
 		mostrarTablero(controlador.obtenerTablero());
-		ventanaTablero.mostrarMensaje("Comienza la partida. Empieza el jugador " + jugadores[0].getNombre() + ".");
+		//mostrarEstadoJugador(jugadorActual);
+		int turnoActual = controlador.obtenerTurnoActual();
+		if(turnoActual == -1) {
+			turnoActual = 0;
+		}
+		ventanaTablero.mostrarMensaje("Comienza la partida. Empieza el jugador " + jugadores[turnoActual].getNombre() + ".");
 		
 	}
 
@@ -171,11 +221,34 @@ public class VistaGrafica implements Vista{
 	public void mostrarEstadoJugador(Jugador jugador) {
 		ventanaTablero.mostrarEstadoJugador(jugador);
 	}
+	
+
+	public void mostrarPartidasGuardadas() {
+		try {
+			ventanaPartidas.mostrarPartidasGuardadas(controlador.obtenerPartidas());
+		} catch (IOException e) {
+			// TODO Bloque catch generado automáticamente
+			e.printStackTrace();
+		}
+	}
+
+
+
+	public void mostrarRanking() {
+		try {
+			ventanaRanking.setVisible(true);
+			ventanaRanking.mostrarRanking(controlador.obtenerTop5Jugadores());
+		} catch (IOException e) {
+			// TODO Bloque catch generado automáticamente
+			e.printStackTrace();
+		}
+	}
 
 	
 	public void mostrarMensaje(String mensaje) {
 		ventanaTablero.mostrarMensaje(mensaje);
 	}
+	
 	
 	//Métodos del flujo
 	public String validarPalabra(int idJugador) {
@@ -228,16 +301,11 @@ public class VistaGrafica implements Vista{
 	}
 	
 	public void validarDisposicion() {
-		/*
-		switch(opcion) {
-		case "1" -> horizontal = true;
-		case "2" -> horizontal = false;
-		default -> {
-			vista.mostrarMensaje("Ingrese un número valido entre 1 y 2.");
-			return this;}
-		}
-		*/
+		
 	}
+
+
+	
 
 	
 	

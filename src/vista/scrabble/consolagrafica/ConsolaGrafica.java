@@ -22,6 +22,7 @@ import javax.swing.SpringLayout;
 import controlador.scrabble.Controlador;
 import modelo.scrabble.Ficha;
 import modelo.scrabble.Jugador;
+import modelo.scrabble.Partida;
 import modelo.scrabble.PremioLetra;
 import vista.scrabble.Vista;
 
@@ -36,7 +37,9 @@ import javax.swing.JTextArea;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -175,11 +178,15 @@ public class ConsolaGrafica implements Vista{
 	}
 	
 	public void mostrarIngresarJugadores() {
-		mostrarMensaje("Se han ingresado los nuevos jugadores");
+		mostrarMensaje("Se han ingresado los nuevos jugadores.");
 	}
 
 	public void mostrarComenzarPartida(Jugador[] jugadores) {
-		mostrarMensaje("Comienza la partida. Empieza el jugador " + jugadores[0].getNombre() + ".");
+		int turnoActual = controlador.obtenerTurnoActual();
+		if(turnoActual == -1) {
+			turnoActual = 0;
+		}
+		mostrarMensaje("Comienza la partida. Empieza el jugador " + jugadores[turnoActual].getNombre() + ".");
 	}
 
 	public void mostrarTablero(Ficha[][] tablero) {
@@ -198,6 +205,26 @@ public class ConsolaGrafica implements Vista{
 				+ "ATRIL: " + jugador.getAtril() + "\n"
 				+ "PUNTAJE: " + jugador.getPuntaje() + "\n";
 		mostrarMensaje(obtenerEstadoJugador);
+	}
+
+	public void mostrarPartidasGuardadas() {
+		ArrayList<Object> listaPartidas = new ArrayList<>();
+		try {
+			listaPartidas = controlador.obtenerPartidas();
+			for(Object o: listaPartidas) {
+				Partida p = (Partida)o;
+				mostrarMensaje(p.toString());
+			}
+		} catch (IOException e) {
+			// TODO Bloque catch generado automáticamente
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void mostrarRanking() {
+		// TODO Apéndice de método generado automáticamente
+		
 	}
 	
 		

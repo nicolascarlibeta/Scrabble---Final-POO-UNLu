@@ -47,7 +47,6 @@ public class VentanaTablero {
 	private JButton comenzarPartida;
 	private ImageIcon scrabble;
 	private JTextField palabra;
-	private JTextField cadenaFichas;
 	private JTextArea tablero;
 	private JLabel jugador;
 	private JLabel puntaje;
@@ -57,6 +56,7 @@ public class VentanaTablero {
 	private JButton pasarTurno;
 	private JTextField coorX;
 	private JTextField coorY;
+	private JTextField cadenaFichas;
 	
 	
 	//CONSTRUCTOR
@@ -102,7 +102,7 @@ public class VentanaTablero {
 		JPanel panelEste = new JPanel();
 		panelEste.setBorder(null);
 		panelEste.setBackground(new Color(0, 128, 0));
-		panelEste.setPreferredSize(new Dimension(200, 100));
+		panelEste.setPreferredSize(new Dimension(210, 100));
 		frmScrabble.getContentPane().add(panelEste, BorderLayout.EAST);
 		panelEste.setLayout(new GridLayout(2, 0, 0, 0));
 		
@@ -197,7 +197,7 @@ public class VentanaTablero {
 		panel_13.add(panel_22);
 		panel_22.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JLabel lblNewLabel_3 = new JLabel("New label");
+		JLabel lblNewLabel_3 = new JLabel("Ingresar palabra:");
 		lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_22.add(lblNewLabel_3);
 		
@@ -216,7 +216,7 @@ public class VentanaTablero {
 		panel_14.add(panel_24);
 		panel_24.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JLabel lblNewLabel_4 = new JLabel("New label");
+		JLabel lblNewLabel_4 = new JLabel("Coordenada X:");
 		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_24.add(lblNewLabel_4);
 		
@@ -235,7 +235,7 @@ public class VentanaTablero {
 		panel_15.add(panel_26);
 		panel_26.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JLabel lblNewLabel_5 = new JLabel("New label");
+		JLabel lblNewLabel_5 = new JLabel("Coordenada Y:");
 		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_26.add(lblNewLabel_5);
 		
@@ -254,7 +254,7 @@ public class VentanaTablero {
 		panel_16.add(panel_28);
 		panel_28.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JLabel lblNewLabel_6 = new JLabel("New label");
+		JLabel lblNewLabel_6 = new JLabel("Elegir disposición:");
 		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_28.add(lblNewLabel_6);
 		
@@ -269,13 +269,13 @@ public class VentanaTablero {
 		JPanel panel_33 = new JPanel();
 		panel_31.add(panel_33);
 		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("New radio button");
+		JRadioButton rdbtnNewRadioButton = new JRadioButton("Horizontal");
 		panel_33.add(rdbtnNewRadioButton);
 		
 		JPanel panel_32 = new JPanel();
 		panel_31.add(panel_32);
 		
-		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("New radio button");
+		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("Vertical");
 		panel_32.add(rdbtnNewRadioButton_1);
 		
 		JPanel panel_17 = new JPanel();
@@ -288,7 +288,7 @@ public class VentanaTablero {
 		JPanel panel_29 = new JPanel();
 		panel_17.add(panel_29);
 		
-		enviarPalabra = new JButton("New button");
+		enviarPalabra = new JButton("Enviar");
 		panel_29.add(enviarPalabra);
 		
 		JPanel panel_18 = new JPanel();
@@ -303,53 +303,28 @@ public class VentanaTablero {
 		
 		JPanel panel_5 = new JPanel();
 		PanelSubMenu.addTab("Cambiar fichas", null, panel_5, null);
-		panel_5.setLayout(new GridLayout(0, 3, 0, 0));
-		
-		JPanel panel_34 = new JPanel();
-		panel_5.add(panel_34);
-		panel_34.setLayout(new GridLayout(3, 1, 0, 0));
-		
-		JPanel panel_40 = new JPanel();
-		panel_34.add(panel_40);
-		
-		JPanel panel_41 = new JPanel();
-		panel_34.add(panel_41);
-		
-		JLabel lblNewLabel_8 = new JLabel("New label");
-		panel_41.add(lblNewLabel_8);
+		panel_5.setLayout(new GridLayout(3, 1, 0, 0));
 		
 		JPanel panel_35 = new JPanel();
 		panel_5.add(panel_35);
-		panel_35.setLayout(new GridLayout(3, 0, 0, 0));
+		panel_35.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JPanel panel_37 = new JPanel();
-		panel_35.add(panel_37);
-		
-		JPanel panel_39 = new JPanel();
-		panel_35.add(panel_39);
-		
-		cadenaFichas = new JTextField();
-		panel_39.add(cadenaFichas);
-		cadenaFichas.setColumns(10);
-		
-		JPanel panel_38 = new JPanel();
-		panel_35.add(panel_38);
+		JLabel leyendaCambiarFichas = new JLabel("Ingrese una palabra que contenga las letras que desea cambiar (en cualquier orden):");
+		leyendaCambiarFichas.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_35.add(leyendaCambiarFichas);
 		
 		JPanel panel_36 = new JPanel();
 		panel_5.add(panel_36);
-		panel_36.setLayout(new GridLayout(3, 0, 0, 0));
 		
-		JPanel panel_43 = new JPanel();
-		panel_36.add(panel_43);
+		cadenaFichas = new JTextField();
+		panel_36.add(cadenaFichas);
+		cadenaFichas.setColumns(10);
 		
-		JPanel panel_44 = new JPanel();
-		panel_36.add(panel_44);
+		JPanel panel_34 = new JPanel();
+		panel_5.add(panel_34);
 		
-		cambioFichas = new JButton("New button");
-		panel_44.add(cambioFichas);
-		
-		JPanel panel_42 = new JPanel();
-		panel_36.add(panel_42);
+		cambioFichas = new JButton("Cambiar fichas");
+		panel_34.add(cambioFichas);
 		
 		JPanel panel_12 = new JPanel();
 		PanelSubMenu.addTab("Pasar turno", null, panel_12, null);
@@ -361,11 +336,16 @@ public class VentanaTablero {
 		
 		JPanel panel_49 = new JPanel();
 		panel_45.add(panel_49);
+		panel_49.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		JLabel lblNewLabel_8 = new JLabel("Presione para pasar el turno:");
+		lblNewLabel_8.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_49.add(lblNewLabel_8);
 		
 		JPanel panel_51 = new JPanel();
 		panel_45.add(panel_51);
 		
-		pasarTurno = new JButton("New button");
+		pasarTurno = new JButton("Pasar turno");
 		panel_51.add(pasarTurno);
 		
 		JPanel panel_50 = new JPanel();

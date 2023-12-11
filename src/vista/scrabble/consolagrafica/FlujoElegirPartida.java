@@ -13,17 +13,7 @@ public class FlujoElegirPartida extends Flujo{
 	}
 
 	public void mostarMenuTextual() {
-		ArrayList<Object> listaPartidas = new ArrayList<>();
-		try {
-			listaPartidas = controlador.obtenerPartidas();
-			for(Object o: listaPartidas) {
-				Partida p = (Partida)o;
-				vista.mostrarMensaje(p.toString());
-			}
-		} catch (IOException e) {
-			// TODO Bloque catch generado automáticamente
-			e.printStackTrace();
-		}
+		vista.mostrarPartidasGuardadas();
 		vista.mostrarMensaje("Seleccione una partida: ");
 	}
 
@@ -31,7 +21,7 @@ public class FlujoElegirPartida extends Flujo{
 		int idPartida = Integer.parseInt(opcion);
 		try {
 			controlador.cargarPartida(idPartida);
-			return new FlujoIngresarPalabra(vista,controlador,controlador.siguienteTurno());
+			return new FlujoIngresarPalabra(vista,controlador,controlador.obtenerTurnoActual());
 		} catch (IOException e) {
 			// TODO Bloque catch generado automáticamente
 			return this;

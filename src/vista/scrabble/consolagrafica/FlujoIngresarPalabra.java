@@ -97,13 +97,15 @@ public class FlujoIngresarPalabra extends Flujo{
 			vista.mostrarMensaje("La palabra ingresada no es valida, intente con otra.");
 			return this;
 		}
-		if(controlador.esPrimerMovimiento()) {
-			this.x = 72;
-			this.y = 72;
-			estadoActual = EstadosPosibles.INGRESANDO_DISPOSICION;
-		}
 		else {
-			estadoActual = EstadosPosibles.INGRESANDO_COORDENADA_X;			
+			if(controlador.esPrimerMovimiento()) {
+				this.x = 72;
+				this.y = 72;
+				estadoActual = EstadosPosibles.INGRESANDO_DISPOSICION;
+			}
+			else {
+				estadoActual = EstadosPosibles.INGRESANDO_COORDENADA_X;			
+			}
 		}
 		return this;
 	}

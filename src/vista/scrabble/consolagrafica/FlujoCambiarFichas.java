@@ -33,7 +33,7 @@ public class FlujoCambiarFichas extends Flujo{
 			}
 		}
 		controlador.cambiarFichas(idJugador, cadenaCaracteres);
-		return new FlujoIngresarPalabra(vista,controlador,controlador.siguienteTurno());
+		return new FlujoOpcionesJuego(vista,controlador,controlador.siguienteTurno());
 	}
     
 }
