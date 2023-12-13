@@ -85,4 +85,5 @@ public class VentanaPartidas implements Ventana{
 		return listaPartidas.getSelectedIndex();
 	}
 
+
 }

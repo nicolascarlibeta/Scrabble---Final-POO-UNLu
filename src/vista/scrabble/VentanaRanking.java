@@ -49,18 +49,19 @@ public class VentanaRanking implements Ventana{
 	}
 
 	public void mostrarRanking(ArrayList<Jugador> top5jugadores) {
-		int i = 1;
 		String dato = "";
+		mostrarMensaje("*** TOP 5 MEJORES JUGADORES ***");
 		mostrarMensaje("");
-		mostrarMensaje("Jugador		Puntaje\n");
-		for(Jugador j: top5jugadores) {
-			dato += (i + ". ") + j.getNombre() + ". ......... " + j.getPuntaje() + ".\n";
+		mostrarMensaje("Jugador		Puntaje");
+		for(int i = 0; i < 5; i++) {
+			Jugador j = top5jugadores.get(i);
+			dato += ((i + 1) + ". ") + j.getNombre() + ". ......... " + j.getPuntaje() + ".\n";
 		}
 		mostrarMensaje(dato);
 	}
 
 	private void mostrarMensaje(String string) {
-		ranking.setText(string);
+		ranking.setText(string + "\n");
 	}
 
 }

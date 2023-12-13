@@ -8,12 +8,11 @@ import vista.scrabble.consolagrafica.FlujoIngresarPalabra.EstadosPosibles;
 
 public class FlujoCambiarFichas extends Flujo{
 
-	private int idJugador;
-	
-	public FlujoCambiarFichas(ConsolaGrafica vista, Controlador controlador, int idJugador) {
+	public FlujoCambiarFichas(ConsolaGrafica vista, Controlador controlador) {
 		super(vista, controlador);
-		this.idJugador = idJugador;
 	}
+	
+	private int idJugador = controlador.obtenerTurnoActual();
 	
     public void mostarMenuTextual() {
     	vista.mostrarTablero(controlador.obtenerTablero());	
@@ -33,7 +32,7 @@ public class FlujoCambiarFichas extends Flujo{
 			}
 		}
 		controlador.cambiarFichas(idJugador, cadenaCaracteres);
-		return new FlujoOpcionesJuego(vista,controlador,controlador.siguienteTurno());
+		return new FlujoOpcionesJuego(vista,controlador);
 	}
     
 }

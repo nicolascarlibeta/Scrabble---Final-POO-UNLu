@@ -13,22 +13,7 @@ public class FlujoVerRanking extends Flujo{
 	}
 
 	public void mostarMenuTextual() {
-		int i = 1;
-		String dato = "";
-		ArrayList<Jugador> top5jugadores = null;
-		try {
-			top5jugadores = controlador.obtenerTop5Jugadores();
-		} catch (IOException e) {
-			// TODO Bloque catch generado automáticamente
-			e.printStackTrace();
-		}
-		vista.mostrarMensaje("*** TOP 5 MEJORES JUGADORES ***");
-		vista.mostrarMensaje("");
-		vista.mostrarMensaje("Jugador		Puntaje\n");
-		for(Jugador j: top5jugadores) {
-			dato += (i + ". ") + j.getNombre() + ". ......... " + j.getPuntaje() + ".\n";
-		}
-		vista.mostrarMensaje(dato);
+		vista.mostrarRanking();
 		vista.mostrarMensaje("Presiona Intro para continuar.");
 	}
 

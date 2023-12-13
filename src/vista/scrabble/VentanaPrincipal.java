@@ -79,18 +79,11 @@ public class VentanaPrincipal implements Ventana {
 		mnNewMenu.add(iRanking);
 	}
 
+	
 	public void setVisible(boolean b) {
 		frmScrabble.setVisible(b);
 	}
 	
-	public int validarCantidadJugadores(String entrada) {
-		try {
-			int cantidadJugadores = Integer.parseInt(entrada);
-			return cantidadJugadores;
-		} catch(NumberFormatException e) {
-			return -1;
-		}
-	}
 	
 	public void nuevaPartida(ActionListener accion) {
 		iNuevaPartida.addActionListener(accion);
@@ -107,6 +100,8 @@ public class VentanaPrincipal implements Ventana {
 	public void verRanking(ActionListener accion) {
 		iRanking.addActionListener(accion);
 	}
+
+	
 
 
 

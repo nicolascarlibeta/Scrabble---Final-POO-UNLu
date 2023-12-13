@@ -47,11 +47,11 @@ public class VistaGrafica implements Vista{
 				
 				//Ingreso cuantas personas van a jugar en la partida actual
 				String cantidadJugadores = JOptionPane.showInputDialog("¿Cuántas personas van a jugar (entre 2 y 4)?");
-				int cantJug = ventanaPrincipal.validarCantidadJugadores(cantidadJugadores);
-				while(cantJug == -1) {
+				int cantJug = Integer.parseInt(cantidadJugadores);					
+				while(cantJug < 2 || cantJug > 4) {
 					JOptionPane.showMessageDialog(ventanaPrincipal.parentComponent(),"***¡Debe ingresar un número valido entre 2 y 4!***");
 					cantidadJugadores = JOptionPane.showInputDialog("¿Cuántas personas van a jugar (entre 2 y 4)?");
-					cantJug = ventanaPrincipal.validarCantidadJugadores(cantidadJugadores);
+					cantJug = Integer.parseInt(cantidadJugadores);
 				}
 				
 				//Ingreso los nombres de los jugadores
@@ -65,12 +65,12 @@ public class VistaGrafica implements Vista{
 		});
 		
 		
-		//Acción de ingresar palabra
+		//Acción de Ingresar palabra
 		ventanaTablero.ingresarPalabra(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
 				
-				int idJugador = controlador.siguienteTurno();
+				int idJugador = controlador.obtenerTurnoActual();
 				Jugador jugadorActual = controlador.obtenerJugadores(idJugador);
 				boolean avanzar = true;
 				
@@ -86,23 +86,31 @@ public class VistaGrafica implements Vista{
 					e1.printStackTrace();
 				}
 				
-				if(avanzar){
-					//Primero recibo la palabra
-					String cadenaString = validarPalabra(idJugador);
-					int x = 0, y = 0;
-					if(!controlador.esPrimerMovimiento()) {
-						//Coor. X
-						x = validarCoorX();
-						//Coor. Y
-						y = validarCoorY();					
-					}
-					//Disposición
-					validarDisposicion();
-					
-					//Ingreso la palabra
-					controlador.agregarPalabra(idJugador,x,y,cadenaString,false);					
+				//Primero recibo la palabra
+				String cadenaString = validarPalabra(idJugador);
+				if(cadenaString == "") {
+					avanzar = false;
 				}
-			
+				
+				int x = 72, y = 72;
+				if(!controlador.esPrimerMovimiento()) {
+					//Coor. X
+					x = validarCoorX();
+					//Coor. Y
+					y = validarCoorY();
+					if(x == -1 || y == -1) {
+						avanzar = false;
+					}
+				}
+					
+				//Disposición
+				boolean disposicion = validarDisposicion();
+					
+				//Ingreso la palabra
+				if(avanzar) {
+					ventanaTablero.limpiar();
+					controlador.agregarPalabra(idJugador,x,y,cadenaString,disposicion);						
+				}
 			}
 		});
 		
@@ -112,6 +120,7 @@ public class VistaGrafica implements Vista{
 			
 			public void actionPerformed(ActionEvent e) {
 		
+				boolean avanzar = true;
 				Jugador jugadorActual = null;
 				String cadenaString = ventanaTablero.recibirCadenaString();
 				jugadorActual = controlador.obtenerJugadores(controlador.obtenerTurnoActual());
@@ -120,9 +129,12 @@ public class VistaGrafica implements Vista{
 				for(char c: cadenaCaracteres) {
 					if(jugadorActual != null && !jugadorActual.getAtril().contains(c)) {
 						mostrarMensaje("Ingrese una palabra que contenga las letras de su atril.");
+						avanzar = false;
 					}
 				}
-				controlador.cambiarFichas(controlador.obtenerTurnoActual(), cadenaCaracteres);
+				if(avanzar) {
+					controlador.cambiarFichas(controlador.obtenerTurnoActual(), cadenaCaracteres);					
+				}
 			}
 		});
 		
@@ -131,7 +143,7 @@ public class VistaGrafica implements Vista{
 		ventanaTablero.pasarTurno(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				controlador.siguienteTurno();
+				controlador.pasarTurno();
 			}
 		});
 		
@@ -154,7 +166,7 @@ public class VistaGrafica implements Vista{
 				if(idPartida != -1) {
 					try {
 						controlador.cargarPartida(idPartida);
-						mostrarComenzarPartida(controlador.obtenerJugadores());
+						mostrarComenzarPartida();
 					} catch (IOException e1) {
 						// TODO Bloque catch generado automáticamente
 						e1.printStackTrace();
@@ -176,12 +188,7 @@ public class VistaGrafica implements Vista{
 	}	
 
 	
-	
-	
-	
-	
-	
-	
+	//Métodos de VistaGrafica
 	public void iniciar() {
 		ventanaPrincipal.setVisible(true);
 	}
@@ -193,16 +200,12 @@ public class VistaGrafica implements Vista{
 
 	
 	public void mostrarComenzarPartida(Jugador[] jugadores) {
-		ventanaPrincipal.setVisible(false);
 		ventanaTablero.setVisible(true);
-		mostrarTablero(controlador.obtenerTablero());
-		//mostrarEstadoJugador(jugadorActual);
-		int turnoActual = controlador.obtenerTurnoActual();
-		if(turnoActual == -1) {
-			turnoActual = 0;
-		}
-		ventanaTablero.mostrarMensaje("Comienza la partida. Empieza el jugador " + jugadores[turnoActual].getNombre() + ".");
-		
+		ventanaTablero.mostrarMensaje("Comienza la partida. Empieza el jugador " + jugadores[controlador.obtenerTurnoActual()].getNombre() + ".");
+	}
+	
+	public void mostrarComenzarPartida() {
+		ventanaTablero.setVisible(true);
 	}
 
 	
@@ -225,13 +228,13 @@ public class VistaGrafica implements Vista{
 
 	public void mostrarPartidasGuardadas() {
 		try {
+			ventanaPartidas.setVisible(true);
 			ventanaPartidas.mostrarPartidasGuardadas(controlador.obtenerPartidas());
 		} catch (IOException e) {
 			// TODO Bloque catch generado automáticamente
 			e.printStackTrace();
 		}
 	}
-
 
 
 	public void mostrarRanking() {
@@ -260,16 +263,16 @@ public class VistaGrafica implements Vista{
 		char[] cadenaCaracteres = cadenaString.toCharArray();
 		
 		//Luego, valido que la palabra contenga letras del atril
-		for(char c: cadenaCaracteres) {
-			if(!jugadorActual.getAtril().contains(c)) {
-				mostrarMensaje("Ingrese una palabra que contenga las letras de su atril.");
-			}
+		if(!validarCaracteres(cadenaCaracteres,jugadorActual)) {
+			mostrarMensaje("Ingrese una palabra que contenga las letras de su atril.");
+			cadenaString = "";
 		}
 		
 		//Valido la palabra en el diccionario
 		try {
 			if(!new Diccionario().contieneA(cadenaString.toLowerCase())) {
 				mostrarMensaje("La palabra ingresada no es valida, intente con otra.");
+				cadenaString = "";
 			}
 		} catch (IOException e1) {
 			
@@ -278,12 +281,21 @@ public class VistaGrafica implements Vista{
 		return cadenaString;
 	}
 	
+	private boolean validarCaracteres(char[] cadenaCaracteres, Jugador jugadorActual) {
+		for(char c: cadenaCaracteres) {
+			if(!jugadorActual.getAtril().contains(c)) {
+				return false;
+			}
+		}
+		return true;
+	}
 	
 	public int validarCoorX() {
 		String xString = ventanaTablero.recibirCoordenadaX();
 		xString = xString.toUpperCase();
 		int x = (int) xString.toCharArray()[0];
 		if(x < 65 || x > 79) {
+			x = -1;
 			mostrarMensaje("Ingrese una letra coordenada entre A y O.");
 		}
 		return x;
@@ -295,18 +307,25 @@ public class VistaGrafica implements Vista{
 		yString = yString.toUpperCase();
 		int y = (int) yString.toCharArray()[0];
 		if(y < 65 || y > 79) {
+			y = -1;
 			mostrarMensaje("Ingrese una letra coordenada entre A y O.");
 		}
 		return y;
 	}
 	
-	public void validarDisposicion() {
+	
+	public boolean validarDisposicion() {
+		
+		boolean disposicion = false;
+		if(ventanaTablero.isSelected()) {
+			disposicion = true;
+		}
+		return disposicion;
 		
 	}
 
 
 	
-
 	
 	
 }

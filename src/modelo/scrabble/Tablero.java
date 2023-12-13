@@ -188,8 +188,6 @@ public class Tablero implements Serializable{
 	
 	public void addPalabra(Jugador[] jugadores, BolsaFichas bolsaDeFichas, int idJugador, int x, int y, Palabra palabraActual, boolean horizontal) throws RemoteException {
 		
-		//PROCESAMIENTO:
-		
 		//Hago un alias del conjunto de letras de la palabra
 		char[] letrasPalabra = palabraActual.getLetras();
 		//length de la palabra
@@ -198,16 +196,6 @@ public class Tablero implements Serializable{
 		
 		//Hago un formateo de x e y
 		x -= 64; y -=64;
-		
-		
-		//VALIDACIÓN:
-		
-		
-		
-		
-		
-		
-		
 		
 		//Calculo el puntaje inicial de la palabra
 		int puntajePalabra = calcularPuntajePalabra(x, y, letrasPalabra, horizontal);
@@ -227,17 +215,6 @@ public class Tablero implements Serializable{
 				i++;
 			}
 		}
-		
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		//Le reparto las fichas restantes al jugador
 		if(bolsaDeFichas.getCantidadFichas() > 0) {
@@ -267,15 +244,15 @@ public class Tablero implements Serializable{
 		for(char letra: letrasPalabra) {
 			
 			if(tablero[i][d].getClass() == PremioLetra.class) {
-				puntajePalabra += PuntajeFichas.getPuntaje(letra + "") * tablero[i][d].getPuntos();					
+				puntajePalabra += new PuntajeFichas().getPuntaje(letra + "") * tablero[i][d].getPuntos();					
 			}
 			else if(tablero[i][d].getClass() == PremioPalabra.class) {
-				puntajePalabra += PuntajeFichas.getPuntaje(letra + "");
+				puntajePalabra += new PuntajeFichas().getPuntaje(letra + "");
 				cantVecesMultiplicar *= tablero[i][d].getPuntos();
 				multiplicarPalabra = true;
 			}
 			else {
-				puntajePalabra += PuntajeFichas.getPuntaje(letra + "");
+				puntajePalabra += new PuntajeFichas().getPuntaje(letra + "");
 			}
 			
 			if(horizontal) {
@@ -291,14 +268,6 @@ public class Tablero implements Serializable{
 		}
 		return puntajePalabra;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	//Setters y Getters
 	

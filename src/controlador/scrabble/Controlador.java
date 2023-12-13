@@ -151,6 +151,7 @@ public class Controlador implements IControladorRemoto{
 			return modelo.isPrimerMovimiento();
 		} catch (RemoteException e) {
 			// TODO Bloque catch generado automáticamente
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -170,6 +171,15 @@ public class Controlador implements IControladorRemoto{
 		} catch (RemoteException e) {
 			// TODO Bloque catch generado automáticamente
 			return -1;
+		}
+	}
+	
+	public void pasarTurno() {
+		try {
+			modelo.pasarTurno();
+		} catch (RemoteException e) {
+			// TODO Bloque catch generado automáticamente
+			e.printStackTrace();
 		}
 	}
 
@@ -206,6 +216,8 @@ public class Controlador implements IControladorRemoto{
 			}
 		}
 	}
+	
+	
 
 	
 

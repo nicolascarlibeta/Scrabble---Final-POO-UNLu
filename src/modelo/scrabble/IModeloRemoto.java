@@ -21,6 +21,8 @@ public interface IModeloRemoto extends IObservableRemoto{
 	int obtenerGanador() throws RemoteException;
 
 	boolean isPrimerMovimiento() throws RemoteException;
+	
+	void pasarTurno() throws RemoteException;
 
 	Ficha[][] getTablero() throws RemoteException;
 

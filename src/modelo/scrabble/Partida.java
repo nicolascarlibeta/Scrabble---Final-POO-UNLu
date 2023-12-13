@@ -23,7 +23,8 @@ public class Partida implements Serializable{
 	public Partida(Tablero tablero, BolsaFichas bolsaDeFichas,
 			Jugador[] jugadores, int turnoActual) {
 		LocalDateTime fechaHoy = LocalDateTime.now();
-		DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy  HH:MM");
+		DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy  HH:mm");
+		this.id++;
 		this.fechaHora = fechaHoy.format(formato);
 		this.tablero = tablero;
 		this.bolsaDeFichas = bolsaDeFichas;
@@ -75,7 +76,7 @@ public class Partida implements Serializable{
 			jug += jugadores[j].getNombre() + ". ";
 			j++;
 		}
-		return (id++)
+		return id
 				+ ". FECHA: " + fechaHora + "\n"
 				+ "JUGADORES: " + jug + "\n"
 				+ "TURNO ACTUAL: " + jugadores[turnoActual].getNombre() + "\n";

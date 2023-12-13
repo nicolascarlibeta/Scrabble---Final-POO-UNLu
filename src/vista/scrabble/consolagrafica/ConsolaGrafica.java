@@ -183,9 +183,6 @@ public class ConsolaGrafica implements Vista{
 
 	public void mostrarComenzarPartida(Jugador[] jugadores) {
 		int turnoActual = controlador.obtenerTurnoActual();
-		if(turnoActual == -1) {
-			turnoActual = 0;
-		}
 		mostrarMensaje("Comienza la partida. Empieza el jugador " + jugadores[turnoActual].getNombre() + ".");
 	}
 
@@ -212,7 +209,7 @@ public class ConsolaGrafica implements Vista{
 		try {
 			listaPartidas = controlador.obtenerPartidas();
 			for(Object o: listaPartidas) {
-				Partida p = (Partida)o;
+				Partida p = (Partida) o;
 				mostrarMensaje(p.toString());
 			}
 		} catch (IOException e) {
@@ -221,10 +218,23 @@ public class ConsolaGrafica implements Vista{
 		}
 	}
 
-	@Override
 	public void mostrarRanking() {
-		// TODO Apéndice de método generado automáticamente
-		
+		String dato = "";
+		ArrayList<Jugador> top5jugadores = null;
+		try {
+			top5jugadores = controlador.obtenerTop5Jugadores();
+		} catch (IOException e) {
+			// TODO Bloque catch generado automáticamente
+			e.printStackTrace();
+		}
+		mostrarMensaje("*** TOP 5 MEJORES JUGADORES ***");
+		mostrarMensaje("");
+		mostrarMensaje("Jugador		Puntaje\n");
+		for(int i = 0; i < 5; i++) {
+			Jugador j = top5jugadores.get(i);
+			dato += ((i + 1) + ". ") + j.getNombre() + ". ......... " + j.getPuntaje() + ".\n";
+		}
+		mostrarMensaje(dato);
 	}
 	
 		

@@ -39,7 +39,7 @@ import javax.swing.UIManager;
 import java.awt.event.ActionEvent;
 import javax.swing.GroupLayout.Alignment;
 
-public class VentanaTablero {
+public class VentanaTablero implements Ventana{
 
 	private JFrame frmScrabble;
 	private JLabel menuPrincipal;
@@ -50,10 +50,12 @@ public class VentanaTablero {
 	private JTextArea tablero;
 	private JLabel jugador;
 	private JLabel puntaje;
-	private JTextArea atril;
+	private JLabel atril;
 	private JButton enviarPalabra;
 	private JButton cambioFichas;
 	private JButton pasarTurno;
+	private JRadioButton horizontal;
+	private JRadioButton vertical;
 	private JTextField coorX;
 	private JTextField coorY;
 	private JTextField cadenaFichas;
@@ -125,7 +127,7 @@ public class VentanaTablero {
 		JLabel lblNewLabel = new JLabel("Jugador:");
 		panel_3.add(lblNewLabel);
 		
-		jugador = new JLabel("New label");
+		jugador = new JLabel("");
 		panel_3.add(jugador);
 		
 		JPanel panel_4 = new JPanel();
@@ -134,7 +136,7 @@ public class VentanaTablero {
 		JLabel lblNewLabel_1 = new JLabel("Puntaje:");
 		panel_4.add(lblNewLabel_1);
 		
-		puntaje = new JLabel("New label");
+		puntaje = new JLabel("");
 		panel_4.add(puntaje);
 		
 		JPanel panel_6 = new JPanel();
@@ -156,7 +158,7 @@ public class VentanaTablero {
 		JPanel panel = new JPanel();
 		panel_11.add(panel);
 		
-		atril = new JTextArea();
+		atril = new JLabel();
 		panel.add(atril);
 		
 		JPanel panel_10 = new JPanel();
@@ -164,6 +166,7 @@ public class VentanaTablero {
 		panel_6.add(panel_10);
 		
 		JLabel lblNewLabel_2 = new JLabel("SU TURNO: Elija una opción:");
+		lblNewLabel_2.setForeground(new Color(255, 255, 255));
 		panel_10.add(lblNewLabel_2);
 		
 		JPanel panelSur = new JPanel();
@@ -269,14 +272,18 @@ public class VentanaTablero {
 		JPanel panel_33 = new JPanel();
 		panel_31.add(panel_33);
 		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("Horizontal");
-		panel_33.add(rdbtnNewRadioButton);
+		horizontal = new JRadioButton("Horizontal");
+		vertical = new JRadioButton("Vertical");
+		
+		ButtonGroup buttonGroup = new ButtonGroup();
+		buttonGroup.add(horizontal);
+		buttonGroup.add(vertical);
 		
 		JPanel panel_32 = new JPanel();
 		panel_31.add(panel_32);
 		
-		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("Vertical");
-		panel_32.add(rdbtnNewRadioButton_1);
+		panel_33.add(horizontal);
+		panel_32.add(vertical);
 		
 		JPanel panel_17 = new JPanel();
 		panel_2.add(panel_17);
@@ -378,6 +385,7 @@ public class VentanaTablero {
 		panelCentro.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		tablero = new JTextArea();
+		tablero.setEditable(false);
 		tablero.setFont(new Font("JetBrains Mono", Font.PLAIN, 18));
 		tablero.setForeground(new Color(255, 255, 255));
 		tablero.setBackground(new Color(0, 64, 0));
@@ -408,6 +416,7 @@ public class VentanaTablero {
 		cambioFichas.addActionListener(accion);
 	}
 	
+	
 	public void pasarTurno(ActionListener accion) {
 		this.pasarTurno.addActionListener(accion);
 	}
@@ -431,8 +440,15 @@ public class VentanaTablero {
 	public String recibirCadenaString() {
 		return cadenaFichas.getText();
 	}
-
-
+	
+	public boolean isSelected() {
+		return horizontal.isSelected();
+	}
+	
+	public boolean cambiarDisposicion(boolean horizontal) {
+		return horizontal;
+	}
+	
 	public void mostrarEstadoJugador(Jugador jugador) {
 		this.jugador.setText(jugador.getNombre());
 		this.puntaje.setText(jugador.getPuntaje() + "");
@@ -441,6 +457,14 @@ public class VentanaTablero {
 
 	public JFrame parentComponent() {
 		return frmScrabble;
+	}
+
+
+	public void limpiar() {
+		palabra.setText("");
+		coorX.setText("");
+		coorY.setText("");
+		cadenaFichas.setText("");
 	}
 	
 

@@ -107,7 +107,7 @@ public class FlujoIngresarJugadores extends Flujo{
 			jugadores[j] = new Jugador(this.jugadores[j]);
 		}
 		controlador.comenzarPartida(jugadores);
-		return new FlujoOpcionesJuego(vista,controlador,controlador.siguienteTurno());
+		return new FlujoOpcionesJuego(vista,controlador);
 	}
 	
 	

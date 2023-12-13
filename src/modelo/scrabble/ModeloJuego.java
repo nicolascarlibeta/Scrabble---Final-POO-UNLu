@@ -22,12 +22,11 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	// * BOLSA DE FICHAS: 
 	private BolsaFichas bolsaDeFichas = new BolsaFichas();
 	// * JUGADORES:
-	private ArrayList<Jugador> usuariosJugadores = new ArrayList<>();
 	private Jugador[] jugadores = new Jugador[4];
 	// * TURNO:
 	private int turnoActual = -1;
 	// * OTROS:
-	private String partidas = "PartidasGuardadas.dat";
+	private static Serializador serializador = new Serializador("PartidasGuardadas.dat");
 	
 	
 	//INTERFAZ
@@ -39,8 +38,10 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		
 		//Comenzamos la primer partida
 		tablero.comenzarPartida(jugadores, bolsaDeFichas);
-		
+		siguienteTurno();
+
 		notificarObservadores(Evento.NUEVA_PARTIDA);
+		notificarObservadores(Evento.CAMBIO_ESTADO_PARTIDA);
 		
 	}
 	
@@ -49,8 +50,10 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		
 		//Devolvemos las fichas
 		tablero.devolverFichas(jugadores, bolsaDeFichas, idJugador, fichasACambiar);
+		siguienteTurno();
 		
 		notificarObservadores(Evento.CAMBIO_FICHAS);
+		notificarObservadores(Evento.CAMBIO_ESTADO_PARTIDA);
 
 	} 
 	
@@ -59,8 +62,10 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		
 		//Agregamos la palabra
 		tablero.addPalabra(jugadores, bolsaDeFichas, idJugador, x, y, palabraActual, horizontal);
+		siguienteTurno();
 		try {
 			notificarObservadores(Evento.NUEVA_PALABRA);
+			notificarObservadores(Evento.CAMBIO_ESTADO_PARTIDA);
 		} catch (RemoteException e) {
 			// TODO Bloque catch generado automáticamente
 			e.printStackTrace();
@@ -77,9 +82,14 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		else {
 			this.turnoActual = 0;
 		}
-		notificarObservadores(Evento.CAMBIO_ESTADO_PARTIDA);
 		return turnoActual;
 		
+	}
+	
+	
+	public void pasarTurno() throws RemoteException{
+		siguienteTurno();
+		notificarObservadores(Evento.CAMBIO_ESTADO_PARTIDA);
 	}
 	
 	
@@ -97,41 +107,18 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	
 	
 	public boolean isPrimerMovimiento() throws RemoteException{
+		int i = 0;
 		boolean esPrimer = true;
-		for(Jugador j: jugadores) {
+		while(esPrimer && i < jugadores.length) {
+			Jugador j = jugadores[i];
 			if (j != null && j.getPuntaje() > 0) {
-				return false;
+				esPrimer = false;
 			}
+			i++;
 		}
 		return esPrimer;
 	}
 	
-	
-	//Setters y Getters
-	
-	public Ficha[][] getTablero() throws RemoteException{
-		return tablero.getTablero();
-	}
-
-	public int getTurnoActual() throws RemoteException{
-		return turnoActual;
-	}
-	
-	public BolsaFichas getBolsaDeFichas() throws RemoteException{
-		return bolsaDeFichas;
-	}
-	
-	public Jugador[] getJugadores() throws RemoteException{
-		return jugadores;
-	}
-	
-	public boolean isVacia() throws RemoteException{
-		return bolsaDeFichas.getCantidadFichas() == 0;
-	}
-	
-	public int getCantidadFichas() throws RemoteException{
-		return bolsaDeFichas.getCantidadFichas();
-	}
 	
 	
 	//Lectura de archivos
@@ -142,7 +129,7 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		ArrayList<Object> listaPartidas = getListaPartidas();
 		
 		//Alias del objeto
-		Partida partidaACargar = (Partida) listaPartidas.get(idPartida - 1);
+		Partida partidaACargar = (Partida) listaPartidas.get(idPartida);
 		
 		//Volcamos todo el contenido en el modelo
 		tablero = partidaACargar.getTablero();
@@ -151,16 +138,14 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		turnoActual = partidaACargar.getTurnoActual();
 		
 		notificarObservadores(Evento.PARTIDA_CARGADA);
+		notificarObservadores(Evento.CAMBIO_ESTADO_PARTIDA);
 		
 	}
 	
 	
 	public void guardarPartida() throws IOException{
 		
-		//Partida actual
 		Partida partidaActual = new Partida(tablero,bolsaDeFichas,jugadores,turnoActual);
-		
-		Serializador serializador = new Serializador(partidas);
 		
 		Object o = serializador.readFirstObject();
 		if(o == null) {
@@ -180,35 +165,7 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		//Creo una lista vacia de partidas
 		ArrayList<Object> listaPartidas = new ArrayList<>();
 		
-		Serializador serializador = new Serializador(partidas);
-		
-		Object objeto = serializador.readFirstObject();
-		if(objeto != null) {
-			listaPartidas = serializador.readObjects();
-		}
-		
-		/*
-		//Creo un FileInputStream con el nombre del archivo
-		FileInputStream archivo = new FileInputStream(partidas);
-				
-		//Creo un ObjectInputStream con el FileInputStream
-		ObjectInputStream ois = new ObjectInputStream(archivo);
-		
-		//Leo el primer objeto del archivo
-		try {
-			Object objeto = ois.readObject();
-			while(objeto != null) {
-				listaPartidas.add((Partida)objeto);
-				objeto = ois.readObject();
-			}
-			ois.close();
-			
-		} catch(EOFException e) {
-			System.out.println("Fin de archivo.");
-		}*/
-		
-		
-		
+		listaPartidas = serializador.readObjects();
 		
 		return listaPartidas;
 	}
@@ -243,19 +200,44 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		//Agrego los jugadores
 		for(int j = 0; j < jugadores.length; j++) {
 			this.jugadores[j] = jugadores[j];
-			usuariosJugadores.add(jugadores[j]);
 		}
 		notificarObservadores(Evento.NUEVOS_JUGADORES);
 	}
 	
 	private void removeJugadores(int idUsuario) throws RemoteException {
-		usuariosJugadores.remove(idUsuario);
 		notificarObservadores(Evento.NUEVOS_JUGADORES);
 	}
 	
 	public void notificarObservadores(Object obj) throws RemoteException {
 		super.notificarObservadores(obj);
 	}
+	
+	
+	//Setters y Getters
+	
+		public Ficha[][] getTablero() throws RemoteException{
+			return tablero.getTablero();
+		}
+
+		public int getTurnoActual() throws RemoteException{
+			return turnoActual;
+		}
+		
+		public BolsaFichas getBolsaDeFichas() throws RemoteException{
+			return bolsaDeFichas;
+		}
+		
+		public Jugador[] getJugadores() throws RemoteException{
+			return jugadores;
+		}
+		
+		public boolean isVacia() throws RemoteException{
+			return bolsaDeFichas.getCantidadFichas() == 0;
+		}
+		
+		public int getCantidadFichas() throws RemoteException{
+			return bolsaDeFichas.getCantidadFichas();
+		}
 	
 	
 

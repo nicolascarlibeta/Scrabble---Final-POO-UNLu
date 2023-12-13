@@ -11,16 +11,15 @@ import modelo.scrabble.Jugador;
 
 public class FlujoIngresarPalabra extends Flujo{
 	
-	public FlujoIngresarPalabra(ConsolaGrafica vista, Controlador controlador, int idJugador) {
+	public FlujoIngresarPalabra(ConsolaGrafica vista, Controlador controlador) {
 		super(vista, controlador);
-		this.idJugador = idJugador;
 	}
 	
 	private String cadenaString = "";
 	private int x;
 	private int y;
 	private boolean horizontal;
-	protected int idJugador;
+	private int idJugador = controlador.obtenerTurnoActual();
 	private EstadosPosibles estadoActual = EstadosPosibles.INGRESANDO_PALABRA;
 	
 	public enum EstadosPosibles{
@@ -97,15 +96,13 @@ public class FlujoIngresarPalabra extends Flujo{
 			vista.mostrarMensaje("La palabra ingresada no es valida, intente con otra.");
 			return this;
 		}
+		if(controlador.esPrimerMovimiento()) {
+			this.x = 72;
+			this.y = 72;
+			estadoActual = EstadosPosibles.INGRESANDO_DISPOSICION;
+		}
 		else {
-			if(controlador.esPrimerMovimiento()) {
-				this.x = 72;
-				this.y = 72;
-				estadoActual = EstadosPosibles.INGRESANDO_DISPOSICION;
-			}
-			else {
-				estadoActual = EstadosPosibles.INGRESANDO_COORDENADA_X;			
-			}
+			estadoActual = EstadosPosibles.INGRESANDO_COORDENADA_X;			
 		}
 		return this;
 	}
@@ -141,7 +138,7 @@ public class FlujoIngresarPalabra extends Flujo{
 			return this;}
 		}
 		controlador.agregarPalabra(idJugador,x,y,cadenaString,horizontal);
-		return new FlujoOpcionesJuego(vista,controlador,controlador.siguienteTurno());
+		return new FlujoOpcionesJuego(vista,controlador);
 	}
 	
 	

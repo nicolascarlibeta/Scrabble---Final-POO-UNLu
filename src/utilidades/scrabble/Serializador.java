@@ -9,6 +9,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import modelo.scrabble.Jugador;
+
 public class Serializador {
 	private String fileName;
 
@@ -72,34 +74,35 @@ public class Serializador {
 		return respuesta;
 	}
 	
+	
 	public ArrayList<Object> readObjects() {
-		Object[] respuesta;
-		ArrayList<Object> listOfObject = new ArrayList<Object>();
-		try {
-			ObjectInputStream ois = new ObjectInputStream(
-                    new FileInputStream(fileName));
-			
-			Object r = ois.readObject();
-			while (r !=null)
-            {
-               listOfObject.add(r);
-               r = ois.readObject();
-            }
-            ois.close();
-			
-		}catch (EOFException e) {
-			System.out.println("Lectura completada");
-            
-        }catch (FileNotFoundException e) {
-			e.printStackTrace();
-			
-		} catch (IOException e) {
-			e.printStackTrace();
+	    ArrayList<Object> listOfObject = new ArrayList<>();
+	    try {
+	        ObjectInputStream ois = new ObjectInputStream(
+	                new FileInputStream(fileName));
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return listOfObject;
+	        try {
+	            while (true) {
+	                Object r = ois.readObject();
+	                listOfObject.add(r);
+	            }
+	        } catch (EOFException e) {
+	            // Se lanza EOFException cuando llega al final del archivo
+	            System.out.println("Lectura completada");
+	        }
+
+	        ois.close();
+
+	    } catch (FileNotFoundException e) {
+	        e.printStackTrace();
+
+	    } catch (IOException e) {
+	        e.printStackTrace();
+
+	    } catch (ClassNotFoundException e) {
+	        e.printStackTrace();
+	    }
+	    return listOfObject;
 	}
 	
 
