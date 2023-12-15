@@ -18,31 +18,45 @@ import utilidades.scrabble.*;
 public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	
 	// * TABLERO: 
-	private Tablero tablero = new Tablero();
+	private Tablero tablero;
 	// * BOLSA DE FICHAS: 
-	private BolsaFichas bolsaDeFichas = new BolsaFichas();
+	private BolsaFichas bolsaDeFichas;
 	// * JUGADORES:
-	private Jugador[] jugadores = new Jugador[4];
+	private Jugador[] jugadores; 
 	// * TURNO:
-	private int turnoActual = -1;
+	private int turnoActual;
 	// * OTROS:
-	private static Serializador serializador = new Serializador("PartidasGuardadas.dat");
-	
+	private static Serializador serializador = new Serializador("PartidasGuardadas.bin");
+	private ArrayList<Partida> partidas = new ArrayList<>();
 	
 	//INTERFAZ
 	
 	public void comenzarPartida(Jugador[] jugadores) throws RemoteException {
 		
+		//Comenzamos la primer partida
+		tablero = new Tablero();
+		bolsaDeFichas = new BolsaFichas();
+		this.jugadores = new Jugador[4];
+		turnoActual = -1;
+		
 		//Creamos y agregamos a los jugadores
 		addJugadores(jugadores);
 		
-		//Comenzamos la primer partida
 		tablero.comenzarPartida(jugadores, bolsaDeFichas);
 		siguienteTurno();
 
 		notificarObservadores(Evento.NUEVA_PARTIDA);
 		notificarObservadores(Evento.CAMBIO_ESTADO_PARTIDA);
 		
+	}
+	
+	
+	private void addJugadores(Jugador[] jugadores) throws RemoteException {
+		//Agrego los jugadores
+		for(int j = 0; j < jugadores.length; j++) {
+			this.jugadores[j] = jugadores[j];
+		}
+		notificarObservadores(Evento.NUEVOS_JUGADORES);
 	}
 	
 	
@@ -126,7 +140,7 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	public void cargarPartida(int idPartida) throws IOException, ClassNotFoundException{
 
 		//Cargamos la lista de todas las partidas guardadas
-		ArrayList<Object> listaPartidas = getListaPartidas();
+		ArrayList<Partida> listaPartidas = getListaPartidas();
 		
 		//Alias del objeto
 		Partida partidaACargar = (Partida) listaPartidas.get(idPartida);
@@ -146,35 +160,46 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	public void guardarPartida() throws IOException{
 		
 		Partida partidaActual = new Partida(tablero,bolsaDeFichas,jugadores,turnoActual);
+		partidas.add(partidaActual);
 		
-		Object o = serializador.readFirstObject();
-		if(o == null) {
-			serializador.writeOneObject(partidaActual);
-		}
-		else {
-			serializador.addOneObject(partidaActual);
-		}
-
+		try {
+            FileOutputStream fos = new FileOutputStream("PartidasGuardadas.bin");
+            var oos = new ObjectOutputStream(fos);
+            oos.writeObject(partidas);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+		
 		notificarObservadores(Evento.PARTIDA_GUARDADA);
 		
 	}
 	
 	
-	public ArrayList<Object> getListaPartidas() throws IOException, ClassNotFoundException, RemoteException{
+	public ArrayList<Partida> getListaPartidas() throws IOException, ClassNotFoundException, RemoteException{
 
-		//Creo una lista vacia de partidas
-		ArrayList<Object> listaPartidas = new ArrayList<>();
-		
-		listaPartidas = serializador.readObjects();
-		
-		return listaPartidas;
+		try {
+            FileInputStream fis = new FileInputStream("PartidasGuardadas.bin");
+            var ois = new ObjectInputStream(fis);
+            var listaPartidas = (ArrayList<Partida>) ois.readObject();
+            fis.close();
+            return listaPartidas;
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 	}
 	
 	
 	public ArrayList<Jugador> getTop5Jugadores() throws ClassNotFoundException, IOException{
 
 		//Cargamos las partidas guardadas
-		ArrayList<Object> partidas = getListaPartidas();
+		ArrayList<Partida> partidas = getListaPartidas();
 		
 		//ArrayList de jugadores
 		ArrayList<Jugador> jugadores = new ArrayList<>();
@@ -194,15 +219,9 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	}
 	
 	
-	//Metodos de observer
 	
-	private void addJugadores(Jugador[] jugadores) throws RemoteException {
-		//Agrego los jugadores
-		for(int j = 0; j < jugadores.length; j++) {
-			this.jugadores[j] = jugadores[j];
-		}
-		notificarObservadores(Evento.NUEVOS_JUGADORES);
-	}
+	
+	//Metodos de observer
 	
 	private void removeJugadores(int idUsuario) throws RemoteException {
 		notificarObservadores(Evento.NUEVOS_JUGADORES);

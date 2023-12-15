@@ -38,7 +38,7 @@ public interface IModeloRemoto extends IObservableRemoto{
 	
 	void notificarObservadores(Object obj) throws RemoteException;
 	
-	ArrayList<Object> getListaPartidas() throws IOException, ClassNotFoundException, RemoteException;
+	ArrayList<Partida> getListaPartidas() throws IOException, ClassNotFoundException, RemoteException;
 	
 	void cargarPartida(int idPartida) throws IOException, ClassNotFoundException, RemoteException;
 

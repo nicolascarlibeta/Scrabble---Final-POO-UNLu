@@ -12,7 +12,8 @@ import java.util.Random;
 public class Partida implements Serializable{
 	
 	private static final long serialVersionUID = -4243684796308041028L;
-	private static int id = 1;
+	private static int ContadorID = 0;
+	private int id;
 	private String fechaHora = "";
 	private Tablero tablero;
 	private BolsaFichas bolsaDeFichas;
@@ -24,7 +25,7 @@ public class Partida implements Serializable{
 			Jugador[] jugadores, int turnoActual) {
 		LocalDateTime fechaHoy = LocalDateTime.now();
 		DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy  HH:mm");
-		this.id++;
+		this.id = ++ContadorID;
 		this.fechaHora = fechaHoy.format(formato);
 		this.tablero = tablero;
 		this.bolsaDeFichas = bolsaDeFichas;

@@ -205,12 +205,11 @@ public class ConsolaGrafica implements Vista{
 	}
 
 	public void mostrarPartidasGuardadas() {
-		ArrayList<Object> listaPartidas = new ArrayList<>();
+		ArrayList<Partida> listaPartidas = new ArrayList<>();
 		try {
 			listaPartidas = controlador.obtenerPartidas();
-			for(Object o: listaPartidas) {
-				Partida p = (Partida) o;
-				mostrarMensaje(p.toString());
+			for(Partida p: listaPartidas) {
+				mostrarMensaje(p.toString());					
 			}
 		} catch (IOException e) {
 			// TODO Bloque catch generado automáticamente
@@ -220,7 +219,7 @@ public class ConsolaGrafica implements Vista{
 
 	public void mostrarRanking() {
 		String dato = "";
-		ArrayList<Jugador> top5jugadores = null;
+		ArrayList<Jugador> top5jugadores = new ArrayList<>();
 		try {
 			top5jugadores = controlador.obtenerTop5Jugadores();
 		} catch (IOException e) {
@@ -232,9 +231,19 @@ public class ConsolaGrafica implements Vista{
 		mostrarMensaje("Jugador		Puntaje\n");
 		for(int i = 0; i < 5; i++) {
 			Jugador j = top5jugadores.get(i);
-			dato += ((i + 1) + ". ") + j.getNombre() + ". ......... " + j.getPuntaje() + ".\n";
+			dato += ((i + 1) + ". ");
+			try {
+				if(j != null) {
+					dato += j.getNombre() + ". ......... " + j.getPuntaje() + ".";				
+				}
+				i++;
+			}catch(IndexOutOfBoundsException e) {
+				dato += "\n";
+				}
+			mostrarMensaje(dato);
+			dato = "";
 		}
-		mostrarMensaje(dato);
+		
 	}
 	
 		

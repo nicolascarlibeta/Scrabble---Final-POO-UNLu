@@ -102,7 +102,7 @@ public class Controlador implements IControladorRemoto{
 		}
 	}
 	
-	public ArrayList<Object> obtenerPartidas() throws IOException{
+	public ArrayList<Partida> obtenerPartidas() throws IOException{
 		try {
 			return modelo.getListaPartidas();
 		} catch (ClassNotFoundException | IOException e) {
