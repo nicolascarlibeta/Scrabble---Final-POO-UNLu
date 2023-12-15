@@ -219,9 +219,9 @@ public class ConsolaGrafica implements Vista{
 
 	public void mostrarRanking() {
 		String dato = "";
-		ArrayList<Jugador> top5jugadores = new ArrayList<>();
+		ArrayList<Jugador> top5Jugadores = new ArrayList<>();
 		try {
-			top5jugadores = controlador.obtenerTop5Jugadores();
+			top5Jugadores = controlador.obtenerTop5Jugadores();
 		} catch (IOException e) {
 			// TODO Bloque catch generado automáticamente
 			e.printStackTrace();
@@ -229,22 +229,33 @@ public class ConsolaGrafica implements Vista{
 		mostrarMensaje("*** TOP 5 MEJORES JUGADORES ***");
 		mostrarMensaje("");
 		mostrarMensaje("Jugador		Puntaje\n");
-		for(int i = 0; i < 5; i++) {
-			Jugador j = top5jugadores.get(i);
-			dato += ((i + 1) + ". ");
-			try {
-				if(j != null) {
-					dato += j.getNombre() + ". ......... " + j.getPuntaje() + ".";				
-				}
-				i++;
-			}catch(IndexOutOfBoundsException e) {
-				dato += "\n";
-				}
-			mostrarMensaje(dato);
-			dato = "";
-		}
 		
+		for(int i = 0; i < 5; i++) {
+			
+			dato += (i + 1 + ". ");
+			
+			if(i < top5Jugadores.size()) {
+				Jugador jugador = top5Jugadores.get(i);
+				if(jugador != null) {
+					dato += jugador.getNombre() + ". ......... " + jugador.getPuntaje() + ".\n";				
+					}
+				else {
+					dato += "nulo\n";
+				}
+			}
+			
+			else {
+				dato += "......... .\n";
+				}
+			i++;	
+			}
+			mostrarMensaje(dato);
+		}
+	
+	
+	
+	
 	}
 	
-		
-}
+	
+

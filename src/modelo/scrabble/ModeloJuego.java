@@ -205,14 +205,14 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		ArrayList<Jugador> jugadores = new ArrayList<>();
 		
 		//Las leemos y guardamos cada uno de sus jugadores
-		for(Object o: partidas) {
-			Partida p = (Partida) o;
-			for(Jugador j: p.getJugadores()) {
+		for(Partida p: partidas) {
+			Jugador[] jug = p.getJugadores();
+			for(Jugador j: jug) {
 				jugadores.add(j);
 			}
 		}
-		Comparator<Jugador> comp = Comparator.comparingInt(Jugador::getPuntaje).reversed();
-		jugadores.sort(comp);
+		//Comparator<Jugador> comp = Comparator.comparingInt(Jugador::getPuntaje).reversed();
+		//jugadores.sort(comp);
 		
 		return jugadores;
 
