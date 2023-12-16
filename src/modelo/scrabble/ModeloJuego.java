@@ -13,7 +13,6 @@ import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 import modelo.scrabble.Ficha;
 import java.io.*;
-import utilidades.scrabble.*;
 
 public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	
@@ -26,7 +25,6 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	// * TURNO:
 	private int turnoActual;
 	// * OTROS:
-	private static Serializador serializador = new Serializador("PartidasGuardadas.bin");
 	private ArrayList<Partida> partidas = new ArrayList<>();
 	
 	//INTERFAZ
@@ -208,24 +206,20 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		for(Partida p: partidas) {
 			Jugador[] jug = p.getJugadores();
 			for(Jugador j: jug) {
-				jugadores.add(j);
+				if(j != null) {
+					jugadores.add(j);					
+				}
 			}
 		}
-		//Comparator<Jugador> comp = Comparator.comparingInt(Jugador::getPuntaje).reversed();
-		//jugadores.sort(comp);
+		Comparator<Jugador> comp = Comparator.comparing(Jugador::getPuntaje).reversed();
+		jugadores.sort(comp);
 		
 		return jugadores;
 
 	}
 	
 	
-	
-	
 	//Metodos de observer
-	
-	private void removeJugadores(int idUsuario) throws RemoteException {
-		notificarObservadores(Evento.NUEVOS_JUGADORES);
-	}
 	
 	public void notificarObservadores(Object obj) throws RemoteException {
 		super.notificarObservadores(obj);

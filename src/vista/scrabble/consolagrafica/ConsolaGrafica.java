@@ -231,23 +231,19 @@ public class ConsolaGrafica implements Vista{
 		mostrarMensaje("Jugador		Puntaje\n");
 		
 		for(int i = 0; i < 5; i++) {
-			
 			dato += (i + 1 + ". ");
-			
 			if(i < top5Jugadores.size()) {
 				Jugador jugador = top5Jugadores.get(i);
 				if(jugador != null) {
 					dato += jugador.getNombre() + ". ......... " + jugador.getPuntaje() + ".\n";				
 					}
 				else {
-					dato += "nulo\n";
+					dato += "......... .\n";
 				}
 			}
-			
 			else {
 				dato += "......... .\n";
 				}
-			i++;	
 			}
 			mostrarMensaje(dato);
 		}

@@ -94,11 +94,11 @@ public class Controlador implements IControladorRemoto{
 		} catch (IOException e) {
 			// TODO Bloque catch generado automáticamente
 			e.printStackTrace();
-			return new ArrayList<>();
+			return null;
 		} catch (ClassNotFoundException e) {
 			// TODO Bloque catch generado automáticamente
 			e.printStackTrace();
-			return new ArrayList<>();
+			return null;
 		}
 	}
 	

@@ -29,6 +29,8 @@ import java.awt.GridBagConstraints;
 import javax.swing.SwingConstants;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
@@ -73,7 +75,7 @@ public class VentanaTablero implements Ventana{
 		frmScrabble.setResizable(false);
 		frmScrabble.setTitle("Scrabble");
 		frmScrabble.setBounds(100, 100, 710, 640);
-		frmScrabble.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmScrabble.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		
 		JPanel panelNorte = new JPanel();
 		panelNorte.setBorder(null);
@@ -459,7 +461,6 @@ public class VentanaTablero implements Ventana{
 		return frmScrabble;
 	}
 
-
 	public void limpiar() {
 		palabra.setText("");
 		coorX.setText("");
@@ -467,6 +468,10 @@ public class VentanaTablero implements Ventana{
 		cadenaFichas.setText("");
 	}
 	
+	public void cerrar(WindowAdapter accion) {
+		frmScrabble.addWindowListener(accion);
+	}
+
 
 	
 	

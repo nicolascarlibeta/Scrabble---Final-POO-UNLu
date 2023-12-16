@@ -3,6 +3,8 @@ package vista.scrabble;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.rmi.RemoteException;
 
@@ -88,7 +90,7 @@ public class VistaGrafica implements Vista{
 				
 				//Primero recibo la palabra
 				String cadenaString = validarPalabra(idJugador);
-				if(cadenaString == "") {
+				if(cadenaString.equals("")) {
 					avanzar = false;
 				}
 				
@@ -167,6 +169,7 @@ public class VistaGrafica implements Vista{
 					try {
 						controlador.cargarPartida(idPartida);
 						mostrarComenzarPartida();
+						ventanaPartidas.setVisible(false);
 					} catch (IOException e1) {
 						// TODO Bloque catch generado automáticamente
 						e1.printStackTrace();
@@ -185,6 +188,21 @@ public class VistaGrafica implements Vista{
 			}
 		});
 		
+		//Cerrar Ventana
+		ventanaTablero.cerrar(new WindowAdapter() {
+			
+			public void windowClosing(WindowEvent e) {
+				try {
+					controlador.guardarPartida();
+				} catch (IOException e1) {
+					// TODO Bloque catch generado automáticamente
+					e1.printStackTrace();
+				}	
+			}
+		});
+	
+	
+
 	}	
 
 	
@@ -258,6 +276,9 @@ public class VistaGrafica implements Vista{
 		
 		//Primero recibo la palabra
 		String cadenaString = ventanaTablero.recibirPalabra();
+		if(cadenaString.isEmpty()) {
+			return "";
+		}
 		Jugador jugadorActual = controlador.obtenerJugadores(idJugador);
 		cadenaString = cadenaString.toUpperCase();
 		char[] cadenaCaracteres = cadenaString.toCharArray();
@@ -265,7 +286,7 @@ public class VistaGrafica implements Vista{
 		//Luego, valido que la palabra contenga letras del atril
 		if(!validarCaracteres(cadenaCaracteres,jugadorActual)) {
 			mostrarMensaje("Ingrese una palabra que contenga las letras de su atril.");
-			cadenaString = "";
+			return "";
 		}
 		
 		//Valido la palabra en el diccionario
@@ -323,6 +344,8 @@ public class VistaGrafica implements Vista{
 		return disposicion;
 		
 	}
+	
+	
 
 
 	

@@ -9,7 +9,7 @@ public class Diccionario implements Serializable {
 	
     //INTERFAZ
 	
-	public void porIndice(int primeraLetra) {
+	private void porIndice(int primeraLetra) {
 		
 		if(primeraLetra >= 97 && primeraLetra <= 102) {
     		palabras = new File("A-F.txt");

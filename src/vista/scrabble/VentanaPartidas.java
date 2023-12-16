@@ -34,7 +34,7 @@ public class VentanaPartidas implements Ventana{
 		frmPartidasGuardadas = new JFrame();
 		frmPartidasGuardadas.setTitle("Partidas guardadas");
 		frmPartidasGuardadas.setBounds(100, 100, 524, 410);
-		frmPartidasGuardadas.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmPartidasGuardadas.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		
 		JPanel panelNorte = new JPanel();
 		frmPartidasGuardadas.getContentPane().add(panelNorte, BorderLayout.NORTH);
@@ -73,10 +73,9 @@ public class VentanaPartidas implements Ventana{
 		elegirPartida.addActionListener(accion);
 	}
 	
-    public void mostrarPartidasGuardadas(ArrayList<Object> listaPartidas) {
+    public void mostrarPartidasGuardadas(ArrayList<Partida> listaPartidas) {
     	listaModelo.clear();
-		for(Object o: listaPartidas) {
-			Partida p = (Partida)o;
+		for(Partida p: listaPartidas) {
 			listaModelo.addElement(p.toString());
 		}
     }

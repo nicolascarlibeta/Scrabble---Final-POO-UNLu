@@ -78,8 +78,8 @@ public class Partida implements Serializable{
 			j++;
 		}
 		return id
-				+ ". FECHA: " + fechaHora + "\n"
-				+ "JUGADORES: " + jug + "\n"
+				+ ". FECHA: " + fechaHora + "\n "
+				+ "JUGADORES: " + jug + "\n "
 				+ "TURNO ACTUAL: " + jugadores[turnoActual].getNombre() + "\n";
 	}
 	

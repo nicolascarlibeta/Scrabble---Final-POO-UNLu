@@ -29,7 +29,7 @@ public class VentanaRanking implements Ventana{
 		frmScrabble = new JFrame();
 		frmScrabble.setTitle("Scrabble");
 		frmScrabble.setBounds(100, 100, 510, 380);
-		frmScrabble.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmScrabble.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		
 		JPanel panelNorte = new JPanel();
 		panelNorte.setPreferredSize(new Dimension(10, 30));
@@ -40,6 +40,8 @@ public class VentanaRanking implements Ventana{
 		panelNorte.add(titulo);
 		
 		ranking = new JTextArea();
+		ranking.setEditable(false);
+		ranking.setFont(new Font("Segoe UI Variable Static Text", Font.PLAIN, 16));
 		frmScrabble.getContentPane().add(ranking, BorderLayout.CENTER);
 	}
 
@@ -48,20 +50,32 @@ public class VentanaRanking implements Ventana{
 		
 	}
 
-	public void mostrarRanking(ArrayList<Jugador> top5jugadores) {
+	public void mostrarRanking(ArrayList<Jugador> top5Jugadores) {
 		String dato = "";
 		mostrarMensaje("*** TOP 5 MEJORES JUGADORES ***");
 		mostrarMensaje("");
-		mostrarMensaje("Jugador		Puntaje");
+		mostrarMensaje("Jugador		Puntaje\n");
+		
 		for(int i = 0; i < 5; i++) {
-			Jugador j = top5jugadores.get(i);
-			dato += ((i + 1) + ". ") + j.getNombre() + ". ......... " + j.getPuntaje() + ".\n";
-		}
-		mostrarMensaje(dato);
+			dato += (i + 1 + ". ");
+			if(i < top5Jugadores.size()) {
+				Jugador jugador = top5Jugadores.get(i);
+				if(jugador != null) {
+					dato += jugador.getNombre() + ". ......... " + jugador.getPuntaje() + ".\n";				
+					}
+				else {
+					dato += "......... .\n";
+				}
+			}
+			else {
+				dato += "......... .\n";
+				}
+			}
+			mostrarMensaje(dato);
 	}
 
 	private void mostrarMensaje(String string) {
-		ranking.setText(string + "\n");
+		ranking.setText(string);
 	}
 
 }
