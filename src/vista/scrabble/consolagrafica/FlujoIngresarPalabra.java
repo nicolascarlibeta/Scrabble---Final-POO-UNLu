@@ -137,6 +137,11 @@ public class FlujoIngresarPalabra extends Flujo{
 			vista.mostrarMensaje("Ingrese un número valido entre 1 y 2.");
 			return this;}
 		}
+		if(!controlador.esPrimerMovimiento() && !controlador.validarPalabra(x, y, cadenaString, horizontal)) {
+			vista.mostrarMensaje("La palabra debe al menos estar en contacto con una ficha ya existente.");
+			estadoActual = EstadosPosibles.INGRESANDO_COORDENADA_X;
+			return this;
+		}
 		controlador.agregarPalabra(idJugador,x,y,cadenaString,horizontal);
 		return new FlujoOpcionesJuego(vista,controlador);
 	}

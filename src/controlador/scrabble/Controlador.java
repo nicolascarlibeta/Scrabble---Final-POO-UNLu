@@ -70,6 +70,22 @@ public class Controlador implements IControladorRemoto{
 		
 	}
 	
+	public boolean validarPalabra(int x, int y, String cadenaString, boolean horizontal) {
+		
+		//Creo la nueva palabra dentro del Controlador
+		Palabra nuevaPalabra = new Palabra(cadenaString);
+				
+		//La envio al modelo
+		try {
+			return modelo.validarPalabra(x, y, nuevaPalabra, horizontal);
+		} catch (RemoteException e) {
+			// TODO Bloque catch generado automáticamente
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+	
 	public void cargarPartida(int idPartida) throws IOException{
 		try {
 			modelo.cargarPartida(idPartida);

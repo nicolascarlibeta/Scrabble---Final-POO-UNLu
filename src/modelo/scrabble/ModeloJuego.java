@@ -84,6 +84,9 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		}
 	}
 	
+	public boolean validarPalabra(int x, int y, Palabra palabraActual, boolean horizontal) throws RemoteException{
+		return tablero.validarPalabra(x, y, palabraActual, horizontal, isPrimerMovimiento());
+	}
 	
 	public int siguienteTurno() throws RemoteException{
 		

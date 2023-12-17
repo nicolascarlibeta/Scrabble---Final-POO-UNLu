@@ -230,6 +230,47 @@ public class Tablero implements Serializable{
 		}
 	}
 	
+	public boolean validarPalabra(int x, int y, Palabra palabraActual, boolean horizontal, boolean esPrimerMovimiento) {
+		
+		//Hago un formateo de x e y
+		x -= 64; y -=64;
+		
+		//Valido que la palabra se coloque al lado de una palabra ya existente
+		char[] letrasPalabra = palabraActual.getLetras();
+		int p = x, q = y;
+		boolean valor = false;
+		for(Character ltr: letrasPalabra) { 
+			
+			if(!valor) {
+				if(horizontal) {
+					if(!tablero[p][q].getLetra().isBlank() || !tablero[p - 1][q].getLetra().isBlank()
+							|| !tablero[p + 1][q].getLetra().isBlank()) {
+						valor = true;
+					}				
+				}
+				else {
+					if(!tablero[p][q].getLetra().isBlank() || !tablero[p][q - 1].getLetra().isBlank()
+							|| !tablero[p][q + 1].getLetra().isBlank()) {
+						valor = true;
+					}
+				}
+			}
+			
+			else if(!tablero[p][q].getLetra().isBlank() && !tablero[p][q].getLetra().equals(ltr + "")) {
+				valor = false;
+				return valor;
+			}
+	
+			if(horizontal) {
+				q++;				
+			}
+			else{
+				p++;
+			}
+			
+		}
+		return valor;
+	}
 	
 	
 	private int calcularPuntajePalabra(int x, int y, char[] letrasPalabra, boolean horizontal) {

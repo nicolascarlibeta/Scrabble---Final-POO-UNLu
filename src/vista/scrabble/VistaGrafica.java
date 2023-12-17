@@ -107,6 +107,11 @@ public class VistaGrafica implements Vista{
 					
 				//Disposición
 				boolean disposicion = validarDisposicion();
+				
+				if(!controlador.esPrimerMovimiento() && !controlador.validarPalabra(x, y, cadenaString, disposicion)) {
+					mostrarMensaje("La palabra debe al menos estar en contacto con una ficha ya existente.");
+					avanzar = false;
+				}
 					
 				//Ingreso la palabra
 				if(avanzar) {
