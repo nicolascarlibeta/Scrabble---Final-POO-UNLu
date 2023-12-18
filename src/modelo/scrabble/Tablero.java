@@ -256,7 +256,7 @@ public class Tablero implements Serializable{
 				}
 			}
 			
-			else if(!tablero[p][q].getLetra().isBlank() && !tablero[p][q].getLetra().equals(ltr + "")) {
+			if(valor && !tablero[p][q].getLetra().isBlank() && !tablero[p][q].getLetra().equals(ltr + "")) {
 				valor = false;
 				return valor;
 			}
