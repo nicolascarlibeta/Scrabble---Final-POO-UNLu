@@ -204,7 +204,7 @@ public class ConsolaGrafica implements Vista{
 		mostrarMensaje(obtenerEstadoJugador);
 	}
 
-	public void mostrarPartidasGuardadas() {
+	public void mostrarPartidasGuardadas(Object arg0) {
 		ArrayList<Partida> listaPartidas = new ArrayList<>();
 		try {
 			listaPartidas = controlador.obtenerPartidas();
@@ -216,6 +216,8 @@ public class ConsolaGrafica implements Vista{
 			e.printStackTrace();
 		}
 	}
+	
+	public void mostrarPartidasGuardadas() {}
 
 	public void mostrarRanking() {
 		String dato = "";
@@ -247,6 +249,12 @@ public class ConsolaGrafica implements Vista{
 			}
 			mostrarMensaje(dato);
 		}
+
+	@Override
+	public void mostrarPartidasGuardadas(ArrayList<Partida> partidas) {
+		// TODO Apéndice de método generado automáticamente
+		
+	}
 	
 	
 	

@@ -15,7 +15,7 @@ public class FlujoElegirPartida extends Flujo{
 	}
 
 	public void mostarMenuTextual() {
-		vista.mostrarPartidasGuardadas();
+		vista.mostrarPartidasGuardadas(new Object());
 		vista.mostrarMensaje("Seleccione una partida: ");
 	}
 

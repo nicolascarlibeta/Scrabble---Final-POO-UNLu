@@ -214,7 +214,13 @@ public class Controlador implements IControladorRemoto{
 				vista.mostrarMensaje("Se ha cargado la partida exitosamente.");				
 				}
 			case PARTIDA_GUARDADA -> {
-				vista.mostrarMensaje("Se ha guardado la partida.");				
+				vista.mostrarMensaje("Se ha guardado la partida.");
+				try {
+					vista.mostrarPartidasGuardadas(modelo.getListaPartidas());
+				} catch (ClassNotFoundException | IOException e) {
+					// TODO Bloque catch generado automáticamente
+					e.printStackTrace();
+				}
 				}
 			case NUEVA_PALABRA -> {
 				vista.mostrarMensaje("Se ha agregado la palabra correctamente.");				

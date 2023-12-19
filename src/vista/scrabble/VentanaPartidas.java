@@ -59,6 +59,7 @@ public class VentanaPartidas implements Ventana{
 		frmPartidasGuardadas.getContentPane().add(scrollPane, BorderLayout.CENTER);
 		
 		listaPartidas = new JList();
+		listaPartidas.setToolTipText("");
 		listaModelo = new DefaultListModel<>();
 		listaPartidas.setModel(listaModelo);
 		listaPartidas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

@@ -7,6 +7,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
@@ -14,6 +15,7 @@ import controlador.scrabble.Controlador;
 import modelo.scrabble.Diccionario;
 import modelo.scrabble.Ficha;
 import modelo.scrabble.Jugador;
+import modelo.scrabble.Partida;
 import vista.scrabble.consolagrafica.Flujo;
 import vista.scrabble.consolagrafica.FlujoFinalPartida;
 import vista.scrabble.consolagrafica.FlujoIngresarPalabra;
@@ -249,16 +251,13 @@ public class VistaGrafica implements Vista{
 	}
 	
 
-	public void mostrarPartidasGuardadas() {
-		try {
-			ventanaPartidas.setVisible(true);
-			ventanaPartidas.mostrarPartidasGuardadas(controlador.obtenerPartidas());
-		} catch (IOException e) {
-			// TODO Bloque catch generado automáticamente
-			e.printStackTrace();
-		}
+	public void mostrarPartidasGuardadas(ArrayList<Partida> partidas) {
+		ventanaPartidas.mostrarPartidasGuardadas(partidas);
 	}
-
+	
+	public void mostrarPartidasGuardadas() {
+		ventanaPartidas.setVisible(true);
+	}
 
 	public void mostrarRanking() {
 		try {
