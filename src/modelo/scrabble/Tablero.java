@@ -240,27 +240,31 @@ public class Tablero implements Serializable{
 		int p = x, q = y;
 		boolean valor = false;
 		for(Character ltr: letrasPalabra) { 
-			
+					
 			if(!valor) {
-				if(horizontal) {
-					if(!tablero[p][q].getLetra().isBlank() || !tablero[p - 1][q].getLetra().isBlank()
-							|| !tablero[p + 1][q].getLetra().isBlank()) {
-						valor = true;
-					}				
+				if(!tablero[p][q].getLetra().equals("_")) {
+					valor = true;
 				}
 				else {
-					if(!tablero[p][q].getLetra().isBlank() || !tablero[p][q - 1].getLetra().isBlank()
-							|| !tablero[p][q + 1].getLetra().isBlank()) {
-						valor = true;
+					if(horizontal) {
+						if(!tablero[p - 1][q].getLetra().equals("_")
+								|| !tablero[p + 1][q].getLetra().equals("_")) {
+							valor = true;
+						}				
+					}
+					else {
+						if(!tablero[p][q - 1].getLetra().equals("_")
+								|| !tablero[p][q + 1].getLetra().equals("_")) {
+							valor = true;
+						}
 					}
 				}
 			}
-			
-			if(valor && !tablero[p][q].getLetra().isBlank() && !tablero[p][q].getLetra().equals(ltr + "")) {
-				valor = false;
-				return valor;
+					
+			if(valor && tablero[p][q] instanceof Letra && !(tablero[p][q].getLetra().equals("_")) && !(tablero[p][q].getLetra().equals(ltr + ""))) {
+				return false;
 			}
-	
+			
 			if(horizontal) {
 				q++;				
 			}

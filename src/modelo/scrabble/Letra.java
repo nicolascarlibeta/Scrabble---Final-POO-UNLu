@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Letra implements Ficha, Serializable{
 
-	private String letra;
+	private String letra = "";
 	private int puntos;
 	
 	//CONSTRUCTOR
