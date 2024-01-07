@@ -11,35 +11,32 @@ import java.util.Map;
 import java.util.Random;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
-import modelo.scrabble.Ficha;
+import modelo.scrabble.Casillero;
+import vista.scrabble.consolagrafica.FlujoIngresarPalabra.EstadosPosibles;
+
 import java.io.*;
 
 public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	
-	// * TABLERO: 
 	private Tablero tablero;
-	// * BOLSA DE FICHAS: 
 	private BolsaFichas bolsaDeFichas;
-	// * JUGADORES:
-	private Jugador[] jugadores; 
-	// * TURNO:
-	private int turnoActual;
-	// * OTROS:
+	private ArrayList<Jugador> jugadores = new ArrayList<>();
 	private ArrayList<Partida> partidas = new ArrayList<>();
+	private int turnoActual;
 	
 	//INTERFAZ
 	
-	public void comenzarPartida(Jugador[] jugadores) throws RemoteException {
+	public void addJugador(Jugador jugador) throws RemoteException {
+		conectarJugador(jugador);
+	}
+	
+	public void comenzarPartida() throws RemoteException {
 		
 		//Comenzamos la primer partida
-		tablero = new Tablero();
+		tablero = new Tablero(this);
 		bolsaDeFichas = new BolsaFichas();
-		this.jugadores = new Jugador[4];
 		turnoActual = -1;
-		
-		//Creamos y agregamos a los jugadores
-		addJugadores(jugadores);
-		
+
 		tablero.comenzarPartida(jugadores, bolsaDeFichas);
 		siguienteTurno();
 
@@ -49,31 +46,59 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	}
 	
 	
-	private void addJugadores(Jugador[] jugadores) throws RemoteException {
-		//Agrego los jugadores
-		for(int j = 0; j < jugadores.length; j++) {
-			this.jugadores[j] = jugadores[j];
+	public boolean agregarPalabra(String x, String y, Palabra palabraActual, String disposicion) throws IOException {
+		
+		// Referencio al jugador actual
+		IJugador jugadorActual = jugadores.get(getTurnoActual());
+		
+		// Hago un alias del conjunto de letras de la palabra
+        char[] letrasPalabra = palabraActual.getLetras();
+		
+		//Primero valido que la palabra contenga letras del atril
+		for(char c: letrasPalabra) {
+			if(!jugadorActual.getAtril().contains(c)) {
+				notificarObservadores(Evento.ERROR_ATRIL);
+				return false;
+			}
 		}
-		notificarObservadores(Evento.NUEVOS_JUGADORES);
-	}
-	
-	
-	public void devolverFichas(int idJugador, char[] fichasACambiar) throws RemoteException {
 		
-		//Devolvemos las fichas
-		tablero.devolverFichas(jugadores, bolsaDeFichas, idJugador, fichasACambiar);
-		siguienteTurno();
+		//Segundo, valido la palabra en el diccionario
+		if(!new Diccionario().contieneA(palabraActual.getPalabra().toLowerCase())) {
+			notificarObservadores(Evento.ERROR_DICCIONARIO);
+			return false;
+		}
+	
+		//Valido las coordenadas X e Y
+		int X = 72, Y = 72;
+		if(!isPrimerMovimiento()) {
+			X = (int) x.toCharArray()[0];
+			Y = (int) y.toCharArray()[0];			
 		
-		notificarObservadores(Evento.CAMBIO_FICHAS);
-		notificarObservadores(Evento.CAMBIO_ESTADO_PARTIDA);
-
-	} 
-	
-	
-	public void agregarPalabra(int idJugador, int x, int y, Palabra palabraActual, boolean horizontal) throws RemoteException {
+		if((X < 65 || X > 79) || (Y < 65 || Y > 79)) {
+			notificarObservadores(Evento.ERROR_COORDENADAS);
+			return false;
+			}
+		}
+		
+		//Valido las disposición
+		boolean horizontal = false;
+		switch(disposicion) {
+		case "1" -> horizontal = true;
+		case "2" -> horizontal = false;
+		default -> {
+			notificarObservadores(Evento.ERROR_DISPOSICION);
+			return false;
+		}
+		}
+		
+		if(!isPrimerMovimiento() && !validarPalabra(X, Y, palabraActual, horizontal)) {
+			notificarObservadores(Evento.ERROR_VALIDACION_PALABRA);
+			return false;
+			}
+		
 		
 		//Agregamos la palabra
-		tablero.addPalabra(jugadores, bolsaDeFichas, idJugador, x, y, palabraActual, horizontal);
+		tablero.addPalabra(bolsaDeFichas, jugadorActual, X, Y, palabraActual, horizontal);
 		siguienteTurno();
 		try {
 			notificarObservadores(Evento.NUEVA_PALABRA);
@@ -82,16 +107,35 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 			// TODO Bloque catch generado automáticamente
 			e.printStackTrace();
 		}
+		return true;
 	}
+	
 	
 	public boolean validarPalabra(int x, int y, Palabra palabraActual, boolean horizontal) throws RemoteException{
 		return tablero.validarPalabra(x, y, palabraActual, horizontal, isPrimerMovimiento());
 	}
 	
+	
+	public boolean cambiarFichas(char[] fichasACambiar) throws RemoteException {
+		
+		//Referencio al jugador actual
+		IJugador jugadorActual = jugadores.get(turnoActual);
+		
+		//Devolvemos las fichas
+		boolean valor = tablero.cambiarFichas(bolsaDeFichas, jugadorActual, fichasACambiar);
+		siguienteTurno();
+		
+		notificarObservadores(Evento.CAMBIO_FICHAS);
+		notificarObservadores(Evento.CAMBIO_ESTADO_PARTIDA);
+		return valor;
+
+	} 
+	
+	
 	public int siguienteTurno() throws RemoteException{
 		
-		int turnoActual = 0; 
-		if(this.jugadores[++this.turnoActual] != null) {
+		int turnoActual = 0;
+		if(++this.turnoActual != jugadores.size()) {
 			turnoActual = this.turnoActual;
 		}
 		else {
@@ -109,11 +153,11 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	
 	
 	public int obtenerGanador() throws RemoteException{
-		int mayor = jugadores[0].getPuntaje();
+		int mayor = jugadores.get(0).getPuntaje();
 		int idGanador = 0;
-		for(int j = 1; j < jugadores.length; j++) {
-			if(jugadores[j].getPuntaje() > mayor) {
-				mayor = jugadores[j].getPuntaje();
+		for(int j = 1; j < jugadores.size(); j++) {
+			if(jugadores.get(j).getPuntaje() > mayor) {
+				mayor = jugadores.get(j).getPuntaje();
 				idGanador = j;
 			}
 		}
@@ -124,8 +168,8 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	public boolean isPrimerMovimiento() throws RemoteException{
 		int i = 0;
 		boolean esPrimer = true;
-		while(esPrimer && i < jugadores.length) {
-			Jugador j = jugadores[i];
+		while(esPrimer && i < jugadores.size()) {
+			IJugador j = jugadores.get(i);
 			if (j != null && j.getPuntaje() > 0) {
 				esPrimer = false;
 			}
@@ -138,13 +182,18 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	
 	//Lectura de archivos
 	
-	public void cargarPartida(int idPartida) throws IOException, ClassNotFoundException{
+	public void cargarPartida(int idPartida) throws IOException, ClassNotFoundException, RemoteException{
 
+		if(idPartida < 1 || idPartida > partidas.size()) {
+			notificarObservadores(Evento.ERROR_CARGA_PARTIDAS);
+			return;
+		}
+		
 		//Cargamos la lista de todas las partidas guardadas
 		ArrayList<Partida> listaPartidas = getListaPartidas();
 		
 		//Alias del objeto
-		Partida partidaACargar = (Partida) listaPartidas.get(idPartida);
+		Partida partidaACargar = listaPartidas.get(idPartida);
 		
 		//Volcamos todo el contenido en el modelo
 		tablero = partidaACargar.getTablero();
@@ -206,11 +255,11 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		ArrayList<Jugador> jugadores = new ArrayList<>();
 		
 		//Las leemos y guardamos cada uno de sus jugadores
-		for(Partida p: partidas) {
-			Jugador[] jug = p.getJugadores();
-			for(Jugador j: jug) {
+		for(IPartida p: partidas) {
+			ArrayList<Jugador> jug = p.getJugadores();
+			for(IJugador j: jug) {
 				if(j != null) {
-					jugadores.add(j);					
+					jugadores.add((Jugador) j);					
 				}
 			}
 		}
@@ -229,9 +278,23 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	}
 	
 	
+	//Metodos del modelo
+	
+	private void conectarJugador(Jugador nuevoJugador) throws RemoteException {
+		jugadores.add(nuevoJugador);
+		notificarObservadores(Evento.NUEVOS_JUGADORES);
+	}
+	
+	
+	public void desconectarJugador(Jugador jugador) throws RemoteException {
+		jugadores.remove(jugador);
+		notificarObservadores(Evento.JUGADOR_DESCONECTADO);
+	}
+	
+	
 	//Setters y Getters
 	
-		public Ficha[][] getTablero() throws RemoteException{
+		public Casillero[][] getTablero() throws RemoteException{
 			return tablero.getTablero();
 		}
 
@@ -243,7 +306,7 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 			return bolsaDeFichas;
 		}
 		
-		public Jugador[] getJugadores() throws RemoteException{
+		public ArrayList<Jugador> getJugadores() {
 			return jugadores;
 		}
 		
@@ -254,7 +317,9 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		public int getCantidadFichas() throws RemoteException{
 			return bolsaDeFichas.getCantidadFichas();
 		}
-	
+
+
+		
 	
 
 }

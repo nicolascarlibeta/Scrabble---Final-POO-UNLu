@@ -2,25 +2,27 @@ package modelo.scrabble;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import modelo.scrabble.*;
 
 public class Tablero implements Serializable{
 	
-	// * TABLERO:
-	private Ficha[][] tablero = new Ficha[16][16];
-	// * CANTIDAD DE FICHAS A REPARTIR:
+	private ModeloJuego modelo;
+	private Casillero[][] tablero = new Casillero[16][16];
 	private final int cantidadFichas = 7;
 	
 	//CONSTRUCTOR
-	public Tablero() {
+	public Tablero(ModeloJuego modelo) {
+		this.modelo = modelo;
 		cargarTablero();
 		cargarPremios();
 	}
 	
 	//INTERFAZ
 	private void cargarTablero() {
-		Ficha casilleroVacio = new Letra("_");
+		Casillero casilleroVacio = new Letra("_");
 		tablero[0][0] = new Letra(" ");
 		for(int f = 1; f < tablero.length; f++) {
 			for(int c = 1; c < tablero[f].length; c++) {
@@ -107,13 +109,13 @@ public class Tablero implements Serializable{
 	
 	//Comenzar primera partida
 	
-	public void comenzarPartida(Jugador[] jugadores, BolsaFichas bolsaDeFichas) throws RemoteException {
+	public void comenzarPartida(ArrayList<Jugador> jugadores, BolsaFichas bolsaDeFichas) throws RemoteException {
 		
 		//Genero el grupo de las vocales (al menos 4 vocales en el atril)
 		char vocales[] = {'A','E','I','O','U'};
 		
 		//Represento la cantidad actual de jugadores
-		int cantidadJugadores = jugadores.length;
+		int cantidadJugadores = jugadores.size();
 		
 		//Le repartimos aleatoriamente las 7 fichas a cada jugador
 		for(int j = 0; j < cantidadJugadores; j++) {
@@ -125,26 +127,27 @@ public class Tablero implements Serializable{
 				while(bolsaDeFichas.get(letra) == -1 || bolsaDeFichas.get(letra) == 0) {
 					letra = (char)((char)new Random().nextInt(91 - 65) + 65);
 				}
-				repartirFichas(jugadores, bolsaDeFichas, j, letra);				
+				IJugador jugadorActual = jugadores.get(j);
+				repartirFichas(bolsaDeFichas, jugadorActual, letra);				
 			}
 		}
 		for(int j = 0; j < cantidadJugadores; j++) {
 			for(int f = 0; f < 4; f++) {
 				//Reparto las 7 fichas iniciales
 				int random = new Random().nextInt(vocales.length);
-				repartirFichas(jugadores, bolsaDeFichas, j, vocales[random]);				
+				IJugador jugadorActual = jugadores.get(j);
+				repartirFichas(bolsaDeFichas, jugadorActual, vocales[random]);				
 			}
 		}
 	}
 	
 	
-	
 	//Repartir fichas
 	
-	public void repartirFichas(Jugador[] jugadores, BolsaFichas bolsaDeFichas, int idJugador, char letra) {
+	public void repartirFichas(BolsaFichas bolsaDeFichas, IJugador jugadorActual, char letra) {
 		
 		//Le agrego las fichas al atril del jugador
-		jugadores[idJugador].getAtril().add(letra);
+		jugadorActual.getAtril().add(letra);
 
 		//Le quito las fichas a la bolsa
 		bolsaDeFichas.put(letra, bolsaDeFichas.get(letra) - 1);
@@ -155,80 +158,89 @@ public class Tablero implements Serializable{
 	
 	//Devolver fichas
 	
-	public void devolverFichas(Jugador[] jugadores, BolsaFichas bolsaDeFichas, int idJugador, char[] fichasACambiar) throws RemoteException {
-		
-		for(Character f: fichasACambiar) {
-			
-			//Elimino la ficha del atril
-			jugadores[idJugador].getAtril().remove(f);
-			
-			//Devuelvo la ficha del atril a la bolsa
-			bolsaDeFichas.put(f, bolsaDeFichas.get(f) + 1);
-		}
-		
-		//Le reparto las fichas restantes al jugador
-		List<Character> atril = jugadores[idJugador].getAtril();
-		if(bolsaDeFichas.getCantidadFichas() > 0) {
-			int cantidadARepartir = cantidadFichas - atril.size();
-			for(int c = 0; c < cantidadARepartir; c++) {
-				char letra = (char)((char)new Random().nextInt(91 - 65) + 65);
-				
-				while(bolsaDeFichas.get(letra) == -1 || bolsaDeFichas.get(letra) == 0) {
-					letra = (char)((char)new Random().nextInt(91 - 65) + 65);
-				}
-				repartirFichas(jugadores,bolsaDeFichas,idJugador,letra);
+	public boolean cambiarFichas(BolsaFichas bolsaDeFichas, IJugador jugadorActual, char[] fichasACambiar) throws RemoteException {
+
+		for(Character c: fichasACambiar) {
+			if(jugadorActual != null && !jugadorActual.getAtril().contains(c)) {
+				modelo.notificarObservadores(Evento.ERROR_ATRIL);
+				return false;
 			}
-			bolsaDeFichas.setCantidadFichas(bolsaDeFichas.getCantidadFichas() + cantidadARepartir);
 		}
-	} 
+		
+		
+        for (Character f : fichasACambiar) {
+
+            // Elimino la ficha del atril
+        	jugadorActual.getAtril().remove(Character.valueOf(f));
+
+            // Devuelvo la ficha del atril a la bolsa
+            bolsaDeFichas.put(f, bolsaDeFichas.get(f) + 1);
+        }
+
+        // Le reparto las fichas restantes al jugador
+        List<Character> atril = jugadorActual.getAtril();
+        if (bolsaDeFichas.getCantidadFichas() > 0) {
+            int cantidadARepartir = cantidadFichas - atril.size();
+            for (int c = 0; c < cantidadARepartir; c++) {
+                char letra = (char) ((char) new Random().nextInt(91 - 65) + 65);
+
+                while (bolsaDeFichas.get(letra) == -1 || bolsaDeFichas.get(letra) == 0) {
+                    letra = (char) ((char) new Random().nextInt(91 - 65) + 65);
+                }
+                repartirFichas(bolsaDeFichas, jugadorActual, letra);
+            }
+            bolsaDeFichas.setCantidadFichas(bolsaDeFichas.getCantidadFichas() + cantidadARepartir);
+        }
+        return true;
+    }
 	
 	
 	
 	//Agregar palabra
 	
-	public void addPalabra(Jugador[] jugadores, BolsaFichas bolsaDeFichas, int idJugador, int x, int y, Palabra palabraActual, boolean horizontal) throws RemoteException {
-		
-		//Hago un alias del conjunto de letras de la palabra
-		char[] letrasPalabra = palabraActual.getLetras();
-		//length de la palabra
-		//Hago un alias del atril del jugador
-		List<Character> atril = jugadores[idJugador].getAtril();
-		
-		//Hago un formateo de x e y
-		x -= 64; y -=64;
-		
-		//Calculo el puntaje inicial de la palabra
-		int puntajePalabra = calcularPuntajePalabra(x, y, letrasPalabra, horizontal);
-		
-		//Seteo el puntaje al jugador
-		jugadores[idJugador].setPuntaje(jugadores[idJugador].getPuntaje() + puntajePalabra);
-				
-		//Coloco las letras en el tablero y se las resto del atril al jugador
-		int i = x, d = y;
-		for(Character l: letrasPalabra) {
-			tablero[i][d] = new Letra(l + "");
-			atril.remove(l);
-			if(horizontal) {
-				d++;				
-			}
-			else{
-				i++;
-			}
-		}
-		
-		//Le reparto las fichas restantes al jugador
-		if(bolsaDeFichas.getCantidadFichas() > 0) {
-			int cantidadARepartir = cantidadFichas - atril.size();
-			for(int c = 0; c < cantidadARepartir; c++) {
-				char letra = (char)((char)new Random().nextInt(91 - 65) + 65);
-				
-				while(bolsaDeFichas.get(letra) == -1 || bolsaDeFichas.get(letra) == 0) {
-					letra = (char)((char)new Random().nextInt(91 - 65) + 65);
-				}
-				repartirFichas(jugadores,bolsaDeFichas,idJugador,letra);
-			}
-		}
-	}
+	public void addPalabra(BolsaFichas bolsaDeFichas, IJugador jugadorActual, int x, int y, Palabra palabraActual, boolean horizontal) throws RemoteException {
+
+		// Hago un alias del conjunto de letras de la palabra
+        char[] letrasPalabra = palabraActual.getLetras();
+        
+        // Hago un alias del atril del jugador
+        List<Character> atril = jugadorActual.getAtril();
+
+        // Hago un formateo de x e y
+        x -= 64;
+        y -= 64;
+
+        // Calculo el puntaje inicial de la palabra
+        int puntajePalabra = calcularPuntajePalabra(x, y, letrasPalabra, horizontal);
+
+        // Seteo el puntaje al jugador
+        jugadorActual.setPuntaje(jugadorActual.getPuntaje() + puntajePalabra);
+
+        // Coloco las letras en el tablero y se las resto del atril al jugador
+        int i = x, d = y;
+        for (Character l : letrasPalabra) {
+            tablero[i][d] = new Letra(l + "");
+            atril.remove(Character.valueOf(l));
+            if (horizontal) {
+                d++;
+            } else {
+                i++;
+            }
+        }
+
+        // Le reparto las fichas restantes al jugador
+        if (bolsaDeFichas.getCantidadFichas() > 0) {
+            int cantidadARepartir = cantidadFichas - atril.size();
+            for (int c = 0; c < cantidadARepartir; c++) {
+                char letra = (char) ((char) new Random().nextInt(91 - 65) + 65);
+
+                while (bolsaDeFichas.get(letra) == -1 || bolsaDeFichas.get(letra) == 0) {
+                    letra = (char) ((char) new Random().nextInt(91 - 65) + 65);
+                }
+                repartirFichas(bolsaDeFichas, jugadorActual, letra);
+            }
+        }
+    }
 	
 	public boolean validarPalabra(int x, int y, Palabra palabraActual, boolean horizontal, boolean esPrimerMovimiento) {
 		
@@ -242,26 +254,26 @@ public class Tablero implements Serializable{
 		for(Character ltr: letrasPalabra) { 
 					
 			if(!valor) {
-				if(!tablero[p][q].getLetra().equals("_")) {
+				if(!tablero[p][q].getDescripcion().equals("_")) {
 					valor = true;
 				}
 				else {
 					if(horizontal) {
-						if(!tablero[p - 1][q].getLetra().equals("_")
-								|| !tablero[p + 1][q].getLetra().equals("_")) {
+						if(!tablero[p - 1][q].getDescripcion().equals("_")
+								|| !tablero[p + 1][q].getDescripcion().equals("_")) {
 							valor = true;
 						}				
 					}
 					else {
-						if(!tablero[p][q - 1].getLetra().equals("_")
-								|| !tablero[p][q + 1].getLetra().equals("_")) {
+						if(!tablero[p][q - 1].getDescripcion().equals("_")
+								|| !tablero[p][q + 1].getDescripcion().equals("_")) {
 							valor = true;
 						}
 					}
 				}
 			}
 					
-			if(valor && tablero[p][q] instanceof Letra && !(tablero[p][q].getLetra().equals("_")) && !(tablero[p][q].getLetra().equals(ltr + ""))) {
+			if(valor && tablero[p][q] instanceof Letra && !(tablero[p][q].getDescripcion().equals("_")) && !(tablero[p][q].getDescripcion().equals(ltr + ""))) {
 				return false;
 			}
 			
@@ -316,7 +328,7 @@ public class Tablero implements Serializable{
 	
 	//Setters y Getters
 	
-	public Ficha[][] getTablero() {
+	public Casillero[][] getTablero() {
 		return tablero;
 	}
 	

@@ -23,7 +23,7 @@ import java.awt.CardLayout;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 
-public class VentanaTablero implements Ventana{
+public class VentanaTablero2 implements Ventana{
 
 	private JFrame frmScrabble;
 	private IJugador cliente;
@@ -32,7 +32,6 @@ public class VentanaTablero implements Ventana{
 	private JButton comenzarPartida;
 	private ImageIcon scrabble;
 	private JTextField palabra;
-	private JTextArea tablero;
 	private JLabel jugador;
 	private JLabel turnoDe;
 	private JLabel puntaje;
@@ -49,7 +48,7 @@ public class VentanaTablero implements Ventana{
 	
 	
 	//CONSTRUCTOR
-	public VentanaTablero() {
+	public VentanaTablero2() {
 		inicializarVentana();
 	}
 	
@@ -394,14 +393,106 @@ public class VentanaTablero implements Ventana{
 		panelCentro.setFont(new Font("Courier Prime", Font.BOLD, 12));
 		panelCentro.setBackground(new Color(0, 64, 0));
 		frmScrabble.getContentPane().add(panelCentro, BorderLayout.CENTER);
-		panelCentro.setLayout(new GridLayout(0, 1, 0, 0));
+		panelCentro.setLayout(new GridLayout(0, 16, 0, 0));
 		
-		tablero = new JTextArea();
-		tablero.setEditable(false);
-		tablero.setFont(new Font("JetBrains Mono", Font.PLAIN, 18));
-		tablero.setForeground(new Color(255, 255, 255));
-		tablero.setBackground(new Color(0, 64, 0));
-		panelCentro.add(tablero);
+		JPanel panel_39 = new JPanel();
+		panelCentro.add(panel_39);
+		
+		JPanel panel_40 = new JPanel();
+		panelCentro.add(panel_40);
+		
+		JPanel panel_41 = new JPanel();
+		panelCentro.add(panel_41);
+		
+		JPanel panel_42 = new JPanel();
+		panelCentro.add(panel_42);
+		
+		JPanel panel_43 = new JPanel();
+		panelCentro.add(panel_43);
+		
+		JPanel panel_44 = new JPanel();
+		panelCentro.add(panel_44);
+		
+		JPanel panel_56 = new JPanel();
+		panelCentro.add(panel_56);
+		
+		JPanel panel_57 = new JPanel();
+		panelCentro.add(panel_57);
+		
+		JPanel panel_58 = new JPanel();
+		panelCentro.add(panel_58);
+		
+		JPanel panel_59 = new JPanel();
+		panelCentro.add(panel_59);
+		
+		JPanel panel_60 = new JPanel();
+		panelCentro.add(panel_60);
+		
+		JPanel panel_61 = new JPanel();
+		panelCentro.add(panel_61);
+		
+		JPanel panel_62 = new JPanel();
+		panelCentro.add(panel_62);
+		
+		JPanel panel_63 = new JPanel();
+		panelCentro.add(panel_63);
+		
+		JPanel panel_64 = new JPanel();
+		panelCentro.add(panel_64);
+		
+		JPanel panel_65 = new JPanel();
+		panelCentro.add(panel_65);
+		
+		JPanel panel_66 = new JPanel();
+		panelCentro.add(panel_66);
+		
+		JPanel panel_67 = new JPanel();
+		panelCentro.add(panel_67);
+		
+		JPanel panel_68 = new JPanel();
+		panelCentro.add(panel_68);
+		
+		JPanel panel_69 = new JPanel();
+		panelCentro.add(panel_69);
+		
+		JPanel panel_70 = new JPanel();
+		panelCentro.add(panel_70);
+		
+		JPanel panel_71 = new JPanel();
+		panelCentro.add(panel_71);
+		
+		JPanel panel_72 = new JPanel();
+		panelCentro.add(panel_72);
+		
+		JPanel panel_73 = new JPanel();
+		panelCentro.add(panel_73);
+		
+		JPanel panel_74 = new JPanel();
+		panelCentro.add(panel_74);
+		
+		JPanel panel_75 = new JPanel();
+		panelCentro.add(panel_75);
+		
+		JPanel panel_76 = new JPanel();
+		panelCentro.add(panel_76);
+		
+		JPanel panel_77 = new JPanel();
+		panelCentro.add(panel_77);
+		
+		JPanel panel_78 = new JPanel();
+		panelCentro.add(panel_78);
+		
+		JPanel panel_79 = new JPanel();
+		panelCentro.add(panel_79);
+		
+		JPanel panel_80 = new JPanel();
+		panelCentro.add(panel_80);
+		
+		JPanel panel_81 = new JPanel();
+		panelCentro.add(panel_81);
+		
+		JPanel panel_82 = new JPanel();
+		panelCentro.add(panel_82);
 	}
 
 	public void setVisible(boolean b) {
@@ -414,11 +505,6 @@ public class VentanaTablero implements Ventana{
 	}
 
 
-	public void mostrarTablero(String obtenerTablero) {
-		tablero.setText(obtenerTablero);
-	}
-
-	
 	public void ingresarPalabra(ActionListener accion) {
 		enviarPalabra.addActionListener(accion);
 	}

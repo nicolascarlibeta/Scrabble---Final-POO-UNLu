@@ -4,14 +4,13 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import vista.scrabble.*;
 import vista.scrabble.consolagrafica.ConsolaGrafica;
-
 import javax.swing.JOptionPane;
 import controlador.scrabble.*;
 import ar.edu.unlu.rmimvc.RMIMVCException;
 import ar.edu.unlu.rmimvc.Util;
 import ar.edu.unlu.rmimvc.cliente.Cliente;
 
-public class AppClienteVG {
+public class AppClienteVistaGrafica {
 
 	public static void main(String[] args) {
 		ArrayList<String> ips = Util.getIpDisponibles();
@@ -47,10 +46,23 @@ public class AppClienteVG {
 				null,
 				8888
 		);
+		String nombreJugador = (String) JOptionPane.showInputDialog(
+				null, 
+				"¿Cómo se llamará el jugador?", "Nombre del jugador", 
+				JOptionPane.QUESTION_MESSAGE,
+				null,
+				null,
+				"Juan, jose, anonimo48_, ..."
+				);
 		Controlador controlador = new Controlador();
-		Vista vista = new VistaGrafica(controlador);
+		Vista vista = new VistaGrafica(controlador, nombreJugador);
 		Cliente c = new Cliente(ip, Integer.parseInt(port), ipServidor, Integer.parseInt(portServidor));
 		try {
+			/*
+			 * el método iniciar() carga al nuevo Cliente y determina que el modelo (servidor)
+			pertenece al nuevo Controlador
+			
+			*/
 			c.iniciar(controlador);
 			vista.iniciar();
 		} catch (RemoteException e) {

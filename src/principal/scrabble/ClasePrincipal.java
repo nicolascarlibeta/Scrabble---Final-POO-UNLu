@@ -17,7 +17,7 @@ public class ClasePrincipal {
 		servidor.main(args);
 		
 		AppCliente cliente = new AppCliente();
-		AppClienteVG clienteVG = new AppClienteVG();
+		AppClienteVistaGrafica clienteVG = new AppClienteVistaGrafica();
 		cliente.main(args);
 		clienteVG.main(args);
 		

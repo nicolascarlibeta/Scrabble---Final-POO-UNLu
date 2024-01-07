@@ -2,7 +2,7 @@ package modelo.scrabble;
 
 import java.io.Serializable;
 
-public class PremioLetra implements Ficha, Serializable {
+public class PremioLetra implements Casillero, Serializable {
 	
 	private String letra = "";
 	private TipoPuntaje tipoPuntaje;
@@ -22,7 +22,7 @@ public class PremioLetra implements Ficha, Serializable {
 	
 	//INTERFAZ
 	
-	public String getLetra() {
+	public String getDescripcion() {
 		return letra;
 	}
 	
@@ -36,7 +36,5 @@ public class PremioLetra implements Ficha, Serializable {
 		}
 		return premio;
 	}
-	
-	
 	
 }

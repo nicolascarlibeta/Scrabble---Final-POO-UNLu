@@ -11,6 +11,7 @@ import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
+import modelo.scrabble.IPartida;
 import modelo.scrabble.Partida;
 import javax.swing.JList;
 import java.awt.Dimension;
@@ -74,9 +75,9 @@ public class VentanaPartidas implements Ventana{
 		elegirPartida.addActionListener(accion);
 	}
 	
-    public void mostrarPartidasGuardadas(ArrayList<Partida> listaPartidas) {
+    public void mostrarPartidasGuardadas(ArrayList<IPartida> partidas) {
     	listaModelo.clear();
-		for(Partida p: listaPartidas) {
+		for(IPartida p: partidas) {
 			listaModelo.addElement(p.toString());
 		}
     }

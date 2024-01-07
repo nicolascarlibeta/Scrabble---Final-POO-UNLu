@@ -1,15 +1,11 @@
 package modelo.scrabble;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
 
-public class Partida implements Serializable{
+public class Partida implements IPartida, Serializable{
 	
 	private static final long serialVersionUID = -4243684796308041028L;
 	private static int ContadorID = 0;
@@ -17,12 +13,12 @@ public class Partida implements Serializable{
 	private String fechaHora = "";
 	private Tablero tablero;
 	private BolsaFichas bolsaDeFichas;
-	private Jugador[] jugadores = new Jugador[4];
+	private ArrayList<Jugador> jugadores = new ArrayList<>();
 	private int turnoActual = 0;
 	private boolean terminada = false;
 	
 	public Partida(Tablero tablero, BolsaFichas bolsaDeFichas,
-			Jugador[] jugadores, int turnoActual) {
+			ArrayList<Jugador> jugadores, int turnoActual) {
 		LocalDateTime fechaHoy = LocalDateTime.now();
 		DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy  HH:mm");
 		this.id = ++ContadorID;
@@ -56,12 +52,7 @@ public class Partida implements Serializable{
 	public void setBolsaDeFichas(BolsaFichas bolsaDeFichas) {
 		this.bolsaDeFichas = bolsaDeFichas;
 	}
-	public Jugador[] getJugadores() {
-		return jugadores;
-	}
-	public void setJugadores(Jugador[] jugadores) {
-		this.jugadores = jugadores;
-	}
+	
 	public int getTurnoActual() {
 		return turnoActual;
 	}
@@ -73,14 +64,18 @@ public class Partida implements Serializable{
 
 		int j = 0;
 		String jug = "";
-		while(jugadores[j] != null) {
-			jug += jugadores[j].getNombre() + ". ";
+		while(jugadores.get(j) != null) {
+			jug += jugadores.get(j).getNombre() + ". ";
 			j++;
 		}
 		return id
 				+ ". FECHA: " + fechaHora + "\n "
 				+ "JUGADORES: " + jug + "\n "
-				+ "TURNO ACTUAL: " + jugadores[turnoActual].getNombre() + "\n";
+				+ "TURNO ACTUAL: " + jugadores.get(turnoActual).getNombre() + "\n";
+	}
+
+	public ArrayList<Jugador> getJugadores() {
+		return jugadores;
 	}
 	
 	

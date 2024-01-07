@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
+import modelo.scrabble.IJugador;
 import modelo.scrabble.Jugador;
 
 import java.awt.Dimension;
@@ -50,7 +51,7 @@ public class VentanaRanking implements Ventana{
 		
 	}
 
-	public void mostrarRanking(ArrayList<Jugador> top5Jugadores) {
+	public void mostrarRanking(ArrayList<IJugador> jugadores) {
 		String dato = "";
 		mostrarMensaje("*** TOP 5 MEJORES JUGADORES ***");
 		mostrarMensaje("");
@@ -58,8 +59,8 @@ public class VentanaRanking implements Ventana{
 		
 		for(int i = 0; i < 5; i++) {
 			dato += (i + 1 + ". ");
-			if(i < top5Jugadores.size()) {
-				Jugador jugador = top5Jugadores.get(i);
+			if(i < jugadores.size()) {
+				IJugador jugador = jugadores.get(i);
 				if(jugador != null) {
 					dato += jugador.getNombre() + ". ......... " + jugador.getPuntaje() + ".\n";				
 					}

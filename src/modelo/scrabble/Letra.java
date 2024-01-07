@@ -2,8 +2,12 @@ package modelo.scrabble;
 
 import java.io.Serializable;
 
-public class Letra implements Ficha, Serializable{
+public class Letra implements Casillero, Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String letra = "";
 	private int puntos;
 	
@@ -15,7 +19,7 @@ public class Letra implements Ficha, Serializable{
 		}
 	}
 	
-	public String getLetra() {
+	public String getDescripcion() {
 		return letra;
 	}
 	

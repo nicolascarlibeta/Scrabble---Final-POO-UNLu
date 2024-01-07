@@ -4,6 +4,7 @@ import controlador.scrabble.*;
 
 public class FlujoMenuPrincipal extends Flujo{
 
+	
 	public FlujoMenuPrincipal(ConsolaGrafica vista, Controlador controlador) {
 		super(vista, controlador);
 	}
@@ -23,7 +24,8 @@ public class FlujoMenuPrincipal extends Flujo{
     public Flujo elegirOpcion(String opcion) {
         switch (opcion) {
             case "1" -> {
-            	return new FlujoIngresarCantidadJugadores(vista, controlador);
+            	controlador.comenzarPartida();
+            	return new FlujoOpcionesJuego(vista, controlador);
             }
             case "2" -> {
             	return new FlujoElegirPartida(vista, controlador);

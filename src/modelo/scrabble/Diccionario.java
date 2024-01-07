@@ -1,10 +1,13 @@
 package modelo.scrabble;
 
-import java.util.*;
 import java.io.*;
 
 public class Diccionario implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private File palabras;
 	
     //INTERFAZ
@@ -12,16 +15,16 @@ public class Diccionario implements Serializable {
 	private void porIndice(int primeraLetra) {
 		
 		if(primeraLetra >= 97 && primeraLetra <= 102) {
-    		palabras = new File("A-F.txt");
+    		palabras = new File("C:\\Users\\Usuario\\eclipse-workspace\\Scrabble\\src\\modelo\\diccionario\\A-F.txt");
     	}
     	else if(primeraLetra >= 103 && primeraLetra <= 109) {
-    		palabras = new File("G-M.txt");
+    		palabras = new File("C:\\Users\\Usuario\\eclipse-workspace\\Scrabble\\src\\modelo\\diccionario\\G-M.txt");
     	}
     	else if(primeraLetra >= 110 && primeraLetra <= 115) {
-    		palabras = new File("N-S.txt");
+    		palabras = new File("C:\\Users\\Usuario\\eclipse-workspace\\Scrabble\\src\\modelo\\diccionario\\N-S.txt");
     	}
     	else {
-    		palabras = new File("T-Z.txt");
+    		palabras = new File("C:\\Users\\Usuario\\eclipse-workspace\\Scrabble\\src\\modelo\\diccionario\\T-Z.txt");
     	}
 	}
     

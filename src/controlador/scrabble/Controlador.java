@@ -8,6 +8,7 @@ import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 import modelo.scrabble.*;
 import vista.scrabble.Vista;
+import vista.scrabble.consolagrafica.FlujoIngresarPalabra.EstadosPosibles;
 
 public class Controlador implements IControladorRemoto{
 	
@@ -35,9 +36,34 @@ public class Controlador implements IControladorRemoto{
 	}
 	
 	
-	public void comenzarPartida(Jugador[] jugadores) {
+	public IJugador agregarJugador(String nombreJugador) {
+		
+		IJugador jugador = new Jugador(nombreJugador);
 		try {
-			modelo.comenzarPartida(jugadores);
+			modelo.addJugador((Jugador) jugador);
+			return jugador;
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	
+	public void desconectarJugador(IJugador cliente) {
+		try {
+			modelo.desconectarJugador((Jugador) cliente);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public void comenzarPartida() {
+		try {
+			modelo.comenzarPartida();
 		} catch (RemoteException e) {
 			// TODO Bloque catch generado automáticamente
 			e.printStackTrace();
@@ -45,30 +71,38 @@ public class Controlador implements IControladorRemoto{
 	}
 	
 	
-	public void cambiarFichas(int idJugador, char[] cadenaCaracteres) {
+	public boolean cambiarFichas(String cadena) {
+		cadena = cadena.toUpperCase();
+		char[] cadenaCaracteres = cadena.toCharArray();
 		try {
-			modelo.devolverFichas(idJugador,cadenaCaracteres);
+			return modelo.cambiarFichas(cadenaCaracteres);
 		} catch (RemoteException e) {
 			// TODO Bloque catch generado automáticamente
 			e.printStackTrace();
+			return false;
 		}
 	}
 	
 	
-	public void agregarPalabra(int idJugador, int x, int y, String cadenaString, boolean horizontal) {
+	public boolean agregarPalabra(String x, String y, String cadenaString, String disposicion) {
 		
 		//Creo la nueva palabra dentro del Controlador
 		Palabra nuevaPalabra = new Palabra(cadenaString);
 		
-		//La envio al modelo
+		//Casteo las coordenadas antes de agregarlas al Modelo
+		x = x.toUpperCase();
+		y = y.toUpperCase();
+		
 		try {
-			modelo.agregarPalabra(idJugador, x, y, nuevaPalabra, horizontal);
-		} catch (RemoteException e) {
-			// TODO Bloque catch generado automáticamente
+			return modelo.agregarPalabra(x, y, nuevaPalabra, disposicion);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return false;
 		
 	}
+	
 	
 	public boolean validarPalabra(int x, int y, String cadenaString, boolean horizontal) {
 		
@@ -86,14 +120,43 @@ public class Controlador implements IControladorRemoto{
 		
 	}
 	
+	
+	public String validarDisposicion(boolean horizontal) {
+		String disp = "";
+		if(horizontal) {
+			disp = "1";
+		}
+		else {
+			disp = "2";
+		}
+		return disp;
+	}
+	
+	
+	public boolean validarFlujo() {
+		boolean avanzar = true;
+		try {
+			if(modelo.isPrimerMovimiento()) {
+				avanzar = false;
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return avanzar;
+	}
+	
+	
 	public void cargarPartida(int idPartida) throws IOException{
 		try {
-			modelo.cargarPartida(idPartida);
-		} catch (ClassNotFoundException | IOException e) {
+			modelo.cargarPartida(idPartida);			
+		}
+		catch (ClassNotFoundException | IOException e) {
 			// TODO Bloque catch generado automáticamente
 			e.printStackTrace();
 		}
 	}
+	
 	
 	public void guardarPartida() throws IOException{
 		try {
@@ -104,31 +167,39 @@ public class Controlador implements IControladorRemoto{
 		}
 	}
 	
-	public ArrayList<Jugador> obtenerTop5Jugadores() throws IOException{
-		try {
-			return modelo.getTop5Jugadores();
-		} catch (IOException e) {
-			// TODO Bloque catch generado automáticamente
-			e.printStackTrace();
-			return null;
-		} catch (ClassNotFoundException e) {
-			// TODO Bloque catch generado automáticamente
-			e.printStackTrace();
-			return null;
-		}
-	}
 	
-	public ArrayList<Partida> obtenerPartidas() throws IOException{
+	public ArrayList<IJugador> obtenerTop5Jugadores() throws IOException{
+		ArrayList<Jugador> top5Jugadores = new ArrayList<>();
 		try {
-			return modelo.getListaPartidas();
+			top5Jugadores = modelo.getTop5Jugadores();
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Bloque catch generado automáticamente
 			e.printStackTrace();
-			return null;
 		}
+		ArrayList<IJugador> listaTop5 = new ArrayList<>();		
+		for(Jugador j: top5Jugadores) {
+			listaTop5.add(j);
+		}
+		return listaTop5;
 	}
 	
-	public Ficha[][] obtenerTablero() {
+	
+	public ArrayList<IPartida> obtenerPartidas() throws IOException{
+		
+		ArrayList<Partida> partidas = new ArrayList<>();
+		try {
+			partidas = modelo.getListaPartidas();
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+		ArrayList<IPartida> listaPartidas = new ArrayList<>();		
+		for(Partida p: partidas) {
+			listaPartidas.add(p);
+		}
+		return listaPartidas;
+	}
+	
+	
+	public Casillero[][] obtenerTablero() {
 		try {
 			return modelo.getTablero();
 		} catch (RemoteException e) {
@@ -137,50 +208,46 @@ public class Controlador implements IControladorRemoto{
 		}
 	}
 	
+	
 	public int obtenerGanador() throws RemoteException{
 		return modelo.obtenerGanador();
 	}
 	
-	public Jugador[] obtenerJugadores() throws RemoteException{
-		return modelo.getJugadores();
+	
+	public ArrayList<IJugador> obtenerJugadores() throws RemoteException{
+		ArrayList<Jugador> jugadores = new ArrayList<>();
+		try {
+			jugadores = modelo.getJugadores();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		ArrayList<IJugador> listaJugadores = new ArrayList<>();		
+		for(Jugador j: jugadores) {
+			listaJugadores.add(j);
+		}
+		return listaJugadores;
 	}
 	
-	public Jugador obtenerJugadores(int idJugador){
+	
+	public IJugador obtenerJugadores(int idJugador){
 		try {
-			return modelo.getJugadores()[idJugador];
+			return modelo.getJugadores().get(idJugador);
 		} catch (RemoteException e) {
-			// TODO Bloque catch generado automáticamente
 			return null;
 		}
 	}
+	
 	
 	public boolean bolsaEstaVacia() throws RemoteException {
 		return modelo.isVacia();
 	}
 	
+	
 	public int obtenerCantidadFichas() throws RemoteException {
 		return modelo.getCantidadFichas();
 	}
 	
-	public boolean esPrimerMovimiento() {
-		try {
-			return modelo.isPrimerMovimiento();
-		} catch (RemoteException e) {
-			// TODO Bloque catch generado automáticamente
-			e.printStackTrace();
-			return false;
-		}
-	}
-	
-	public int siguienteTurno() {
-		try {
-			return modelo.siguienteTurno();
-		} catch (RemoteException e) {
-			// TODO Bloque catch generado automáticamente
-			return -1;
-		}
-	}
-	
+
 	public int obtenerTurnoActual() {
 		try {
 			return modelo.getTurnoActual();
@@ -189,6 +256,7 @@ public class Controlador implements IControladorRemoto{
 			return -1;
 		}
 	}
+	
 	
 	public void pasarTurno() {
 		try {
@@ -199,16 +267,16 @@ public class Controlador implements IControladorRemoto{
 		}
 	}
 
+	
 	public void actualizar(IObservableRemoto arg0, Object arg1) throws RemoteException {
 		if(arg1 instanceof Evento) {
 			switch ((Evento) arg1) {
 			case NUEVOS_JUGADORES -> {
-				Jugador[] nuevosJugadores = modelo.getJugadores();
-				vista.mostrarIngresarJugadores();				
+				vista.mostrarMensaje("El usuario se ha conectado exitosamente.");				
 				}
 			case NUEVA_PARTIDA -> {
-				Jugador[] jugadores = modelo.getJugadores();
-				vista.mostrarComenzarPartida(jugadores);				
+				ArrayList<Jugador> jugadores = modelo.getJugadores();
+				vista.mostrarComenzarPartida(obtenerJugadores());				
 				}
 			case PARTIDA_CARGADA -> {
 				vista.mostrarMensaje("Se ha cargado la partida exitosamente.");				
@@ -216,11 +284,9 @@ public class Controlador implements IControladorRemoto{
 			case PARTIDA_GUARDADA -> {
 				vista.mostrarMensaje("Se ha guardado la partida.");
 				try {
-					vista.mostrarPartidasGuardadas(modelo.getListaPartidas());
-				} catch (ClassNotFoundException | IOException e) {
-					// TODO Bloque catch generado automáticamente
-					e.printStackTrace();
-				}
+					vista.mostrarPartidasGuardadas(obtenerPartidas());
+				} catch (IOException e) {
+					e.printStackTrace();}
 				}
 			case NUEVA_PALABRA -> {
 				vista.mostrarMensaje("Se ha agregado la palabra correctamente.");				
@@ -229,15 +295,37 @@ public class Controlador implements IControladorRemoto{
 				vista.mostrarMensaje("Se han cambiado las fichas correctamente.");				
 				}
 			case CAMBIO_ESTADO_PARTIDA -> {
-				Ficha[][] tablero = modelo.getTablero();
+				Casillero[][] tablero = modelo.getTablero();
 				int turnoActual = modelo.getTurnoActual();
-				Jugador jugadorActual = modelo.getJugadores()[turnoActual];
+				IJugador jugadorActual = modelo.getJugadores().get(turnoActual);
 				vista.mostrarTablero(tablero);	
 				vista.mostrarEstadoJugador(jugadorActual);				
+				}
+			case ERROR_ATRIL -> {
+				vista.mostrarMensaje("<Ingrese una palabra que contenga las letras de su atril.>");				
+				}
+			case ERROR_CARGA_PARTIDAS -> {
+				vista.mostrarMensaje("<Ingrese un número que corresponda al ID de la partida.>");
+				}
+			case ERROR_COORDENADAS -> {
+				vista.mostrarMensaje("<Ingrese una letra coordenada entre A y O.>");
+				}
+			case ERROR_DICCIONARIO -> {
+				vista.mostrarMensaje("<La palabra ingresada no es valida, intente con otra.>");
+				}
+			case ERROR_VALIDACION_PALABRA -> {
+				vista.mostrarMensaje("<La palabra debe al menos estar en contacto con una ficha ya existente.>");
+				}
+			case ERROR_DISPOSICION -> {
+				vista.mostrarMensaje("<Ingrese un número valido entre 1 y 2.>");
 				}
 			}
 		}
 	}
+
+	
+
+	
 	
 	
 

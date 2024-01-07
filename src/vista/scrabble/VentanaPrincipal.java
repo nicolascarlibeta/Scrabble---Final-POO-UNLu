@@ -1,26 +1,14 @@
 package vista.scrabble;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
-
-import controlador.scrabble.Controlador;
-import modelo.scrabble.Ficha;
-import modelo.scrabble.Jugador;
-import vista.scrabble.consolagrafica.FlujoIngresarJugadores;
-
 import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
-import java.awt.FlowLayout;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-
 import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class VentanaPrincipal implements Ventana {
 

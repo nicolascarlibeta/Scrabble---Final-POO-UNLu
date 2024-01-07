@@ -1,83 +1,58 @@
 package vista.scrabble.consolagrafica;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.CardLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import javax.swing.SpringLayout;
-
 import controlador.scrabble.Controlador;
-import modelo.scrabble.Ficha;
+import modelo.scrabble.Casillero;
+import modelo.scrabble.Evento;
+import modelo.scrabble.IJugador;
+import modelo.scrabble.IPartida;
 import modelo.scrabble.Jugador;
-import modelo.scrabble.Partida;
-import modelo.scrabble.PremioLetra;
 import vista.scrabble.Vista;
-
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JMenu;
-import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
-
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.border.CompoundBorder;
-import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
+
+import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
+
+import java.awt.Rectangle;
 
 public class ConsolaGrafica implements Vista{
 
 	//Vista debe conocer a su Controlador
 	private Controlador controlador;
-	
+	private String nombreJugador = "";
+	private IJugador cliente;
 	private JFrame frmScrabble;
 	private JTextField entrada;
 	private JButton intro;
 	private Flujo flujoActual;
-	private JTextArea terminal;
 	private JPanel panelNorte;
 	private JPanel panelOeste;
 	private JPanel panelEste;
-	private JPanel panelTerminal;
+	private JScrollPane panelTerminal;
+	private JTextArea terminal;
 	
 	
 	//CONSTRUCTOR
-	public ConsolaGrafica(Controlador controlador) {
+	public ConsolaGrafica(Controlador controlador, String nombreJugador) {
+		this.nombreJugador = nombreJugador.toUpperCase();
 		this.controlador = controlador;
 		controlador.setVista(this);
-		inicializarVentana();
-	}
-	
-	//Limpiar la terminal
-	public void limpiar() {
-		terminal.setText("");
 	}
 	
 	//Método general para procesar la entrada del usuario
@@ -85,14 +60,22 @@ public class ConsolaGrafica implements Vista{
 		entrada = entrada.trim();
         if (entrada.isEmpty())
             return;
-        limpiar();
+        mostrarMensaje("");
         flujoActual = flujoActual.elegirOpcion(entrada);
         flujoActual.mostarMenuTextual();
     }
+	
+	//Método para controlar los eventos del jugador del turno actual
+	public boolean esTurnoActual() {
+		IJugador jugadorTurnoActual = controlador.obtenerJugadores(controlador.obtenerTurnoActual());
+		return cliente.equals(jugadorTurnoActual);
+	}
 
 	//Inicializa la ventana principal.
 	public void iniciar() {
+		inicializarVentana();
 		frmScrabble.setVisible(true);
+		this.cliente = controlador.agregarJugador(nombreJugador);
 		flujoActual = new FlujoMenuPrincipal(this, controlador);
         flujoActual.mostarMenuTextual();
 	}
@@ -100,9 +83,10 @@ public class ConsolaGrafica implements Vista{
 	private void inicializarVentana() {
 		
 		frmScrabble = new JFrame();
+		frmScrabble.setBounds(new Rectangle(250, 0, 0, 0));
 		frmScrabble.getContentPane().setForeground(new Color(255, 255, 255));
 		frmScrabble.getContentPane().setBackground(new Color(0, 0, 0));
-		frmScrabble.setSize(1366, 728);
+		frmScrabble.setSize(700, 728);
 		frmScrabble.setResizable(true);
 		frmScrabble.setTitle("Scrabble");
 		
@@ -116,12 +100,15 @@ public class ConsolaGrafica implements Vista{
 		entrada = new JTextField();
 		entrada.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					//Recibe la entrada (opcion) y la procesa
-					procesarEntrada(entrada.getText());
-					//Setea en vacio el campo de entrada
-					entrada.setText("");
+				if(esTurnoActual()) {
+					mostrarMensaje("Esperando al turno...");
 				}
+				else if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+						//Recibe la entrada (opcion) y la procesa
+						procesarEntrada(entrada.getText());
+						//Setea en vacio el campo de entrada
+						entrada.setText("");
+					}	
 			}
 		});
 		entrada.setForeground(new Color(255, 255, 255));
@@ -158,17 +145,18 @@ public class ConsolaGrafica implements Vista{
 		panelEste.setPreferredSize(new Dimension(80,70));
 		frmScrabble.getContentPane().add(panelEste, BorderLayout.EAST);
 		
+		panelTerminal = new JScrollPane();
+		panelTerminal.setBorder(new EmptyBorder(0, 0, 0, 0));
+		panelTerminal.setBackground(new Color(0, 0, 0));
+		frmScrabble.getContentPane().add(panelTerminal, BorderLayout.CENTER);
+		
 		terminal = new JTextArea();
+		terminal.setBorder(new EmptyBorder(0, 0, 0, 0));
+		terminal.setFont(new Font("JetBrains Mono", Font.PLAIN, 17));
 		terminal.setEditable(false);
-		terminal.setFont(new Font("JetBrains Mono", Font.PLAIN, 16));
 		terminal.setForeground(new Color(255, 255, 255));
 		terminal.setBackground(new Color(0, 0, 0));
-		panelTerminal = new JPanel();
-		panelTerminal.setForeground(new Color(255, 255, 255));
-		panelTerminal.setBackground(new Color(0, 0, 0));
-		panelTerminal.setLayout(new FlowLayout());
-		panelTerminal.add(terminal);
-		frmScrabble.getContentPane().add(panelTerminal);
+		panelTerminal.setViewportView(terminal);
 		
 	}
 	
@@ -177,27 +165,23 @@ public class ConsolaGrafica implements Vista{
 	    terminal.append(mensaje + "\n");
 	}
 	
-	public void mostrarIngresarJugadores() {
-		mostrarMensaje("Se han ingresado los nuevos jugadores.");
-	}
-
-	public void mostrarComenzarPartida(Jugador[] jugadores) {
+	public void mostrarComenzarPartida(ArrayList<IJugador> jugadores) {
 		int turnoActual = controlador.obtenerTurnoActual();
-		mostrarMensaje("Comienza la partida. Empieza el jugador " + jugadores[turnoActual].getNombre() + ".");
+		mostrarMensaje("Comienza la partida. Empieza el jugador " + jugadores.get(turnoActual).getNombre() + ".");
 	}
 
-	public void mostrarTablero(Ficha[][] tablero) {
+	public void mostrarTablero(Casillero[][] tablero) {
 		String obtenerTablero = "";
 		for(int f = 0; f < tablero.length; f++) {
 			for(int c = 0; c < tablero[f].length; c++) {
-				obtenerTablero += tablero[f][c].getLetra() + " ";
+				obtenerTablero += tablero[f][c].getDescripcion() + " ";
 			}
 			obtenerTablero += "\n"; 
 		}
 		mostrarMensaje(obtenerTablero);
 	}
 
-	public void mostrarEstadoJugador(Jugador jugador) {
+	public void mostrarEstadoJugador(IJugador jugador) {
 		String obtenerEstadoJugador = "Jugador: " + jugador.getNombre() + "\n"
 				+ "ATRIL: " + jugador.getAtril() + "\n"
 				+ "PUNTAJE: " + jugador.getPuntaje() + "\n";
@@ -205,14 +189,13 @@ public class ConsolaGrafica implements Vista{
 	}
 
 	public void mostrarPartidasGuardadas(Object arg0) {
-		ArrayList<Partida> listaPartidas = new ArrayList<>();
+		ArrayList<IPartida> listaPartidas = new ArrayList<>();
 		try {
 			listaPartidas = controlador.obtenerPartidas();
-			for(Partida p: listaPartidas) {
+			for(IPartida p: listaPartidas) {
 				mostrarMensaje(p.toString());					
 			}
 		} catch (IOException e) {
-			// TODO Bloque catch generado automáticamente
 			e.printStackTrace();
 		}
 	}
@@ -221,7 +204,7 @@ public class ConsolaGrafica implements Vista{
 
 	public void mostrarRanking() {
 		String dato = "";
-		ArrayList<Jugador> top5Jugadores = new ArrayList<>();
+		ArrayList<IJugador> top5Jugadores = new ArrayList<>();
 		try {
 			top5Jugadores = controlador.obtenerTop5Jugadores();
 		} catch (IOException e) {
@@ -235,7 +218,7 @@ public class ConsolaGrafica implements Vista{
 		for(int i = 0; i < 5; i++) {
 			dato += (i + 1 + ". ");
 			if(i < top5Jugadores.size()) {
-				Jugador jugador = top5Jugadores.get(i);
+				IJugador jugador = top5Jugadores.get(i);
 				if(jugador != null) {
 					dato += jugador.getNombre() + ". ......... " + jugador.getPuntaje() + ".\n";				
 					}
@@ -251,12 +234,27 @@ public class ConsolaGrafica implements Vista{
 		}
 
 	@Override
-	public void mostrarPartidasGuardadas(ArrayList<Partida> partidas) {
+	public void mostrarPartidasGuardadas(ArrayList<IPartida> partidas) {
 		// TODO Apéndice de método generado automáticamente
 		
 	}
 	
-	
+	public void actualizar(IObservableRemoto arg0, Object arg1) throws RemoteException {
+		if(arg1 instanceof Evento) {
+			switch ((Evento) arg1) {
+			case NUEVOS_JUGADORES -> {
+				mostrarMensaje("El usuario se ha conectado exitosamente.");				
+				}
+			case NUEVA_PARTIDA -> {
+				ArrayList<Jugador> jugadores = modelo.getJugadores();
+				mostrarComenzarPartida(obtenerJugadores());				
+				}
+			case PARTIDA_CARGADA -> {
+				mostrarMensaje("Se ha cargado la partida exitosamente.");				
+				}
+			}
+		}
+	}
 	
 	
 	}

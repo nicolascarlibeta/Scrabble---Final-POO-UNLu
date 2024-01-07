@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 
 import controlador.scrabble.Controlador;
-import modelo.scrabble.Ficha;
+import modelo.scrabble.Casillero;
 import modelo.scrabble.PremioLetra;
 
 public class FlujoOpcionesJuego extends Flujo{

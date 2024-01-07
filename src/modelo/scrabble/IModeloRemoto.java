@@ -7,12 +7,16 @@ import java.util.ArrayList;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 
 public interface IModeloRemoto extends IObservableRemoto{
+	
+	void addJugador(Jugador jugador) throws RemoteException;
+	
+	void desconectarJugador(Jugador jugador) throws RemoteException;
 
-	void comenzarPartida(Jugador[] jugadores) throws RemoteException;
+	void comenzarPartida() throws RemoteException;
 
-	void devolverFichas(int idJugador, char[] fichasACambiar) throws RemoteException;
+	boolean cambiarFichas(char[] fichasACambiar) throws RemoteException;
 
-	void agregarPalabra(int idJugador, int x, int y, Palabra palabraActual, boolean horizontal) throws RemoteException;
+	boolean agregarPalabra(String x, String y, Palabra palabraActual, String disposicion) throws RemoteException, IOException;
 
 	int siguienteTurno() throws RemoteException;
 
@@ -24,11 +28,11 @@ public interface IModeloRemoto extends IObservableRemoto{
 	
 	void pasarTurno() throws RemoteException;
 
-	Ficha[][] getTablero() throws RemoteException;
+	Casillero[][] getTablero() throws RemoteException;
 
 	BolsaFichas getBolsaDeFichas() throws RemoteException;
 
-	Jugador[] getJugadores() throws RemoteException;
+	ArrayList<Jugador> getJugadores() throws RemoteException;
 
 	boolean isVacia() throws RemoteException;
 
@@ -45,5 +49,8 @@ public interface IModeloRemoto extends IObservableRemoto{
 	ArrayList<Jugador> getTop5Jugadores() throws RemoteException, ClassNotFoundException, IOException;
 
 	boolean validarPalabra(int x, int y, Palabra palabraActual, boolean horizontal) throws RemoteException;
+
+	
+
 
 }
