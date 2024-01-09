@@ -205,7 +205,8 @@ public class VistaGrafica implements Vista{
 
 	
 	public void mostrarEstadoJugador(IJugador jugador) {
-		ventanaTablero.mostrarEstadoJugador(jugador);
+		int cantidadFichas = controlador.obtenerCantidadFichas();
+		ventanaTablero.mostrarEstadoJugador(jugador, cantidadFichas);
 	}
 	
 

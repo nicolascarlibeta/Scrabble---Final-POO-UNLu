@@ -29,6 +29,8 @@ import java.awt.Rectangle;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JLabel;
+import java.awt.GridLayout;
 
 public class ConsolaGrafica implements Vista{
 
@@ -48,6 +50,9 @@ public class ConsolaGrafica implements Vista{
 	private JMenuBar menuBar;
 	private JMenu iOpciones;
 	private JMenuItem desconectar;
+	private JPanel panelSobreNorte;
+	private JLabel jugador;
+	private JLabel jugadorNombre;
 	
 	
 	//CONSTRUCTOR
@@ -64,7 +69,9 @@ public class ConsolaGrafica implements Vista{
             return;
         mostrarMensaje("");
         flujoActual = flujoActual.elegirOpcion(entrada);
-        flujoActual.mostarMenuTextual();
+        if(flujoActual.getClass() != FlujoOpcionesJuego.class) {
+        	flujoActual.mostarMenuTextual();        	
+        }
     }
 	
 	//Método para controlar los eventos del jugador del turno actual
@@ -77,13 +84,6 @@ public class ConsolaGrafica implements Vista{
 	/**
 	 * @wbp.parser.entryPoint
 	 */
-	public void iniciar() {
-		inicializarVentana();
-		frmScrabble.setVisible(true);
-		this.cliente = controlador.agregarJugador(nombreJugador);
-		flujoActual = new FlujoMenuPrincipal(this, controlador);
-        flujoActual.mostarMenuTextual();
-	}
 	
 	private void inicializarVentana() {
 		
@@ -180,6 +180,49 @@ public class ConsolaGrafica implements Vista{
 		desconectar = new JMenuItem("Desconectar");
 		iOpciones.add(desconectar);
 		
+		panelSobreNorte = new JPanel();
+		menuBar.add(panelSobreNorte);
+		panelSobreNorte.setLayout(new GridLayout(0, 6, 0, 0));
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(255, 255, 255));
+		panelSobreNorte.add(panel);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(new Color(255, 255, 255));
+		panelSobreNorte.add(panel_1);
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setBackground(new Color(255, 255, 255));
+		panelSobreNorte.add(panel_2);
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(new Color(255, 255, 255));
+		panelSobreNorte.add(panel_3);
+		
+		jugador = new JLabel("Jugador:");
+		panel_3.add(jugador);
+		
+		jugadorNombre = new JLabel("");
+		panel_3.add(jugadorNombre);
+		
+		JPanel panel_4 = new JPanel();
+		panel_4.setBackground(new Color(255, 255, 255));
+		panelSobreNorte.add(panel_4);
+		
+		JPanel panel_5 = new JPanel();
+		panel_5.setBackground(new Color(255, 255, 255));
+		panelSobreNorte.add(panel_5);
+		
+	}
+	
+	public void iniciar() {
+		inicializarVentana();
+		frmScrabble.setVisible(true);
+		this.cliente = controlador.agregarJugador(nombreJugador);
+		jugadorNombre.setText(cliente.getNombre());
+		flujoActual = new FlujoMenuPrincipal(this, controlador);
+        flujoActual.mostarMenuTextual();
 	}
 	
 	//Métodos para imprimir por pantalla
@@ -204,10 +247,12 @@ public class ConsolaGrafica implements Vista{
 	}
 
 	public void mostrarEstadoJugador(IJugador jugador) {
-		String obtenerEstadoJugador = "Jugador: " + jugador.getNombre() + "\n"
+		String obtenerEstadoJugador = "CANT. FICHAS: " + controlador.obtenerCantidadFichas() + "\n"
+				+ "Jugador: " + jugador.getNombre() + "\n"
 				+ "ATRIL: " + jugador.getAtril() + "\n"
 				+ "PUNTAJE: " + jugador.getPuntaje() + "\n";
 		mostrarMensaje(obtenerEstadoJugador);
+		mostrarFlujoOpcionesJuego();
 	}
 
 	public void mostrarPartidasGuardadas(Object arg0) {
@@ -254,23 +299,19 @@ public class ConsolaGrafica implements Vista{
 			}
 			mostrarMensaje(dato);
 		}
+	
+	public void mostrarFlujoOpcionesJuego() {
+		flujoActual = new FlujoOpcionesJuego(this,controlador);
+		flujoActual.mostarMenuTextual();
+	}
 
 	@Override
 	public void mostrarPartidasGuardadas(ArrayList<IPartida> partidas) {
 		// TODO Apéndice de método generado automáticamente
 		
 	}
-	/*
-	public void actualizar(IObservableRemoto arg0, Object arg1) throws RemoteException {
-		if(arg1 instanceof Evento) {
-			switch ((Evento) arg1) {
-			case CAMBIO_TURNO -> {
-				flujoActual = new FlujoOpcionesJuego(this, controlador);
-		        flujoActual.mostarMenuTextual();
-				}
-			}
-		}
-	}*/
+	
+	
 	
 	
 	}

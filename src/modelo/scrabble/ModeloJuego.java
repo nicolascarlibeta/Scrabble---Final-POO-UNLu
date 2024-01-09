@@ -51,6 +51,11 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		// Referencio al jugador actual
 		Jugador jugadorActual = jugadores.get(getTurnoActual());
 		
+		if(palabraActual.getPalabra().isEmpty()) {
+			notificarObservadores(Evento.ERROR_ATRIL);
+			return false;
+		}
+		
 		// Hago un alias del conjunto de letras de la palabra
         char[] letrasPalabra = palabraActual.getLetras();
 		
@@ -69,6 +74,11 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		}
 	
 		//Valido las coordenadas X e Y
+		if(x.isEmpty() || y.isEmpty()) {
+			notificarObservadores(Evento.ERROR_COORDENADAS);
+			return false;
+		}
+		
 		int X = 72, Y = 72;
 		if(!isPrimerMovimiento()) {
 			X = (int) x.toCharArray()[0];

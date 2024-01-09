@@ -241,8 +241,14 @@ public class Controlador implements IControladorRemoto{
 	}
 	
 	
-	public int obtenerCantidadFichas() throws RemoteException {
-		return modelo.getCantidadFichas();
+	public int obtenerCantidadFichas() {
+		try {
+			return modelo.getCantidadFichas();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -1;
+		}
 	}
 	
 
@@ -276,7 +282,6 @@ public class Controlador implements IControladorRemoto{
 				vista.mostrarMensaje("El usuario se ha desconectado.");				
 				}
 			case NUEVA_PARTIDA -> {
-				ArrayList<Jugador> jugadores = modelo.getJugadores();
 				vista.mostrarComenzarPartida(obtenerJugadores());				
 				}
 			case PARTIDA_CARGADA -> {

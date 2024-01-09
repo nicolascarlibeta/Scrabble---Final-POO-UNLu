@@ -22,8 +22,12 @@ import javax.swing.JRadioButton;
 import java.awt.CardLayout;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
 
-public class VentanaTablero implements Ventana{
+public class VentanaTablero2 implements Ventana{
 
 	private JFrame frmScrabble;
 	private IJugador cliente;
@@ -36,7 +40,6 @@ public class VentanaTablero implements Ventana{
 	private JLabel jugador;
 	private JLabel turnoDe;
 	private JLabel puntaje;
-	private JLabel atril;
 	private JLabel cantFichas;
 	private JLabel cntFichas;
 	private JButton enviarPalabra;
@@ -51,7 +54,7 @@ public class VentanaTablero implements Ventana{
 	
 	
 	//CONSTRUCTOR
-	public VentanaTablero() {
+	public VentanaTablero2() {
 		inicializarVentana();
 	}
 	
@@ -105,8 +108,10 @@ public class VentanaTablero implements Ventana{
 		
 		JPanel panel_42 = new JPanel();
 		panel_40.add(panel_42);
+		panel_42.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		cantFichas = new JLabel("Cant. Fichas:");
+		cantFichas.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_42.add(cantFichas);
 		
 		JPanel panel_41 = new JPanel();
@@ -151,11 +156,12 @@ public class VentanaTablero implements Ventana{
 		panel_37.add(desconectar);
 		
 		JPanel panel_8 = new JPanel();
-		panel_8.setBackground(new Color(0, 128, 0));
+		panel_8.setBackground(new Color(255, 255, 255));
 		panel_7.add(panel_8);
 		panel_8.setLayout(new GridLayout(2, 0, 0, 0));
 		
 		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(new Color(255, 255, 255));
 		panel_8.add(panel_3);
 		
 		JLabel lblNewLabel = new JLabel("Turno de:");
@@ -165,6 +171,7 @@ public class VentanaTablero implements Ventana{
 		panel_3.add(turnoDe);
 		
 		JPanel panel_4 = new JPanel();
+		panel_4.setBackground(new Color(255, 255, 255));
 		panel_8.add(panel_4);
 		
 		JLabel lblNewLabel_1 = new JLabel("Puntaje:");
@@ -184,16 +191,56 @@ public class VentanaTablero implements Ventana{
 		panel_11.setLayout(new GridLayout(2, 0, 0, 0));
 		
 		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(new Color(255, 255, 255));
 		panel_11.add(panel_1);
 		
-		JLabel lblNewLabel_7 = new JLabel("Atril");
+		JLabel lblNewLabel_7 = new JLabel("Atril:");
 		panel_1.add(lblNewLabel_7);
 		
 		JPanel panel = new JPanel();
 		panel_11.add(panel);
+		panel.setLayout(new BorderLayout(0, 0));
 		
-		atril = new JLabel();
-		panel.add(atril);
+		JPanel panel_56 = new JPanel();
+		panel.add(panel_56, BorderLayout.CENTER);
+		panel_56.setLayout(new BorderLayout(0, 0));
+		
+		JPanel panel_43 = new JPanel();
+		panel_56.add(panel_43, BorderLayout.NORTH);
+		
+		JPanel panel_44 = new JPanel();
+		panel_56.add(panel_44, BorderLayout.SOUTH);
+		
+		JPanel panel_57 = new JPanel();
+		panel_56.add(panel_57, BorderLayout.EAST);
+		
+		JPanel panel_58 = new JPanel();
+		panel_56.add(panel_58, BorderLayout.WEST);
+		
+		JPanel panel_59 = new JPanel();
+		panel_56.add(panel_59, BorderLayout.CENTER);
+		panel_59.setLayout(new GridLayout(0, 7, 0, 0));
+		
+		JPanel panel_60 = new JPanel();
+		panel_59.add(panel_60);
+		
+		JPanel panel_61 = new JPanel();
+		panel_59.add(panel_61);
+		
+		JPanel panel_62 = new JPanel();
+		panel_59.add(panel_62);
+		
+		JPanel panel_63 = new JPanel();
+		panel_59.add(panel_63);
+		
+		JPanel panel_64 = new JPanel();
+		panel_59.add(panel_64);
+		
+		JPanel panel_65 = new JPanel();
+		panel_59.add(panel_65);
+		
+		JPanel panel_66 = new JPanel();
+		panel_59.add(panel_66);
 		
 		JPanel panel_10 = new JPanel();
 		panel_10.setBackground(new Color(0, 128, 0));
