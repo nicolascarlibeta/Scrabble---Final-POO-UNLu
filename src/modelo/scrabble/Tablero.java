@@ -167,7 +167,6 @@ public class Tablero implements Serializable{
 			}
 		}
 		
-		
         for (Character f : fichasACambiar) {
 
             // Elimino la ficha del atril
@@ -191,6 +190,9 @@ public class Tablero implements Serializable{
             }
             bolsaDeFichas.setCantidadFichas(bolsaDeFichas.getCantidadFichas() + cantidadARepartir);
         }
+        modelo.notificarObservadores(Evento.CAMBIO_FICHAS);
+		modelo.notificarObservadores(Evento.CAMBIO_ESTADO_PARTIDA);
+		modelo.siguienteTurno();
         return true;
     }
 	

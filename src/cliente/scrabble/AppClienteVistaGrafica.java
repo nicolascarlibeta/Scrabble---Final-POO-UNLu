@@ -12,7 +12,7 @@ import ar.edu.unlu.rmimvc.cliente.Cliente;
 
 public class AppClienteVistaGrafica {
 
-	public static void main(String[] args) {
+	public static void main(String[] ar1gs) {
 		ArrayList<String> ips = Util.getIpDisponibles();
 		String ip = (String) JOptionPane.showInputDialog(
 				null, 

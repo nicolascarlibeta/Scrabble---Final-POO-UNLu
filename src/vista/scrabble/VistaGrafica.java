@@ -66,7 +66,7 @@ public class VistaGrafica implements Vista{
 				}
 				else {
 					mostrarMensaje("<Espere a que los demas terminen su turno>");
-				}
+					}
 				}
 			});
 		

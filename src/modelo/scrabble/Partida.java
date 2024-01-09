@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class Partida implements IPartida, Serializable{
+public class Partida implements Serializable, IPartida{
 	
 	private static final long serialVersionUID = -4243684796308041028L;
 	private static int ContadorID = 0;

@@ -3,12 +3,10 @@ package controlador.scrabble;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.List;
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 import modelo.scrabble.*;
 import vista.scrabble.Vista;
-import vista.scrabble.consolagrafica.FlujoIngresarPalabra.EstadosPosibles;
 
 public class Controlador implements IControladorRemoto{
 	
@@ -271,8 +269,11 @@ public class Controlador implements IControladorRemoto{
 	public void actualizar(IObservableRemoto arg0, Object arg1) throws RemoteException {
 		if(arg1 instanceof Evento) {
 			switch ((Evento) arg1) {
-			case NUEVOS_JUGADORES -> {
+			case NUEVO_JUGADOR -> {
 				vista.mostrarMensaje("El usuario se ha conectado exitosamente.");				
+				}
+			case JUGADOR_DESCONECTADO -> {
+				vista.mostrarMensaje("El usuario se ha desconectado.");				
 				}
 			case NUEVA_PARTIDA -> {
 				ArrayList<Jugador> jugadores = modelo.getJugadores();

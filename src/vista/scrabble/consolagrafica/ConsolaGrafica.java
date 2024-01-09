@@ -10,10 +10,8 @@ import javax.swing.BoxLayout;
 import java.awt.Dimension;
 import controlador.scrabble.Controlador;
 import modelo.scrabble.Casillero;
-import modelo.scrabble.Evento;
 import modelo.scrabble.IJugador;
 import modelo.scrabble.IPartida;
-import modelo.scrabble.Jugador;
 import vista.scrabble.Vista;
 import javax.swing.JTextArea;
 import java.io.IOException;
@@ -26,10 +24,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
-
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
-
 import java.awt.Rectangle;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 public class ConsolaGrafica implements Vista{
 
@@ -46,6 +45,9 @@ public class ConsolaGrafica implements Vista{
 	private JPanel panelEste;
 	private JScrollPane panelTerminal;
 	private JTextArea terminal;
+	private JMenuBar menuBar;
+	private JMenu iOpciones;
+	private JMenuItem desconectar;
 	
 	
 	//CONSTRUCTOR
@@ -72,6 +74,9 @@ public class ConsolaGrafica implements Vista{
 	}
 
 	//Inicializa la ventana principal.
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	public void iniciar() {
 		inicializarVentana();
 		frmScrabble.setVisible(true);
@@ -100,10 +105,7 @@ public class ConsolaGrafica implements Vista{
 		entrada = new JTextField();
 		entrada.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
-				if(esTurnoActual()) {
-					mostrarMensaje("Esperando al turno...");
-				}
-				else if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 						//Recibe la entrada (opcion) y la procesa
 						procesarEntrada(entrada.getText());
 						//Setea en vacio el campo de entrada
@@ -119,11 +121,16 @@ public class ConsolaGrafica implements Vista{
 		intro.setBackground(new Color(0, 0, 0));
 		intro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Recibe la entrada (opcion) y la procesa
-				procesarEntrada(entrada.getText());
-				//Setea en vacio el campo de entrada
-				entrada.setText("");
-			}
+				if(esTurnoActual()) {
+					//Recibe la entrada (opcion) y la procesa
+					procesarEntrada(entrada.getText());
+					//Setea en vacio el campo de entrada
+					entrada.setText("");
+					}
+				else {
+					mostrarMensaje("<Espere a que los demas terminen su turno>");
+					}
+				}
 		});
 		intro.setFont(new Font("Segoe UI Variable Static Text", Font.PLAIN, 13));
 		intro.setText("Intro");
@@ -134,6 +141,7 @@ public class ConsolaGrafica implements Vista{
 		panelNorte.setBackground(new Color(0, 0, 0));
 		panelNorte.setPreferredSize(new Dimension(100,50));
 		frmScrabble.getContentPane().add(panelNorte, BorderLayout.NORTH);
+		panelNorte.setLayout(new BorderLayout(0, 0));
  
 		panelOeste = new JPanel();
 		panelOeste.setBackground(new Color(0, 0, 0));
@@ -157,6 +165,20 @@ public class ConsolaGrafica implements Vista{
 		terminal.setForeground(new Color(255, 255, 255));
 		terminal.setBackground(new Color(0, 0, 0));
 		panelTerminal.setViewportView(terminal);
+		
+		menuBar = new JMenuBar();
+		frmScrabble.setJMenuBar(menuBar);
+		
+		iOpciones = new JMenu("Opciones");
+		iOpciones.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controlador.desconectarJugador(cliente);
+			}
+		});
+		menuBar.add(iOpciones);
+		
+		desconectar = new JMenuItem("Desconectar");
+		iOpciones.add(desconectar);
 		
 	}
 	
@@ -238,23 +260,17 @@ public class ConsolaGrafica implements Vista{
 		// TODO Apéndice de método generado automáticamente
 		
 	}
-	
+	/*
 	public void actualizar(IObservableRemoto arg0, Object arg1) throws RemoteException {
 		if(arg1 instanceof Evento) {
 			switch ((Evento) arg1) {
-			case NUEVOS_JUGADORES -> {
-				mostrarMensaje("El usuario se ha conectado exitosamente.");				
-				}
-			case NUEVA_PARTIDA -> {
-				ArrayList<Jugador> jugadores = modelo.getJugadores();
-				mostrarComenzarPartida(obtenerJugadores());				
-				}
-			case PARTIDA_CARGADA -> {
-				mostrarMensaje("Se ha cargado la partida exitosamente.");				
+			case CAMBIO_TURNO -> {
+				flujoActual = new FlujoOpcionesJuego(this, controlador);
+		        flujoActual.mostarMenuTextual();
 				}
 			}
 		}
-	}
+	}*/
 	
 	
 	}

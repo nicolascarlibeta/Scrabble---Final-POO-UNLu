@@ -1,7 +1,5 @@
 package vista.scrabble.consolagrafica;
 
-import java.rmi.RemoteException;
-
 import controlador.scrabble.Controlador;
 
 public class FlujoFinalPartida extends Flujo{

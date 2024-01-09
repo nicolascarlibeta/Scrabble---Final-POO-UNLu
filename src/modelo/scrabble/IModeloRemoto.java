@@ -18,7 +18,7 @@ public interface IModeloRemoto extends IObservableRemoto{
 
 	boolean agregarPalabra(String x, String y, Palabra palabraActual, String disposicion) throws RemoteException, IOException;
 
-	int siguienteTurno() throws RemoteException;
+	void siguienteTurno() throws RemoteException;
 
 	void guardarPartida() throws IOException, ClassNotFoundException, RemoteException;
 

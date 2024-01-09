@@ -1,8 +1,9 @@
 package modelo.scrabble;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public interface IPartida {
+public interface IPartida extends Serializable{
 
 	int getId();
 

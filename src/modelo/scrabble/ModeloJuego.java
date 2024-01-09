@@ -49,7 +49,7 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	public boolean agregarPalabra(String x, String y, Palabra palabraActual, String disposicion) throws IOException {
 		
 		// Referencio al jugador actual
-		IJugador jugadorActual = jugadores.get(getTurnoActual());
+		Jugador jugadorActual = jugadores.get(getTurnoActual());
 		
 		// Hago un alias del conjunto de letras de la palabra
         char[] letrasPalabra = palabraActual.getLetras();
@@ -119,29 +119,22 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	public boolean cambiarFichas(char[] fichasACambiar) throws RemoteException {
 		
 		//Referencio al jugador actual
-		IJugador jugadorActual = jugadores.get(turnoActual);
+		Jugador jugadorActual = jugadores.get(turnoActual);
 		
 		//Devolvemos las fichas
-		boolean valor = tablero.cambiarFichas(bolsaDeFichas, jugadorActual, fichasACambiar);
-		siguienteTurno();
-		
-		notificarObservadores(Evento.CAMBIO_FICHAS);
-		notificarObservadores(Evento.CAMBIO_ESTADO_PARTIDA);
-		return valor;
+		return tablero.cambiarFichas(bolsaDeFichas, jugadorActual, fichasACambiar);
 
 	} 
 	
 	
-	public int siguienteTurno() throws RemoteException{
+	public void siguienteTurno() throws RemoteException{
 		
-		int turnoActual = 0;
-		if(++this.turnoActual != jugadores.size()) {
-			turnoActual = this.turnoActual;
+		if(++this.turnoActual < jugadores.size()) {
+			return;
 		}
 		else {
 			this.turnoActual = 0;
 		}
-		return turnoActual;
 		
 	}
 	
@@ -169,7 +162,7 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		int i = 0;
 		boolean esPrimer = true;
 		while(esPrimer && i < jugadores.size()) {
-			IJugador j = jugadores.get(i);
+			Jugador j = jugadores.get(i);
 			if (j != null && j.getPuntaje() > 0) {
 				esPrimer = false;
 			}
@@ -255,11 +248,11 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		ArrayList<Jugador> jugadores = new ArrayList<>();
 		
 		//Las leemos y guardamos cada uno de sus jugadores
-		for(IPartida p: partidas) {
+		for(Partida p: partidas) {
 			ArrayList<Jugador> jug = p.getJugadores();
-			for(IJugador j: jug) {
+			for(Jugador j: jug) {
 				if(j != null) {
-					jugadores.add((Jugador) j);					
+					jugadores.add(j);					
 				}
 			}
 		}
@@ -282,13 +275,14 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 	
 	private void conectarJugador(Jugador nuevoJugador) throws RemoteException {
 		jugadores.add(nuevoJugador);
-		notificarObservadores(Evento.NUEVOS_JUGADORES);
+		notificarObservadores(Evento.NUEVO_JUGADOR);
 	}
 	
 	
 	public void desconectarJugador(Jugador jugador) throws RemoteException {
 		jugadores.remove(jugador);
 		notificarObservadores(Evento.JUGADOR_DESCONECTADO);
+		notificarObservadores(Evento.CAMBIO_ESTADO_PARTIDA);
 	}
 	
 	
