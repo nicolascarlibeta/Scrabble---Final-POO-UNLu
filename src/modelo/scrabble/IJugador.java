@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface IJugador {
 
+	int getId();
+
 	String getNombre();
 
 	void setNombre(String nombre);
@@ -12,8 +14,8 @@ public interface IJugador {
 
 	void setPuntaje(int puntaje);
 
-	List<Character> getAtril();
+	List<Letra> getAtril();
 
-	void setAtril(List<Character> atril);
+	void setAtril(List<Letra> atril);
 
 }

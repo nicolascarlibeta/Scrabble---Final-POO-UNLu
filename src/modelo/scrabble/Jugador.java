@@ -12,41 +12,48 @@ public class Jugador implements Serializable, IJugador{
 	private static final long serialVersionUID = -1267351262799502699L;
 	private String nombre = "Jugador " + new Random().nextInt(600);
 	private int puntaje = 0;
-	private List<Character> atril = new ArrayList<>();
+	private List<Letra> atril = new ArrayList<>();
 	
 	public Jugador(String nombre) {
 		this.nombre = nombre;
 	}
 	
+	
 	public int getId() {
 		return id;
 	}
+	
 	
 	public String getNombre() {
 		return nombre;
 	}
 
+	
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
 
+	
 	public int getPuntaje() {
 		return puntaje;
 	}
 
+	
 	public void setPuntaje(int puntaje) {
 		this.puntaje = puntaje;
 	}
 
-	public List<Character> getAtril() {
+	
+	public List<Letra> getAtril() {
 		return atril;
 	}
-
-	public void setAtril(List<Character> atril) {
+	
+	
+	public void setAtril(List<Letra> atril) {
 		this.atril = atril;
 	}
 
- 	@Override
+
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -57,8 +64,6 @@ public class Jugador implements Serializable, IJugador{
         }
 
         Jugador jugador = (Jugador) obj;
-
-        // Comparar los atributos relevantes para determinar la igualdad
         return Objects.equals(id, jugador.id);
     }
 

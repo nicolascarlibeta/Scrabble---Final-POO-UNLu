@@ -109,7 +109,7 @@ public class VistaGrafica implements Vista{
 		ventanaTablero.desconectar(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				controlador.desconectarJugador(cliente);
+				controlador.desconectarJugador((Jugador)cliente);
 			}
 		});
 		
@@ -136,7 +136,6 @@ public class VistaGrafica implements Vista{
 						mostrarComenzarPartida();
 						ventanaPartidas.setVisible(false);
 					} catch (IOException e1) {
-						
 						e1.printStackTrace();
 					}
 				}
@@ -193,14 +192,7 @@ public class VistaGrafica implements Vista{
 
 	
 	public void mostrarTablero(Casillero[][] tablero) {
-		String obtenerTablero = "";
-		for(int f = 0; f < tablero.length; f++) {
-			for(int c = 0; c < tablero[f].length; c++) {
-				obtenerTablero += tablero[f][c].getDescripcion() + " ";
-			}
-			obtenerTablero += "\n"; 
-		}
-		ventanaTablero.mostrarTablero(obtenerTablero);
+		ventanaTablero.mostrarTablero(tablero);
 	}
 
 	

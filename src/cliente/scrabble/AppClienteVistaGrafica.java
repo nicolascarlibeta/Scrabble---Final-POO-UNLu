@@ -3,7 +3,6 @@ package cliente.scrabble;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import vista.scrabble.*;
-import vista.scrabble.consolagrafica.ConsolaGrafica;
 import javax.swing.JOptionPane;
 import controlador.scrabble.*;
 import ar.edu.unlu.rmimvc.RMIMVCException;

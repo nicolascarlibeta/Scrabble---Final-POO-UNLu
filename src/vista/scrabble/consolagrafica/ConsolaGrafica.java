@@ -121,15 +121,10 @@ public class ConsolaGrafica implements Vista{
 		intro.setBackground(new Color(0, 0, 0));
 		intro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(esTurnoActual()) {
-					//Recibe la entrada (opcion) y la procesa
-					procesarEntrada(entrada.getText());
-					//Setea en vacio el campo de entrada
-					entrada.setText("");
-					}
-				else {
-					mostrarMensaje("<Espere a que los demas terminen su turno>");
-					}
+				//Recibe la entrada (opcion) y la procesa
+				procesarEntrada(entrada.getText());
+				//Setea en vacio el campo de entrada
+				entrada.setText("");
 				}
 		});
 		intro.setFont(new Font("Segoe UI Variable Static Text", Font.PLAIN, 13));
@@ -154,6 +149,7 @@ public class ConsolaGrafica implements Vista{
 		frmScrabble.getContentPane().add(panelEste, BorderLayout.EAST);
 		
 		panelTerminal = new JScrollPane();
+		panelTerminal.getVerticalScrollBar().setValue(panelTerminal.getVerticalScrollBar().getMaximum());
 		panelTerminal.setBorder(new EmptyBorder(0, 0, 0, 0));
 		panelTerminal.setBackground(new Color(0, 0, 0));
 		frmScrabble.getContentPane().add(panelTerminal, BorderLayout.CENTER);

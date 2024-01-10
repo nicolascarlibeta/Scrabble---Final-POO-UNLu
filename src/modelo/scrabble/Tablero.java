@@ -9,6 +9,7 @@ import modelo.scrabble.*;
 
 public class Tablero implements Serializable{
 	
+	private static final long serialVersionUID = 4452019195532452667L;
 	private ModeloJuego modelo;
 	private Casillero[][] tablero = new Casillero[16][16];
 	private final int cantidadFichas = 7;
@@ -124,19 +125,23 @@ public class Tablero implements Serializable{
 				//Reparto las 7 fichas iniciales (tres primero)
 				char letra = (char)((char)new Random().nextInt(91 - 65) + 65);
 					
-				while(bolsaDeFichas.get(letra) == -1 || bolsaDeFichas.get(letra) == 0) {
+				while(bolsaDeFichas.get(letra + "") == -1 || bolsaDeFichas.get(letra + "") == 0) {
 					letra = (char)((char)new Random().nextInt(91 - 65) + 65);
 				}
-				IJugador jugadorActual = jugadores.get(j);
-				repartirFichas(bolsaDeFichas, jugadorActual, letra);				
+				
+				Jugador jugadorActual = jugadores.get(j);
+				Letra l = new Letra(letra + "");
+				repartirFichas(bolsaDeFichas, jugadorActual, l);				
 			}
 		}
+		
 		for(int j = 0; j < cantidadJugadores; j++) {
 			for(int f = 0; f < 4; f++) {
 				//Reparto las 7 fichas iniciales
 				int random = new Random().nextInt(vocales.length);
-				IJugador jugadorActual = jugadores.get(j);
-				repartirFichas(bolsaDeFichas, jugadorActual, vocales[random]);				
+				Jugador jugadorActual = jugadores.get(j);
+				Letra l = new Letra(vocales[random] + "");
+				repartirFichas(bolsaDeFichas, jugadorActual, l);				
 			}
 		}
 	}
@@ -144,13 +149,13 @@ public class Tablero implements Serializable{
 	
 	//Repartir fichas
 	
-	public void repartirFichas(BolsaFichas bolsaDeFichas, IJugador jugadorActual, char letra) {
+	public void repartirFichas(BolsaFichas bolsaDeFichas, Jugador jugadorActual, Letra letra) {
 		
 		//Le agrego las fichas al atril del jugador
 		jugadorActual.getAtril().add(letra);
 
 		//Le quito las fichas a la bolsa
-		bolsaDeFichas.put(letra, bolsaDeFichas.get(letra) - 1);
+		bolsaDeFichas.put(letra.getDescripcion(), bolsaDeFichas.get(letra.getDescripcion()) - 1);
 		bolsaDeFichas.setCantidadFichas(bolsaDeFichas.getCantidadFichas() - 1);
 	}
 	
@@ -158,7 +163,7 @@ public class Tablero implements Serializable{
 	
 	//Devolver fichas
 	
-	public boolean cambiarFichas(BolsaFichas bolsaDeFichas, IJugador jugadorActual, char[] fichasACambiar) throws RemoteException {
+	public boolean cambiarFichas(BolsaFichas bolsaDeFichas, Jugador jugadorActual, char[] fichasACambiar) throws RemoteException {
 
 		for(Character c: fichasACambiar) {
 			if(jugadorActual != null && !jugadorActual.getAtril().contains(c)) {
@@ -173,20 +178,21 @@ public class Tablero implements Serializable{
         	jugadorActual.getAtril().remove(Character.valueOf(f));
 
             // Devuelvo la ficha del atril a la bolsa
-            bolsaDeFichas.put(f, bolsaDeFichas.get(f) + 1);
+            bolsaDeFichas.put(f + "", bolsaDeFichas.get(f + "") + 1);
         }
 
         // Le reparto las fichas restantes al jugador
-        List<Character> atril = jugadorActual.getAtril();
+        List<Letra> atril = jugadorActual.getAtril();
         if (bolsaDeFichas.getCantidadFichas() > 0) {
             int cantidadARepartir = cantidadFichas - atril.size();
             for (int c = 0; c < cantidadARepartir; c++) {
                 char letra = (char) ((char) new Random().nextInt(91 - 65) + 65);
 
-                while (bolsaDeFichas.get(letra) == -1 || bolsaDeFichas.get(letra) == 0) {
+                while (bolsaDeFichas.get(letra + "") == -1 || bolsaDeFichas.get(letra + "") == 0) {
                     letra = (char) ((char) new Random().nextInt(91 - 65) + 65);
                 }
-                repartirFichas(bolsaDeFichas, jugadorActual, letra);
+                Letra l = new Letra(letra + "");
+                repartirFichas(bolsaDeFichas, jugadorActual, l);
             }
             bolsaDeFichas.setCantidadFichas(bolsaDeFichas.getCantidadFichas() + cantidadARepartir);
         }
@@ -200,13 +206,13 @@ public class Tablero implements Serializable{
 	
 	//Agregar palabra
 	
-	public void addPalabra(BolsaFichas bolsaDeFichas, IJugador jugadorActual, int x, int y, Palabra palabraActual, boolean horizontal) throws RemoteException {
+	public void addPalabra(BolsaFichas bolsaDeFichas, Jugador jugadorActual, int x, int y, Palabra palabraActual, boolean horizontal) throws RemoteException {
 
 		// Hago un alias del conjunto de letras de la palabra
         char[] letrasPalabra = palabraActual.getLetras();
         
         // Hago un alias del atril del jugador
-        List<Character> atril = jugadorActual.getAtril();
+        List<Letra> atril = jugadorActual.getAtril();
 
         // Hago un formateo de x e y
         x -= 64;
@@ -236,10 +242,11 @@ public class Tablero implements Serializable{
             for (int c = 0; c < cantidadARepartir; c++) {
                 char letra = (char) ((char) new Random().nextInt(91 - 65) + 65);
 
-                while (bolsaDeFichas.get(letra) == -1 || bolsaDeFichas.get(letra) == 0) {
+                while (bolsaDeFichas.get(letra + "") == -1 || bolsaDeFichas.get(letra + "") == 0) {
                     letra = (char) ((char) new Random().nextInt(91 - 65) + 65);
                 }
-                repartirFichas(bolsaDeFichas, jugadorActual, letra);
+                Letra l = new Letra(letra + "");
+                repartirFichas(bolsaDeFichas, jugadorActual, l);
             }
         }
     }

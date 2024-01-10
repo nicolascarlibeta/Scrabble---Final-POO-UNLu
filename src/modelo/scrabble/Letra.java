@@ -26,6 +26,10 @@ public class Letra implements Casillero, Serializable{
 	public int getPuntos() {
 		return puntos;
 	}
+	
+	public String toString() {
+		return getDescripcion();
+	}
 
 
 }

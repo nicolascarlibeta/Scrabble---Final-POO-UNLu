@@ -1,6 +1,8 @@
 package vista.scrabble;
 
 import javax.swing.JFrame;
+
+import modelo.scrabble.Casillero;
 import modelo.scrabble.IJugador;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
@@ -12,16 +14,20 @@ import javax.swing.ImageIcon;
 import javax.swing.*;
 import java.awt.GridLayout;
 import javax.swing.JTextArea;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
+import java.util.ArrayList;
+
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
 import java.awt.CardLayout;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
+import javax.swing.table.DefaultTableModel;
+import java.awt.Cursor;
+import utilidades.scrabble.*;
 
 public class VentanaTablero implements Ventana{
 
@@ -32,7 +38,6 @@ public class VentanaTablero implements Ventana{
 	private JButton comenzarPartida;
 	private ImageIcon scrabble;
 	private JTextField palabra;
-	private JTextArea tablero;
 	private JLabel jugador;
 	private JLabel turnoDe;
 	private JLabel puntaje;
@@ -48,6 +53,8 @@ public class VentanaTablero implements Ventana{
 	private JTextField coorX;
 	private JTextField coorY;
 	private JTextField cadenaFichas;
+	private JTable tablero;
+	private JTable tablaAtril;
 	
 	
 	//CONSTRUCTOR
@@ -151,7 +158,7 @@ public class VentanaTablero implements Ventana{
 		panel_37.add(desconectar);
 		
 		JPanel panel_8 = new JPanel();
-		panel_8.setBackground(new Color(0, 128, 0));
+		panel_8.setBackground(Color.LIGHT_GRAY);
 		panel_7.add(panel_8);
 		panel_8.setLayout(new GridLayout(2, 0, 0, 0));
 		
@@ -416,31 +423,51 @@ public class VentanaTablero implements Ventana{
 		panelCentro.setFont(new Font("Courier Prime", Font.BOLD, 12));
 		panelCentro.setBackground(new Color(0, 64, 0));
 		frmScrabble.getContentPane().add(panelCentro, BorderLayout.CENTER);
-		panelCentro.setLayout(new GridLayout(0, 1, 0, 0));
+		panelCentro.setLayout(new BorderLayout(0, 0));
 		
-		tablero = new JTextArea();
-		tablero.setEditable(false);
-		tablero.setFont(new Font("JetBrains Mono", Font.PLAIN, 18));
-		tablero.setForeground(new Color(255, 255, 255));
-		tablero.setBackground(new Color(0, 64, 0));
-		panelCentro.add(tablero);
+		JPanel panelSubSur = new JPanel();
+		panelSubSur.setPreferredSize(new Dimension(10, 72));
+		panelCentro.add(panelSubSur, BorderLayout.SOUTH);
+		panelSubSur.setLayout(new BorderLayout(0, 0));
+		
+		JPanel panel_43 = new JPanel();
+		panelSubSur.add(panel_43, BorderLayout.WEST);
+		
+		JPanel panel_44 = new JPanel();
+		panelSubSur.add(panel_44, BorderLayout.NORTH);
+		
+		JPanel panel_56 = new JPanel();
+		panelSubSur.add(panel_56, BorderLayout.EAST);
+		
+		JPanel panel_57 = new JPanel();
+		panelSubSur.add(panel_57, BorderLayout.SOUTH);
+		
+		configurarAtril();
+		panelSubSur.add(tablaAtril, BorderLayout.CENTER);
+		
+		configurarTablero();
+		panelCentro.add(tablero, BorderLayout.CENTER);
 	}
 
 	public void setVisible(boolean b) {
 		frmScrabble.setVisible(b);
 	}
-
 	
+
 	public void mostrarMensaje(String mensaje) {
 		panelNotificaciones.setText(mensaje);
 	}
 
 
-	public void mostrarTablero(String obtenerTablero) {
-		tablero.setText(obtenerTablero);
+	public void mostrarTablero(Casillero[][] tablero) {
+		this.tablero.setModel(new ModeloTablero(tablero,
+				new String[] {
+					"New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column"
+				}
+			));	
 	}
 
-	
+
 	public void ingresarPalabra(ActionListener accion) {
 		enviarPalabra.addActionListener(accion);
 	}
@@ -482,7 +509,7 @@ public class VentanaTablero implements Ventana{
 	public void mostrarEstadoJugador(IJugador jugador, int cantidadFichas) {
 		this.turnoDe.setText(jugador.getNombre());
 		this.puntaje.setText(jugador.getPuntaje() + "");
-		this.atril.setText(jugador.getAtril().toString());
+		this.tablaAtril.setModel(new ModeloAtril(jugador.getAtril()));
 		this.cntFichas.setText(cantidadFichas + "");
 	}
 
@@ -507,12 +534,91 @@ public class VentanaTablero implements Ventana{
 	}
 	
 
+	public void configurarTablero() {
+		tablero = new JTable();
+		tablero.setDragEnabled(true);
+		tablero.setFont(new Font("JetBrains Mono Medium", Font.PLAIN, 13));
+		tablero.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tablero.setDropMode(DropMode.ON);
+		tablero.setRowSelectionAllowed(false);
+		tablero.setPreferredSize(new Dimension(15, 15));
+		tablero.setRowHeight(19);
+		tablero.setModel(new DefaultTableModel(
+			new Object[][] {
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+			},
+			new String[] {
+				"New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column", "New column"
+			}
+		));
+		// Deshabilitar la edición directa de las celdas
+        tablero.setDefaultEditor(Object.class, null);
 
+        // Establecer el renderizador personalizado para las celdas
+        tablero.setDefaultRenderer(Object.class, new DraggableCellRenderer());
+
+        // Hacer que la tabla sea receptora de datos transferibles
+        tablero.setTransferHandler(new TableTransferHandler());
+        
+		// Aplica el renderizador a todas las columnas de la tabla
+        for (int i = 0; i < tablero.getColumnCount(); i++) {
+        	tablero.getColumnModel().getColumn(i).setCellRenderer(new DraggableCellRenderer());
+        }
+	}
 
 	
+	public void configurarAtril() {
+		tablaAtril = new JTable();
+		tablaAtril.setDropMode(DropMode.ON);
+		tablaAtril.setModel(new DefaultTableModel(
+			new Object[][] {
+				{null, null, null, null, null, null, null},
+			},
+			new String[] {
+				"New column", "New column", "New column", "New column", "New column", "New column", "New column"
+			}
+		));
+		tablaAtril.setCellSelectionEnabled(true);
+		tablaAtril.setDragEnabled(true);
+		tablaAtril.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tablaAtril.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		tablaAtril.setRowHeight(52);
+		tablaAtril.setSize(new Dimension(10, 10));
+		tablaAtril.setRowSelectionAllowed(false);
+		tablaAtril.setPreferredSize(new Dimension(10, 10));
+		
+		// Deshabilitar la edición directa de las celdas
+        tablaAtril.setDefaultEditor(Object.class, null);
+
+        // Establecer el renderizador personalizado para las celdas
+        tablaAtril.setDefaultRenderer(Object.class, new DraggableCellRenderer());
+
+        // Hacer que la tabla sea receptora de datos transferibles
+        tablaAtril.setTransferHandler(new TableTransferHandler());
+        
+		// Aplica el renderizador a todas las columnas de la tabla
+        for (int i = 0; i < tablaAtril.getColumnCount(); i++) {
+        	tablaAtril.getColumnModel().getColumn(i).setCellRenderer(new DraggableCellRenderer());
+        }
+	}
 
 
-	
+
 	
 
 }

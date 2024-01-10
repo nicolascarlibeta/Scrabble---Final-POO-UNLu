@@ -174,7 +174,7 @@ public class Controlador implements IControladorRemoto{
 			e.printStackTrace();
 		}
 		ArrayList<IJugador> listaTop5 = new ArrayList<>();		
-		for(Jugador j: top5Jugadores) {
+		for(IJugador j: top5Jugadores) {
 			listaTop5.add(j);
 		}
 		return listaTop5;
@@ -220,7 +220,7 @@ public class Controlador implements IControladorRemoto{
 			e.printStackTrace();
 		}
 		ArrayList<IJugador> listaJugadores = new ArrayList<>();		
-		for(Jugador j: jugadores) {
+		for(IJugador j: jugadores) {
 			listaJugadores.add(j);
 		}
 		return listaJugadores;
