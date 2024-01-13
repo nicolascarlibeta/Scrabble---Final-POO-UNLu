@@ -1,8 +1,9 @@
 package modelo.scrabble;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface IJugador {
+public interface IJugador extends Serializable{
 
 	int getId();
 

@@ -1,10 +1,6 @@
 package vista.scrabble.consolagrafica;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import controlador.scrabble.Controlador;
-import modelo.scrabble.Jugador;
 
 public class FlujoVerRanking extends Flujo{
 

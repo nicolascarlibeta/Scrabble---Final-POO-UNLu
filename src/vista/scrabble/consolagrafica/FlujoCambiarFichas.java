@@ -14,10 +14,7 @@ public class FlujoCambiarFichas extends Flujo{
     }
 
     public Flujo elegirOpcion(String opcion) {
-    	if(!vista.esTurnoActual()) {
-			vista.mostrarMensaje("<Espere a que los demas terminen su turno>");
-		}
-    	else if(!controlador.cambiarFichas(opcion)) {
+    	if(!controlador.cambiarFichas(opcion)) {
 			return new FlujoCambiarFichas(vista,controlador);
 		}
 		return new FlujoOpcionesJuego(vista,controlador);

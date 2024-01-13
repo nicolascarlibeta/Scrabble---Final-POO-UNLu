@@ -88,10 +88,7 @@ public class FlujoIngresarPalabra extends Flujo{
 	}
 	
 	public Flujo ingresarDisposicion(String disposicion) {
-		if(!vista.esTurnoActual()) {
-			vista.mostrarMensaje("<Espere a que los demas terminen su turno>");
-		}
-		else if(!controlador.agregarPalabra(x,y,cadenaString,disposicion)) {
+		if(!controlador.agregarPalabra(x,y,cadenaString,disposicion)) {
 			return new FlujoIngresarPalabra(vista,controlador);
 		}
 		return new FlujoOpcionesJuego(vista,controlador);

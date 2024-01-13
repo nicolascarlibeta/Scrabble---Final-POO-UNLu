@@ -9,13 +9,15 @@ public class ModeloAtril extends AbstractTableModel {
 	
 	private static final long serialVersionUID = 1L;
 	private Object[][] datos; 
-    private String[] columnas = {"Columna1"};
+    private String[] columnas;
 
     public ModeloAtril(List<Letra> datos) {
     	int c = 0;
     	this.datos = new Object[1][datos.size()];
+    	this.columnas = new String[datos.size()];
     	for(Letra l: datos) {
     		this.datos[0][c] = l;
+    		c++;
     	}
     }
 
@@ -29,10 +31,10 @@ public class ModeloAtril extends AbstractTableModel {
 
     public Object getValueAt(int rowIndex, int columnIndex) {
     	
-        Casillero objetoLetra = (Casillero) datos[0][rowIndex];
+        Casillero objetoLetra = (Casillero) datos[0][columnIndex];
 
         // Dependiendo de la columna, devuelve el valor del atributo correspondiente
-        if(columnIndex >= 0 && columnIndex <= 6) {
+        if(columnIndex >= 0 && columnIndex <= this.datos[0].length) {
         	return objetoLetra.getDescripcion();
         }
         else {

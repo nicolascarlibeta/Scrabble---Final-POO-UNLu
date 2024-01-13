@@ -1,6 +1,7 @@
 package modelo.scrabble;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Letra implements Casillero, Serializable{
 
@@ -30,6 +31,19 @@ public class Letra implements Casillero, Serializable{
 	public String toString() {
 		return getDescripcion();
 	}
+	
+	 public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Letra ltr = (Letra) obj;
+        return Objects.equals(this.letra, ltr.letra);
+	    }
 
 
 }

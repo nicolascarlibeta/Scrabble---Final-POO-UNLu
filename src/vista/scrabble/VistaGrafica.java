@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import controlador.scrabble.Controlador;
 import modelo.scrabble.IJugador;
@@ -57,9 +58,9 @@ public class VistaGrafica implements Vista{
 					String cadenaString = ventanaTablero.recibirPalabra().toUpperCase();
 					String x = ventanaTablero.recibirCoordenadaX();
 					String y = ventanaTablero.recibirCoordenadaY();
-					String disposicion = controlador.validarDisposicion(ventanaTablero.isSelected());
+					String disposicion = null;
+					disposicion = controlador.validarDisposicion(ventanaTablero.isSelected());
 					
-					//Ingreso la palabra
 					if(controlador.agregarPalabra(x,y,cadenaString,disposicion)) {
 						ventanaTablero.limpiar();					
 					}
@@ -109,7 +110,7 @@ public class VistaGrafica implements Vista{
 		ventanaTablero.desconectar(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				controlador.desconectarJugador((Jugador)cliente);
+				controlador.desconectarJugador(cliente);
 			}
 		});
 		
@@ -170,7 +171,8 @@ public class VistaGrafica implements Vista{
 
 	//Método para controlar los eventos del jugador del turno actual
 	public boolean esTurnoActual() {
-		IJugador jugadorTurnoActual = controlador.obtenerJugadores(controlador.obtenerTurnoActual());
+		IJugador jugadorTurnoActual = null;
+		jugadorTurnoActual = controlador.obtenerJugadores(controlador.obtenerTurnoActual());
 		return cliente.equals(jugadorTurnoActual);
 	}
 	
@@ -197,7 +199,8 @@ public class VistaGrafica implements Vista{
 
 	
 	public void mostrarEstadoJugador(IJugador jugador) {
-		int cantidadFichas = controlador.obtenerCantidadFichas();
+		int cantidadFichas = 0;
+		cantidadFichas = controlador.obtenerCantidadFichas();
 		ventanaTablero.mostrarEstadoJugador(jugador, cantidadFichas);
 	}
 	

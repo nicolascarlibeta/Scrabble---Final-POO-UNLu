@@ -2,10 +2,7 @@ package vista.scrabble.consolagrafica;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
-
 import controlador.scrabble.Controlador;
-import modelo.scrabble.Casillero;
-import modelo.scrabble.PremioLetra;
 
 public class FlujoOpcionesJuego extends Flujo{
 	
@@ -21,9 +18,13 @@ public class FlujoOpcionesJuego extends Flujo{
         vista.mostrarMensaje("4. Volver al menú principal.");
         vista.mostrarMensaje("Seleccione una opción: ");
     }
+    
+   
+    //vista.mostrarMensaje("<Ya no puedes participar de esta partida. Inicia otra.>");
 
 	public Flujo elegirOpcion(String opcion) {
-        switch (opcion) {
+		if(vista.esTurnoActual()) {
+			switch (opcion) {
             case "1" -> {
             	return ingresarPalabra();
             }
@@ -37,7 +38,11 @@ public class FlujoOpcionesJuego extends Flujo{
             	return volverMenuPrincipal();
             }
             default -> vista.mostrarMensaje("Opción inválida");
-        }
+            }
+		}
+		else {
+			vista.mostrarMensaje("<Espere a que los demas terminen su turno>");
+		}
         return this;
     }
 

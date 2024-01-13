@@ -1,9 +1,14 @@
 package modelo.scrabble;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public final class PuntajeFichas {
+public final class PuntajeFichas implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static HashMap<String, Integer> fichas = new HashMap<>();
 	
 	//CONSTRUCTOR

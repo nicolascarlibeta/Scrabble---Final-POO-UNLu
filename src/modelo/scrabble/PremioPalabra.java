@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 public class PremioPalabra implements Casillero, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String letra = "";
 	private TipoPuntaje tipoPuntaje;
 	

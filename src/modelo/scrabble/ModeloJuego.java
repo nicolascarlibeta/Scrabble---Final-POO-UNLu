@@ -16,8 +16,9 @@ import vista.scrabble.consolagrafica.FlujoIngresarPalabra.EstadosPosibles;
 
 import java.io.*;
 
-public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
+public class ModeloJuego extends ObservableRemoto implements IModeloRemoto, Serializable {
 	
+	private static final long serialVersionUID = 7507099928370303646L;
 	private Tablero tablero;
 	private BolsaFichas bolsaDeFichas;
 	private ArrayList<Jugador> jugadores = new ArrayList<>();
@@ -51,17 +52,12 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		// Referencio al jugador actual
 		Jugador jugadorActual = jugadores.get(getTurnoActual());
 		
-		if(palabraActual.getPalabra().isEmpty()) {
-			notificarObservadores(Evento.ERROR_ATRIL);
-			return false;
-		}
-		
 		// Hago un alias del conjunto de letras de la palabra
-        char[] letrasPalabra = palabraActual.getLetras();
+        List<Letra> letrasPalabra = palabraActual.getLetras();
 		
 		//Primero valido que la palabra contenga letras del atril
-		for(char c: letrasPalabra) {
-			if(!jugadorActual.getAtril().contains(c)) {
+		for(Letra l: letrasPalabra) {
+			if(!jugadorActual.getAtril().contains(l)) {
 				notificarObservadores(Evento.ERROR_ATRIL);
 				return false;
 			}
@@ -74,11 +70,6 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto {
 		}
 	
 		//Valido las coordenadas X e Y
-		if(x.isEmpty() || y.isEmpty()) {
-			notificarObservadores(Evento.ERROR_COORDENADAS);
-			return false;
-		}
-		
 		int X = 72, Y = 72;
 		if(!isPrimerMovimiento()) {
 			X = (int) x.toCharArray()[0];

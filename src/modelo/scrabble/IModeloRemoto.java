@@ -1,12 +1,13 @@
 package modelo.scrabble;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 
-public interface IModeloRemoto extends IObservableRemoto{
+public interface IModeloRemoto extends IObservableRemoto, Serializable{
 	
 	void addJugador(Jugador jugador) throws RemoteException;
 	

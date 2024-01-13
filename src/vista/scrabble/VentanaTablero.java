@@ -41,7 +41,6 @@ public class VentanaTablero implements Ventana{
 	private JLabel jugador;
 	private JLabel turnoDe;
 	private JLabel puntaje;
-	private JLabel atril;
 	private JLabel cantFichas;
 	private JLabel cntFichas;
 	private JButton enviarPalabra;
@@ -189,18 +188,6 @@ public class VentanaTablero implements Ventana{
 		panel_11.setBackground(new Color(0, 128, 0));
 		panel_6.add(panel_11);
 		panel_11.setLayout(new GridLayout(2, 0, 0, 0));
-		
-		JPanel panel_1 = new JPanel();
-		panel_11.add(panel_1);
-		
-		JLabel lblNewLabel_7 = new JLabel("Atril");
-		panel_1.add(lblNewLabel_7);
-		
-		JPanel panel = new JPanel();
-		panel_11.add(panel);
-		
-		atril = new JLabel();
-		panel.add(atril);
 		
 		JPanel panel_10 = new JPanel();
 		panel_10.setBackground(new Color(0, 128, 0));
@@ -536,10 +523,11 @@ public class VentanaTablero implements Ventana{
 
 	public void configurarTablero() {
 		tablero = new JTable();
+		tablero.setShowGrid(false);
 		tablero.setDragEnabled(true);
 		tablero.setFont(new Font("JetBrains Mono Medium", Font.PLAIN, 13));
 		tablero.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tablero.setDropMode(DropMode.ON);
+		tablero.setDropMode(DropMode.INSERT);
 		tablero.setRowSelectionAllowed(false);
 		tablero.setPreferredSize(new Dimension(15, 15));
 		tablero.setRowHeight(19);
@@ -584,7 +572,8 @@ public class VentanaTablero implements Ventana{
 	
 	public void configurarAtril() {
 		tablaAtril = new JTable();
-		tablaAtril.setDropMode(DropMode.ON);
+		tablaAtril.setDragEnabled(true);
+		tablaAtril.setDropMode(DropMode.INSERT);
 		tablaAtril.setModel(new DefaultTableModel(
 			new Object[][] {
 				{null, null, null, null, null, null, null},
@@ -594,22 +583,22 @@ public class VentanaTablero implements Ventana{
 			}
 		));
 		tablaAtril.setCellSelectionEnabled(true);
-		tablaAtril.setDragEnabled(true);
 		tablaAtril.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tablaAtril.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		tablaAtril.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		tablaAtril.setRowHeight(52);
 		tablaAtril.setSize(new Dimension(10, 10));
 		tablaAtril.setRowSelectionAllowed(false);
 		tablaAtril.setPreferredSize(new Dimension(10, 10));
-		
+		/*
 		// Deshabilitar la edición directa de las celdas
         tablaAtril.setDefaultEditor(Object.class, null);
+        
+        // Hacer que la tabla sea receptora de datos transferibles
+        tablaAtril.setTransferHandler(new TableTransferHandler());*/
 
         // Establecer el renderizador personalizado para las celdas
         tablaAtril.setDefaultRenderer(Object.class, new DraggableCellRenderer());
 
-        // Hacer que la tabla sea receptora de datos transferibles
-        tablaAtril.setTransferHandler(new TableTransferHandler());
         
 		// Aplica el renderizador a todas las columnas de la tabla
         for (int i = 0; i < tablaAtril.getColumnCount(); i++) {

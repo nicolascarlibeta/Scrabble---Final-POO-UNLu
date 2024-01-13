@@ -8,8 +8,8 @@ import javax.swing.JButton;
 import java.awt.Color;
 import javax.swing.BoxLayout;
 import java.awt.Dimension;
-import controlador.scrabble.Controlador;
 import modelo.scrabble.Casillero;
+import modelo.scrabble.Evento;
 import modelo.scrabble.IJugador;
 import modelo.scrabble.IPartida;
 import vista.scrabble.Vista;
@@ -24,7 +24,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
+import controlador.scrabble.*;
 import java.awt.Rectangle;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -56,11 +58,11 @@ public class ConsolaGrafica implements Vista{
 	
 	
 	//CONSTRUCTOR
-	public ConsolaGrafica(Controlador controlador, String nombreJugador) {
-		this.nombreJugador = nombreJugador.toUpperCase();
-		this.controlador = controlador;
-		controlador.setVista(this);
-	}
+		public ConsolaGrafica(Controlador controlador, String nombreJugador) {
+			this.nombreJugador = nombreJugador.toUpperCase();
+			this.controlador = controlador;
+			controlador.setVista(this);
+		}
 	
 	//Método general para procesar la entrada del usuario
 	private void procesarEntrada(String entrada) {
@@ -76,7 +78,8 @@ public class ConsolaGrafica implements Vista{
 	
 	//Método para controlar los eventos del jugador del turno actual
 	public boolean esTurnoActual() {
-		IJugador jugadorTurnoActual = controlador.obtenerJugadores(controlador.obtenerTurnoActual());
+		IJugador jugadorTurnoActual = null;
+		jugadorTurnoActual = controlador.obtenerJugadores(controlador.obtenerTurnoActual());
 		return cliente.equals(jugadorTurnoActual);
 	}
 
@@ -106,11 +109,9 @@ public class ConsolaGrafica implements Vista{
 		entrada.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-						//Recibe la entrada (opcion) y la procesa
-						procesarEntrada(entrada.getText());
-						//Setea en vacio el campo de entrada
-						entrada.setText("");
-					}	
+					procesarEntrada(entrada.getText());
+					entrada.setText("");
+				}	
 			}
 		});
 		entrada.setForeground(new Color(255, 255, 255));
@@ -121,9 +122,7 @@ public class ConsolaGrafica implements Vista{
 		intro.setBackground(new Color(0, 0, 0));
 		intro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Recibe la entrada (opcion) y la procesa
 				procesarEntrada(entrada.getText());
-				//Setea en vacio el campo de entrada
 				entrada.setText("");
 				}
 		});
@@ -212,6 +211,7 @@ public class ConsolaGrafica implements Vista{
 		
 	}
 	
+	
 	public void iniciar() {
 		inicializarVentana();
 		frmScrabble.setVisible(true);
@@ -227,7 +227,8 @@ public class ConsolaGrafica implements Vista{
 	}
 	
 	public void mostrarComenzarPartida(ArrayList<IJugador> jugadores) {
-		int turnoActual = controlador.obtenerTurnoActual();
+		int turnoActual = 0;
+		turnoActual = controlador.obtenerTurnoActual();
 		mostrarMensaje("Comienza la partida. Empieza el jugador " + jugadores.get(turnoActual).getNombre() + ".");
 	}
 
@@ -243,7 +244,8 @@ public class ConsolaGrafica implements Vista{
 	}
 
 	public void mostrarEstadoJugador(IJugador jugador) {
-		String obtenerEstadoJugador = "CANT. FICHAS: " + controlador.obtenerCantidadFichas() + "\n"
+		String obtenerEstadoJugador = null;
+		obtenerEstadoJugador = "CANT. FICHAS: " + controlador.obtenerCantidadFichas() + "\n"
 				+ "Jugador: " + jugador.getNombre() + "\n"
 				+ "ATRIL: " + jugador.getAtril() + "\n"
 				+ "PUNTAJE: " + jugador.getPuntaje() + "\n";
@@ -306,6 +308,10 @@ public class ConsolaGrafica implements Vista{
 		// TODO Apéndice de método generado automáticamente
 		
 	}
+
+	
+
+	
 	
 	
 	
