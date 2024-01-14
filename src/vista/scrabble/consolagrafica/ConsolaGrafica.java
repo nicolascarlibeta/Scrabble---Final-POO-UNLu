@@ -82,6 +82,11 @@ public class ConsolaGrafica implements Vista{
 		jugadorTurnoActual = controlador.obtenerJugadores(controlador.obtenerTurnoActual());
 		return cliente.equals(jugadorTurnoActual);
 	}
+	
+	public boolean estaConectado() {
+		return cliente.isConectado();
+	}
+
 
 	//Inicializa la ventana principal.
 	/**
@@ -165,14 +170,14 @@ public class ConsolaGrafica implements Vista{
 		frmScrabble.setJMenuBar(menuBar);
 		
 		iOpciones = new JMenu("Opciones");
-		iOpciones.addActionListener(new ActionListener() {
+		menuBar.add(iOpciones);
+		
+		desconectar = new JMenuItem("Desconectar");
+		desconectar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controlador.desconectarJugador(cliente);
 			}
 		});
-		menuBar.add(iOpciones);
-		
-		desconectar = new JMenuItem("Desconectar");
 		iOpciones.add(desconectar);
 		
 		panelSobreNorte = new JPanel();
@@ -309,6 +314,7 @@ public class ConsolaGrafica implements Vista{
 		
 	}
 
+	
 	
 
 	

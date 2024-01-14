@@ -304,9 +304,11 @@ public class Controlador implements IControladorRemoto{
 				case CAMBIO_ESTADO_PARTIDA -> {
 					Casillero[][] tablero = modelo.getTablero();
 					int turnoActual = modelo.getTurnoActual();
-					IJugador jugadorActual = modelo.getJugadores().get(turnoActual);
-					vista.mostrarTablero(tablero);	
-					vista.mostrarEstadoJugador(jugadorActual);				
+					if(modelo.getCantidadJugadores() != 0) {
+						Jugador jugadorActual = modelo.getJugadores().get(turnoActual);
+						vista.mostrarTablero(tablero);	
+						vista.mostrarEstadoJugador(jugadorActual);	
+						}		
 					}
 				case ERROR_ATRIL -> {
 					vista.mostrarMensaje("<Ingrese una palabra que contenga las letras de su atril.>");				

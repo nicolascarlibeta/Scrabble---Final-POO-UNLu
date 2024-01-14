@@ -527,12 +527,12 @@ public class VentanaTablero implements Ventana{
 		tablero.setDragEnabled(true);
 		tablero.setFont(new Font("JetBrains Mono Medium", Font.PLAIN, 13));
 		tablero.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tablero.setDropMode(DropMode.INSERT);
+		tablero.setDropMode(DropMode.ON);
 		tablero.setRowSelectionAllowed(false);
 		tablero.setPreferredSize(new Dimension(15, 15));
 		tablero.setRowHeight(19);
 		tablero.setModel(new DefaultTableModel(
-			new Object[][] {
+			new String[][] {
 				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
 				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
 				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},

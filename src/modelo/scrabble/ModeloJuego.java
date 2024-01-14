@@ -1,18 +1,10 @@
 package modelo.scrabble;
 
 import java.rmi.RemoteException;
-import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
-import modelo.scrabble.Casillero;
-import vista.scrabble.consolagrafica.FlujoIngresarPalabra.EstadosPosibles;
 
 import java.io.*;
 
@@ -203,21 +195,23 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto, Seri
 	
 	public void guardarPartida() throws IOException{
 		
-		Partida partidaActual = new Partida(tablero,bolsaDeFichas,jugadores,turnoActual);
-		partidas.add(partidaActual);
-		
-		try {
-            FileOutputStream fos = new FileOutputStream("PartidasGuardadas.bin");
-            var oos = new ObjectOutputStream(fos);
-            oos.writeObject(partidas);
-            fos.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-		
-		notificarObservadores(Evento.PARTIDA_GUARDADA);
+		if(this.getCantidadJugadores() != 0) {
+			Partida partidaActual = new Partida(tablero,bolsaDeFichas,jugadores,turnoActual);
+			partidas.add(partidaActual);
+			
+			try {
+	            FileOutputStream fos = new FileOutputStream("PartidasGuardadas.bin");
+	            var oos = new ObjectOutputStream(fos);
+	            oos.writeObject(partidas);
+	            fos.close();
+	        } catch (FileNotFoundException e) {
+	            throw new RuntimeException(e);
+	        } catch (IOException e) {
+	            throw new RuntimeException(e);
+	        }
+			
+			notificarObservadores(Evento.PARTIDA_GUARDADA);
+		}
 		
 	}
 	
@@ -281,7 +275,8 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto, Seri
 	
 	
 	public void desconectarJugador(Jugador jugador) throws RemoteException {
-		jugadores.remove(jugador);
+		jugador.setConectado(false);
+		this.jugadores.remove(jugador);
 		notificarObservadores(Evento.JUGADOR_DESCONECTADO);
 		notificarObservadores(Evento.CAMBIO_ESTADO_PARTIDA);
 	}
@@ -311,6 +306,10 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto, Seri
 		
 		public int getCantidadFichas() throws RemoteException{
 			return bolsaDeFichas.getCantidadFichas();
+		}
+		
+		public int getCantidadJugadores() throws RemoteException{
+			return jugadores.size();
 		}
 
 

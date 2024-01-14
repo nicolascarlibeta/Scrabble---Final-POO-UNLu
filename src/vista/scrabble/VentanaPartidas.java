@@ -1,18 +1,13 @@
 package vista.scrabble;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
-
 import modelo.scrabble.IPartida;
-import modelo.scrabble.Partida;
 import javax.swing.JList;
 import java.awt.Dimension;
 import javax.swing.DefaultListModel;
@@ -22,7 +17,7 @@ import javax.swing.JLabel;
 public class VentanaPartidas implements Ventana{
 
 	private JFrame frmPartidasGuardadas;
-	private JList listaPartidas;
+	private JList<String> listaPartidas;
 	private DefaultListModel<String> listaModelo;
 	private JButton elegirPartida;
 

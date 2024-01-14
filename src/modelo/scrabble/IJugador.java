@@ -18,5 +18,10 @@ public interface IJugador extends Serializable{
 	List<Letra> getAtril();
 
 	void setAtril(List<Letra> atril);
+	
+	void setConectado(boolean conectado);
+		
+	boolean isConectado();
+		
 
 }

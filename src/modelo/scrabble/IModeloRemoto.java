@@ -50,7 +50,8 @@ public interface IModeloRemoto extends IObservableRemoto, Serializable{
 	ArrayList<Jugador> getTop5Jugadores() throws RemoteException, ClassNotFoundException, IOException;
 
 	boolean validarPalabra(int x, int y, Palabra palabraActual, boolean horizontal) throws RemoteException;
-
+	
+	int getCantidadJugadores() throws RemoteException;
 	
 
 

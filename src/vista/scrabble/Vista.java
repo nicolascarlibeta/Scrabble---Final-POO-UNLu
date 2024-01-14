@@ -16,5 +16,7 @@ public interface Vista {
 	 void mostrarPartidasGuardadas(ArrayList<IPartida> partidas);
 	 void mostrarRanking();
 	 void mostrarMensaje(String mensaje);
+	 boolean esTurnoActual();
+	 boolean estaConectado();
 	
 }

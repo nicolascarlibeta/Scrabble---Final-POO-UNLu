@@ -65,6 +65,9 @@ public class VistaGrafica implements Vista{
 						ventanaTablero.limpiar();					
 					}
 				}
+				else if(estaConectado()) {
+					mostrarMensaje("<Ya no puedes participar de esta partida. Inicia otra>");
+				}
 				else {
 					mostrarMensaje("<Espere a que los demas terminen su turno>");
 					}
@@ -83,10 +86,12 @@ public class VistaGrafica implements Vista{
 						ventanaTablero.limpiar();					
 					}
 				}
+				else if(estaConectado()) {
+					mostrarMensaje("<Ya no puedes participar de esta partida. Inicia otra>");
+				}
 				else {
 					mostrarMensaje("<Espere a que los demas terminen su turno>");
-				}
-				
+					}
 			}
 		});
 		
@@ -99,10 +104,13 @@ public class VistaGrafica implements Vista{
 				if(esTurnoActual()) {
 					controlador.pasarTurno();					
 				}
+				else if(estaConectado()) {
+					mostrarMensaje("<Ya no puedes participar de esta partida. Inicia otra>");
+				}
 				else {
 					mostrarMensaje("<Espere a que los demas terminen su turno>");
+					}
 				}
-			}
 		});
 		
 		
@@ -176,6 +184,10 @@ public class VistaGrafica implements Vista{
 		return cliente.equals(jugadorTurnoActual);
 	}
 	
+	public boolean estaConectado() {
+		return cliente.isConectado();
+	}
+	
 	//Métodos de VistaGrafica
 	public void iniciar() {
 		ventanaPrincipal.setVisible(true);
@@ -225,6 +237,8 @@ public class VistaGrafica implements Vista{
 	public void mostrarMensaje(String mensaje) {
 		ventanaTablero.mostrarMensaje(mensaje);
 	}
+
+	
 	
 	
 	

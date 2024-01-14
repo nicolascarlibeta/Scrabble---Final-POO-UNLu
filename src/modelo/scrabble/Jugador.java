@@ -13,9 +13,11 @@ public class Jugador implements Serializable, IJugador{
 	private String nombre = "Jugador " + new Random().nextInt(600);
 	private int puntaje = 0;
 	private List<Letra> atril = new ArrayList<>();
+	private boolean conectado;
 	
 	public Jugador(String nombre) {
 		this.nombre = nombre;
+		conectado = true;
 	}
 	
 	
@@ -52,7 +54,17 @@ public class Jugador implements Serializable, IJugador{
 	public void setAtril(List<Letra> atril) {
 		this.atril = atril;
 	}
-
+	
+	
+	public void setConectado(boolean conectado) {
+		this.conectado = conectado;
+	}
+	
+	
+	public boolean isConectado() {
+		return conectado;
+	}
+	
 
     public boolean equals(Object obj) {
         if (this == obj) {

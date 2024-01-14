@@ -20,8 +20,6 @@ public class FlujoOpcionesJuego extends Flujo{
     }
     
    
-    //vista.mostrarMensaje("<Ya no puedes participar de esta partida. Inicia otra.>");
-
 	public Flujo elegirOpcion(String opcion) {
 		if(vista.esTurnoActual()) {
 			switch (opcion) {
@@ -39,6 +37,9 @@ public class FlujoOpcionesJuego extends Flujo{
             }
             default -> vista.mostrarMensaje("Opción inválida");
             }
+		} 
+		else if(vista.estaConectado() == false) {
+			vista.mostrarMensaje("<Ya no puedes participar de esta partida. Inicia otra>");
 		}
 		else {
 			vista.mostrarMensaje("<Espere a que los demas terminen su turno>");

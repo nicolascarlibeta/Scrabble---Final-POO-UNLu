@@ -62,11 +62,9 @@ public class Partida implements Serializable, IPartida{
 	
 	public String toString() {
 
-		int j = 0;
 		String jug = "";
-		while(jugadores.get(j) != null) {
-			jug += jugadores.get(j).getNombre() + ". ";
-			j++;
+		for(Jugador j: jugadores) {
+			jug += j.getNombre() + ". ";
 		}
 		return id
 				+ ". FECHA: " + fechaHora + "\n "
