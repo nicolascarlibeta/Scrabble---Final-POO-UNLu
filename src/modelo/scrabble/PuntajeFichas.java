@@ -5,9 +5,6 @@ import java.util.HashMap;
 
 public final class PuntajeFichas implements Serializable{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private static HashMap<String, Integer> fichas = new HashMap<>();
 	
