@@ -15,7 +15,6 @@ public class Partida implements Serializable, IPartida{
 	private BolsaFichas bolsaDeFichas;
 	private ArrayList<Jugador> jugadores = new ArrayList<>();
 	private int turnoActual = 0;
-	private boolean terminada = false;
 	
 	public Partida(Tablero tablero, BolsaFichas bolsaDeFichas,
 			ArrayList<Jugador> jugadores, int turnoActual) {

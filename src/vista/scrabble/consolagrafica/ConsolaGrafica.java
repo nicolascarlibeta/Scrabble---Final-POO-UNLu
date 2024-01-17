@@ -112,7 +112,10 @@ public class ConsolaGrafica implements Vista{
 		entrada = new JTextField();
 		entrada.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+				if(!estaConectado()) {
+					mostrarMensaje("<Ya no puedes participar de esta partida. Inicia otra>");
+				}
+				else if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 					procesarEntrada(entrada.getText());
 					entrada.setText("");
 				}	
@@ -126,8 +129,13 @@ public class ConsolaGrafica implements Vista{
 		intro.setBackground(new Color(0, 0, 0));
 		intro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				procesarEntrada(entrada.getText());
-				entrada.setText("");
+				if(!estaConectado()) {
+					mostrarMensaje("<Ya no puedes participar de esta partida. Inicia otra>");
+				}
+				else {
+					procesarEntrada(entrada.getText());
+					entrada.setText("");					
+					}
 				}
 		});
 		intro.setFont(new Font("Segoe UI Variable Static Text", Font.PLAIN, 13));

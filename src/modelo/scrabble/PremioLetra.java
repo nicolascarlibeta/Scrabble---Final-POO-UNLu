@@ -15,10 +15,10 @@ public class PremioLetra implements Casillero, Serializable {
 	public PremioLetra(TipoPuntaje tipoPuntaje) {
 		this.tipoPuntaje = tipoPuntaje;
 		if(tipoPuntaje == TipoPuntaje.DOBLE) {
-			letra = "D";
+			letra += "D";
 			}
 		else {
-			letra = "T";
+			letra += "T";
 		}
 			
 		

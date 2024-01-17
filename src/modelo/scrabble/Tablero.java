@@ -13,6 +13,7 @@ public class Tablero implements Serializable{
 	private ModeloJuego modelo;
 	private Casillero[][] tablero = new Casillero[16][16];
 	private final int cantidadFichas = 7;
+	private String casilleroVacio = "__";
 	
 	//CONSTRUCTOR
 	public Tablero(ModeloJuego modelo) {
@@ -178,26 +179,26 @@ public class Tablero implements Serializable{
 		for(Letra ltr: letrasPalabra) { 
 					
 			if(!valor) {
-				if(!tablero[p][q].getDescripcion().equals("_")) {
+				if(!tablero[p][q].getDescripcion().equals(casilleroVacio)) {
 					valor = true;
 				}
 				else {
 					if(horizontal) {
-						if(!tablero[p - 1][q].getDescripcion().equals("_")
-								|| !tablero[p + 1][q].getDescripcion().equals("_")) {
+						if(!tablero[p - 1][q].getDescripcion().equals(casilleroVacio)
+								|| !tablero[p + 1][q].getDescripcion().equals(casilleroVacio)) {
 							valor = true;
 						}				
 					}
 					else {
-						if(!tablero[p][q - 1].getDescripcion().equals("_")
-								|| !tablero[p][q + 1].getDescripcion().equals("_")) {
+						if(!tablero[p][q - 1].getDescripcion().equals(casilleroVacio)
+								|| !tablero[p][q + 1].getDescripcion().equals(casilleroVacio)) {
 							valor = true;
 						}
 					}
 				}
 			}
 					
-			if(valor && tablero[p][q] instanceof Letra && !(tablero[p][q].getDescripcion().equals("_")) && !(tablero[p][q].getDescripcion().equals(ltr + ""))) {
+			if(valor && tablero[p][q] instanceof Letra && !(tablero[p][q].getDescripcion().equals(casilleroVacio)) && !(tablero[p][q].getDescripcion().equals(ltr + ""))) {
 				return false;
 			}
 			
@@ -262,7 +263,7 @@ public class Tablero implements Serializable{
 	//Carga de tablero
 	
 	private void cargarTablero() {
-		Casillero casilleroVacio = new Letra("__");
+		Casillero casilleroVacio = new Letra(this.casilleroVacio);
 		tablero[0][0] = new Letra("  ");
 		for(int f = 1; f < tablero.length; f++) {
 			for(int c = 1; c < tablero[f].length; c++) {

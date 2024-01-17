@@ -21,7 +21,7 @@ public class JTableAtril extends JTable{
         
     }
 	
-	public void refrescar() {
+	public void deshacer() {
 		int columnas = this.getColumnCount();
 		for(int i = 0; i < columnas; i++) {
 			String dato = casilleros.get(i);

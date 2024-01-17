@@ -6,7 +6,7 @@ import java.util.Objects;
 public class Letra implements Casillero, Serializable{
 
 	private static final long serialVersionUID = 1L;
-	private String letra = "";
+	private String letra = "  ";
 	private int puntos;
 	
 	//CONSTRUCTOR

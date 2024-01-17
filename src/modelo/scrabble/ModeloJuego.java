@@ -171,7 +171,6 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto, Seri
 	public void cargarPartida(int idPartida) throws IOException, ClassNotFoundException, RemoteException{
 
 		if(idPartida < 1 || idPartida > partidas.size()) {
-			notificarObservadores(Evento.ERROR_CARGA_PARTIDAS);
 			return;
 		}
 		
@@ -275,7 +274,7 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto, Seri
 	
 	
 	public Jugador desconectarJugador(Jugador jugador) throws RemoteException {
-		if(jugadores.size() > 1) {
+		if(this.jugadores.size() > 1) {
 			jugador.setConectado(false);
 			this.jugadores.remove(jugador);
 			notificarObservadores(Evento.JUGADOR_DESCONECTADO);
@@ -287,33 +286,33 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto, Seri
 	
 	//Setters y Getters
 	
-		public Casillero[][] getTablero() throws RemoteException{
-			return tablero.getTablero();
-		}
+	public Casillero[][] getTablero() throws RemoteException{
+		return tablero.getTablero();
+	}
 
-		public int getTurnoActual() throws RemoteException{
-			return turnoActual;
-		}
-		
-		public BolsaFichas getBolsaDeFichas() throws RemoteException{
-			return bolsaDeFichas;
-		}
-		
-		public ArrayList<Jugador> getJugadores() {
-			return jugadores;
-		}
-		
-		public boolean isVacia() throws RemoteException{
-			return bolsaDeFichas.getCantidadFichas() == 0;
-		}
-		
-		public int getCantidadFichas() throws RemoteException{
-			return bolsaDeFichas.getCantidadFichas();
-		}
-		
-		public int getCantidadJugadores() throws RemoteException{
-			return jugadores.size();
-		}
+	public int getTurnoActual() throws RemoteException{
+		return turnoActual;
+	}
+	
+	public BolsaFichas getBolsaDeFichas() throws RemoteException{
+		return bolsaDeFichas;
+	}
+	
+	public ArrayList<Jugador> getJugadores() {
+		return jugadores;
+	}
+	
+	public boolean isVacia() throws RemoteException{
+		return bolsaDeFichas.getCantidadFichas() == 0;
+	}
+	
+	public int getCantidadFichas() throws RemoteException{
+		return bolsaDeFichas.getCantidadFichas();
+	}
+	
+	public int getCantidadJugadores() throws RemoteException{
+		return jugadores.size();
+	}
 
 
 		
