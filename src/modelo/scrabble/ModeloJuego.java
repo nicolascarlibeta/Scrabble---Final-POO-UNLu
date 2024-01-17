@@ -179,7 +179,7 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto, Seri
 		ArrayList<Partida> listaPartidas = getListaPartidas();
 		
 		//Alias del objeto
-		Partida partidaACargar = listaPartidas.get(idPartida);
+		Partida partidaACargar = listaPartidas.get(idPartida - 1);
 		
 		//Volcamos todo el contenido en el modelo
 		tablero = partidaACargar.getTablero();
@@ -274,11 +274,14 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto, Seri
 	}
 	
 	
-	public void desconectarJugador(Jugador jugador) throws RemoteException {
-		jugador.setConectado(false);
-		this.jugadores.remove(jugador);
-		notificarObservadores(Evento.JUGADOR_DESCONECTADO);
-		notificarObservadores(Evento.CAMBIO_ESTADO_PARTIDA);
+	public Jugador desconectarJugador(Jugador jugador) throws RemoteException {
+		if(jugadores.size() > 1) {
+			jugador.setConectado(false);
+			this.jugadores.remove(jugador);
+			notificarObservadores(Evento.JUGADOR_DESCONECTADO);
+			notificarObservadores(Evento.CAMBIO_ESTADO_PARTIDA);
+		}
+		return jugador;
 	}
 	
 	

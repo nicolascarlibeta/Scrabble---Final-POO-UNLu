@@ -65,7 +65,7 @@ public class VistaGrafica implements Vista{
 						ventanaTablero.limpiar();					
 					}
 				}
-				else if(estaConectado()) {
+				else if(!estaConectado()) {
 					mostrarMensaje("<Ya no puedes participar de esta partida. Inicia otra>");
 				}
 				else {
@@ -86,7 +86,7 @@ public class VistaGrafica implements Vista{
 						ventanaTablero.limpiar();					
 					}
 				}
-				else if(estaConectado()) {
+				else if(!estaConectado()) {
 					mostrarMensaje("<Ya no puedes participar de esta partida. Inicia otra>");
 				}
 				else {
@@ -104,7 +104,7 @@ public class VistaGrafica implements Vista{
 				if(esTurnoActual()) {
 					controlador.pasarTurno();					
 				}
-				else if(estaConectado()) {
+				else if(!estaConectado()) {
 					mostrarMensaje("<Ya no puedes participar de esta partida. Inicia otra>");
 				}
 				else {
@@ -179,8 +179,7 @@ public class VistaGrafica implements Vista{
 
 	//Método para controlar los eventos del jugador del turno actual
 	public boolean esTurnoActual() {
-		IJugador jugadorTurnoActual = null;
-		jugadorTurnoActual = controlador.obtenerJugadores(controlador.obtenerTurnoActual());
+		IJugador jugadorTurnoActual = controlador.obtenerJugadores(controlador.obtenerTurnoActual());
 		return cliente.equals(jugadorTurnoActual);
 	}
 	
@@ -236,6 +235,11 @@ public class VistaGrafica implements Vista{
 
 	public void mostrarMensaje(String mensaje) {
 		ventanaTablero.mostrarMensaje(mensaje);
+	}
+
+	@Override
+	public void mostrarMensajePartidaGuardada() {
+		
 	}
 
 	

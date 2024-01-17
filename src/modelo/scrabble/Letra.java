@@ -5,9 +5,6 @@ import java.util.Objects;
 
 public class Letra implements Casillero, Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private String letra = "";
 	private int puntos;
@@ -32,7 +29,7 @@ public class Letra implements Casillero, Serializable{
 		return getDescripcion();
 	}
 	
-	 public boolean equals(Object obj) {
+	public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -43,7 +40,11 @@ public class Letra implements Casillero, Serializable{
 
         Letra ltr = (Letra) obj;
         return Objects.equals(this.letra, ltr.letra);
-	    }
+	}
+	
+	public void setDescripcion(String descripcion) {
+		this.letra = descripcion;
+	}
 
 
 }

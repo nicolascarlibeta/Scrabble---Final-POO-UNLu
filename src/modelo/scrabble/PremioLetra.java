@@ -8,17 +8,17 @@ public class PremioLetra implements Casillero, Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String letra = "";
+	private String letra = "L";
 	private TipoPuntaje tipoPuntaje;
 	
 	//CONSTRUCTOR
 	public PremioLetra(TipoPuntaje tipoPuntaje) {
 		this.tipoPuntaje = tipoPuntaje;
 		if(tipoPuntaje == TipoPuntaje.DOBLE) {
-			letra = "2";
+			letra = "D";
 			}
 		else {
-			letra = "3";
+			letra = "T";
 		}
 			
 		
@@ -39,6 +39,10 @@ public class PremioLetra implements Casillero, Serializable {
 			premio = 3;
 		}
 		return premio;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.letra = descripcion;
 	}
 	
 }

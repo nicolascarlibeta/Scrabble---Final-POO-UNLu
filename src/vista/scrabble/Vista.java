@@ -13,6 +13,7 @@ public interface Vista {
 	 void mostrarComenzarPartida(ArrayList<IJugador> jugadores);
 	 void mostrarTablero(Casillero[][] tablero);
 	 void mostrarEstadoJugador(IJugador jugador);
+	 void mostrarMensajePartidaGuardada();
 	 void mostrarPartidasGuardadas(ArrayList<IPartida> partidas);
 	 void mostrarRanking();
 	 void mostrarMensaje(String mensaje);

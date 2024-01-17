@@ -78,8 +78,7 @@ public class ConsolaGrafica implements Vista{
 	
 	//Método para controlar los eventos del jugador del turno actual
 	public boolean esTurnoActual() {
-		IJugador jugadorTurnoActual = null;
-		jugadorTurnoActual = controlador.obtenerJugadores(controlador.obtenerTurnoActual());
+		IJugador jugadorTurnoActual = controlador.obtenerJugadores(controlador.obtenerTurnoActual());
 		return cliente.equals(jugadorTurnoActual);
 	}
 	
@@ -175,7 +174,7 @@ public class ConsolaGrafica implements Vista{
 		desconectar = new JMenuItem("Desconectar");
 		desconectar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controlador.desconectarJugador(cliente);
+				cliente = controlador.desconectarJugador(cliente);
 			}
 		});
 		iOpciones.add(desconectar);
@@ -307,6 +306,12 @@ public class ConsolaGrafica implements Vista{
 		flujoActual = new FlujoOpcionesJuego(this,controlador);
 		flujoActual.mostarMenuTextual();
 	}
+	
+	public void mostrarMensajePartidaGuardada() {
+		mostrarMensaje("Se ha guardado la partida.");
+		flujoActual = new FlujoMenuPrincipal(this,controlador);
+		flujoActual.mostarMenuTextual();
+	}
 
 	@Override
 	public void mostrarPartidasGuardadas(ArrayList<IPartida> partidas) {
@@ -314,11 +319,6 @@ public class ConsolaGrafica implements Vista{
 		
 	}
 
-	
-	
-
-	
-	
 	
 	
 	

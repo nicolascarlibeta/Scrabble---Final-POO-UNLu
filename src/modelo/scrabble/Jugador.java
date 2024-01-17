@@ -13,11 +13,10 @@ public class Jugador implements Serializable, IJugador{
 	private String nombre = "Jugador " + new Random().nextInt(600);
 	private int puntaje = 0;
 	private List<Letra> atril = new ArrayList<>();
-	private boolean conectado;
+	private boolean conectado = true;
 	
 	public Jugador(String nombre) {
 		this.nombre = nombre;
-		conectado = true;
 	}
 	
 	

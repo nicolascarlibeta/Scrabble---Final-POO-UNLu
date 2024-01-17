@@ -14,7 +14,7 @@ public class TableTransferHandler extends TransferHandler{
 
 
 	public boolean canImport(TransferSupport support) {
-        // Aceptar solo datos transferibles de tipo String
+        // Aceptar solo datos transferibles de tipo Casillero
         return support.isDataFlavorSupported(new DataFlavor(Casillero.class,"Casillero"));
     }
 

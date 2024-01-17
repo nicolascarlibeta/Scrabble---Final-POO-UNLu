@@ -11,7 +11,7 @@ public interface IModeloRemoto extends IObservableRemoto, Serializable{
 	
 	void addJugador(Jugador jugador) throws RemoteException;
 	
-	void desconectarJugador(Jugador jugador) throws RemoteException;
+	Jugador desconectarJugador(Jugador jugador) throws RemoteException;
 
 	void comenzarPartida() throws RemoteException;
 

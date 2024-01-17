@@ -50,12 +50,13 @@ public class Controlador implements IControladorRemoto{
 		}
 		
 		
-		public void desconectarJugador(IJugador cliente) {
+		public IJugador desconectarJugador(IJugador cliente) {
 			try {
-				modelo.desconectarJugador((Jugador) cliente);
+				return modelo.desconectarJugador((Jugador) cliente);
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				return null;
 			}
 		}
 		
@@ -289,7 +290,7 @@ public class Controlador implements IControladorRemoto{
 					vista.mostrarMensaje("Se ha cargado la partida exitosamente.");				
 					}
 				case PARTIDA_GUARDADA -> {
-					vista.mostrarMensaje("Se ha guardado la partida.");
+					vista.mostrarMensajePartidaGuardada();
 					try {
 						vista.mostrarPartidasGuardadas(obtenerPartidas());
 					} catch (IOException e) {
@@ -312,9 +313,6 @@ public class Controlador implements IControladorRemoto{
 					}
 				case ERROR_ATRIL -> {
 					vista.mostrarMensaje("<Ingrese una palabra que contenga las letras de su atril.>");				
-					}
-				case ERROR_CARGA_PARTIDAS -> {
-					vista.mostrarMensaje("<Ingrese un número que corresponda al ID de la partida.>");
 					}
 				case ERROR_COORDENADAS -> {
 					vista.mostrarMensaje("<Ingrese una letra coordenada entre A y O.>");

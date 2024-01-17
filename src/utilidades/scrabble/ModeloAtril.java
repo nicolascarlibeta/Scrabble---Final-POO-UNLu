@@ -41,6 +41,16 @@ public class ModeloAtril extends AbstractTableModel {
         	return new Object();
         }
     }
+    
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+    	super.setValueAt(columnas, rowIndex, columnIndex);
+        Casillero objetoLetra = (Casillero) datos[0][columnIndex];
+        if(aValue.getClass() == String.class) {
+        	objetoLetra.setDescripcion((String)aValue);        	
+        }
+    }
+    
+    
 
 	
     

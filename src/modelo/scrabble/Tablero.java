@@ -262,8 +262,8 @@ public class Tablero implements Serializable{
 	//Carga de tablero
 	
 	private void cargarTablero() {
-		Casillero casilleroVacio = new Letra("_");
-		tablero[0][0] = new Letra(" ");
+		Casillero casilleroVacio = new Letra("__");
+		tablero[0][0] = new Letra("  ");
 		for(int f = 1; f < tablero.length; f++) {
 			for(int c = 1; c < tablero[f].length; c++) {
 				tablero[f][c] = casilleroVacio;	 		
@@ -273,7 +273,7 @@ public class Tablero implements Serializable{
 		int l = 65;
 		for(int f = 1; f < tablero.length; f++) {
 			tablero[f][0] = new Letra("" + ((char)l));
-			tablero[0][f] = new Letra("" + ((char)l));
+			tablero[0][f] = new Letra(((char)l) + " ");
 			l++;
 		}  
 	}

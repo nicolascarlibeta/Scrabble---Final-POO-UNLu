@@ -38,7 +38,7 @@ public class FlujoOpcionesJuego extends Flujo{
             default -> vista.mostrarMensaje("Opción inválida");
             }
 		} 
-		else if(vista.estaConectado() == false) {
+		else if(!vista.estaConectado()) {
 			vista.mostrarMensaje("<Ya no puedes participar de esta partida. Inicia otra>");
 		}
 		else {
@@ -67,10 +67,8 @@ public class FlujoOpcionesJuego extends Flujo{
     		controlador.guardarPartida();
     		return new FlujoMenuPrincipal(vista,controlador);
 		} catch (RemoteException e) {
-			// TODO Bloque catch generado automáticamente
 			return null;
 		} catch (IOException e) {
-			// TODO Bloque catch generado automáticamente
 			return this;
 		}
     }
