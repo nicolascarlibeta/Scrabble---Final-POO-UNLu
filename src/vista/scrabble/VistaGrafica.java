@@ -54,7 +54,10 @@ public class VistaGrafica implements Vista{
 			
 			public void actionPerformed(ActionEvent e) {
 				
-				if(esTurnoActual()) {
+				if(!estaConectado()) {
+					mostrarMensaje("<Ya no puedes participar de esta partida. Inicia otra>");
+				}
+				else if(esTurnoActual()) {
 					String cadenaString = ventanaTablero.recibirPalabra().toUpperCase();
 					String x = ventanaTablero.recibirCoordenadaX();
 					String y = ventanaTablero.recibirCoordenadaY();
@@ -64,9 +67,6 @@ public class VistaGrafica implements Vista{
 					if(controlador.agregarPalabra(x,y,cadenaString,disposicion)) {
 						ventanaTablero.limpiar();					
 					}
-				}
-				else if(!estaConectado()) {
-					mostrarMensaje("<Ya no puedes participar de esta partida. Inicia otra>");
 				}
 				else {
 					mostrarMensaje("<Espere a que los demas terminen su turno>");
@@ -80,14 +80,14 @@ public class VistaGrafica implements Vista{
 			
 			public void actionPerformed(ActionEvent e) {
 				
-				if(esTurnoActual()) {
+				if(!estaConectado()) {
+					mostrarMensaje("<Ya no puedes participar de esta partida. Inicia otra>");
+				}
+				else if(esTurnoActual()) {
 					String cadenaString = ventanaTablero.recibirCadenaString();
 					if(controlador.cambiarFichas(cadenaString)) {
 						ventanaTablero.limpiar();					
 					}
-				}
-				else if(!estaConectado()) {
-					mostrarMensaje("<Ya no puedes participar de esta partida. Inicia otra>");
 				}
 				else {
 					mostrarMensaje("<Espere a que los demas terminen su turno>");
@@ -101,12 +101,13 @@ public class VistaGrafica implements Vista{
 			
 			public void actionPerformed(ActionEvent e) {
 				
-				if(esTurnoActual()) {
-					controlador.pasarTurno();					
-				}
-				else if(!estaConectado()) {
+				if(!estaConectado()) {
 					mostrarMensaje("<Ya no puedes participar de esta partida. Inicia otra>");
 				}
+				else if(esTurnoActual()) {
+					controlador.pasarTurno();					
+				}
+				
 				else {
 					mostrarMensaje("<Espere a que los demas terminen su turno>");
 					}
@@ -118,7 +119,7 @@ public class VistaGrafica implements Vista{
 		ventanaTablero.desconectar(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				controlador.desconectarJugador(cliente);
+				cliente = controlador.desconectarJugador(cliente);
 			}
 		});
 		

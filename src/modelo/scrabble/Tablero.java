@@ -112,9 +112,9 @@ public class Tablero implements Serializable{
             }
             bolsaDeFichas.setCantidadFichas(bolsaDeFichas.getCantidadFichas() + cantidadARepartir);
         }
+        modelo.siguienteTurno();
         modelo.notificarObservadores(Evento.CAMBIO_FICHAS);
 		modelo.notificarObservadores(Evento.CAMBIO_ESTADO_PARTIDA);
-		modelo.siguienteTurno();
         return true;
     }
 	

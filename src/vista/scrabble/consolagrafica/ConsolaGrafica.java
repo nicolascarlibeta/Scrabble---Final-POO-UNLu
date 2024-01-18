@@ -112,12 +112,14 @@ public class ConsolaGrafica implements Vista{
 		entrada = new JTextField();
 		entrada.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
-				if(!estaConectado()) {
-					mostrarMensaje("<Ya no puedes participar de esta partida. Inicia otra>");
-				}
-				else if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					procesarEntrada(entrada.getText());
-					entrada.setText("");
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					if(!estaConectado()) {
+						mostrarMensaje("<Ya no puedes participar de esta partida. Inicia otra>");
+					}
+					else {
+						procesarEntrada(entrada.getText());
+						entrada.setText("");						
+					}
 				}	
 			}
 		});
