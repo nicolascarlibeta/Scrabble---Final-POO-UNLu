@@ -329,6 +329,11 @@ public class ConsolaGrafica implements Vista{
 		
 	}
 
+	public void mostrarFinalPartida(IJugador jugador) {
+		flujoActual = new FlujoFinalPartida(this, controlador, jugador);
+		flujoActual.mostarMenuTextual();
+	}
+
 	
 	
 	

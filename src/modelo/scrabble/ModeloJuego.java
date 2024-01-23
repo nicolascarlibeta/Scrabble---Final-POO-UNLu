@@ -122,6 +122,17 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto, Seri
 	
 	public void siguienteTurno() throws RemoteException{
 		
+		int cantidadFichas = 0;
+		for(Jugador j: jugadores) {
+			cantidadFichas += j.getAtril().size();
+		}
+		
+		if(cantidadFichas == 0 && 
+				bolsaDeFichas.getCantidadFichas() == 0) {
+			notificarObservadores(Evento.FIN_PARTIDA);
+			return;
+		}
+		
 		if(++this.turnoActual < jugadores.size()) {
 			return;
 		}
@@ -266,6 +277,13 @@ public class ModeloJuego extends ObservableRemoto implements IModeloRemoto, Seri
 	
 	
 	//Metodos del modelo
+	
+	public Jugador obtenerJugadorGanador() throws RemoteException{
+		ArrayList<Jugador> jugadores = new ArrayList<>();
+		Comparator<Jugador> comp = Comparator.comparing(Jugador::getPuntaje).reversed();
+		jugadores.sort(comp);
+		return jugadores.get(0); 
+	}
 	
 	private void conectarJugador(Jugador nuevoJugador) throws RemoteException {
 		jugadores.add(nuevoJugador);

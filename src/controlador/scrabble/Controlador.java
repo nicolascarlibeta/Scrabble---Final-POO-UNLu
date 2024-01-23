@@ -311,6 +311,9 @@ public class Controlador implements IControladorRemoto{
 						vista.mostrarEstadoJugador(jugadorActual);	
 						}		
 					}
+				case FIN_PARTIDA -> {
+					vista.mostrarFinalPartida(modelo.obtenerJugadorGanador());		
+					}
 				case ERROR_ATRIL -> {
 					vista.mostrarMensaje("<Ingrese una palabra que contenga las letras de su atril.>");				
 					}

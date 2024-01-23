@@ -243,6 +243,10 @@ public class VistaGrafica implements Vista{
 		
 	}
 
+	public void mostrarFinalPartida(IJugador jugador) {
+		ventanaTablero.mostrarMensaje("El juego ha terminado. ¡Felicidades " + jugador.getNombre() + ", sos el ganador!");
+	}
+
 	
 	
 	

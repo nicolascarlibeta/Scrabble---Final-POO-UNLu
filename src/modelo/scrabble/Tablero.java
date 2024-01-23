@@ -71,8 +71,10 @@ public class Tablero implements Serializable{
 		jugadorActual.getAtril().add(letra);
 
 		//Le quito las fichas a la bolsa
-		bolsaDeFichas.put(letra.getDescripcion(), bolsaDeFichas.get(letra.getDescripcion()) - 1);
-		bolsaDeFichas.setCantidadFichas(bolsaDeFichas.getCantidadFichas() - 1);
+		if(bolsaDeFichas.getCantidadFichas() > 0) {
+			bolsaDeFichas.put(letra.getDescripcion(), bolsaDeFichas.get(letra.getDescripcion()) - 1);
+			bolsaDeFichas.setCantidadFichas(bolsaDeFichas.getCantidadFichas() - 1);			
+		}
 	}
 	
 	

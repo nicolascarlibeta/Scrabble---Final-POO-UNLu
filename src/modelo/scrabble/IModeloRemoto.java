@@ -53,6 +53,8 @@ public interface IModeloRemoto extends IObservableRemoto, Serializable{
 	
 	int getCantidadJugadores() throws RemoteException;
 	
+	Jugador obtenerJugadorGanador() throws RemoteException;
+	
 
 
 }
